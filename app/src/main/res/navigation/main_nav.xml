@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@id/allPicturesFragment">
+    <fragment
+        android:id="@+id/allPicturesFragment"
+        android:name="com.gnine.galleryg2.AllPicturesFragment"
+        android:label="fragment_all_pictures"
+        tools:layout="@layout/fragment_all_pictures" />
+    <fragment
+        android:id="@+id/foldersFragment"
+        android:name="com.gnine.galleryg2.FoldersFragment"
+        android:label="fragment_folders"
+        tools:layout="@layout/fragment_folders" />
+    <fragment
+        android:id="@+id/trashFragment"
+        android:name="com.gnine.galleryg2.TrashFragment"
+        android:label="fragment_trash"
+        tools:layout="@layout/fragment_trash" />
+</navigation>

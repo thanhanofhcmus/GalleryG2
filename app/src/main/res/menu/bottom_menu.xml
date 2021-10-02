@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/allPicturesFragment"
+        android:icon="@drawable/ic_all_pictures"
+        android:title="Pictures" />
+    <item
+        android:id="@+id/foldersFragment"
+        android:icon="@drawable/ic_folders"
+        android:title="Folders" />
+    <item
+        android:id="@+id/trashFragment"
+        android:icon="@drawable/ic_trash"
+        android:title="Trash" />
+</menu>
