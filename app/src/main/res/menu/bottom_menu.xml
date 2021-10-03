@@ -4,13 +4,18 @@
     <item
         android:id="@+id/allPicturesFragment"
         android:icon="@drawable/ic_all_pictures"
-        android:title="Pictures" />
+        android:title="@string/item_pictures" />
     <item
         android:id="@+id/foldersFragment"
         android:icon="@drawable/ic_folders"
-        android:title="Folders" />
+        android:title="@string/item_folders" />
     <item
         android:id="@+id/trashFragment"
         android:icon="@drawable/ic_trash"
-        android:title="Trash" />
+        android:title="@string/item_trash" />
+
+    <item
+        android:id="@+id/settingsFragment"
+        android:icon="@drawable/ic_setting"
+        android:title="@string/item_settings" />
 </menu>

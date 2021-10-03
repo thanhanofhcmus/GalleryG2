@@ -18,4 +18,8 @@
         android:name="com.gnine.galleryg2.TrashFragment"
         android:label="fragment_trash"
         tools:layout="@layout/fragment_trash" />
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.gnine.galleryg2.SettingsFragment"
+        android:label="SettingsFragment" />
 </navigation>
