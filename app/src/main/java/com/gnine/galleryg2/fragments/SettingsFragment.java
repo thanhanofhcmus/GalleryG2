@@ -1,8 +1,10 @@
-package com.gnine.galleryg2;
+package com.gnine.galleryg2.fragments;
 
 import android.os.Bundle;
 
 import androidx.preference.PreferenceFragmentCompat;
+
+import com.gnine.galleryg2.R;
 
 public class SettingsFragment extends PreferenceFragmentCompat {
 

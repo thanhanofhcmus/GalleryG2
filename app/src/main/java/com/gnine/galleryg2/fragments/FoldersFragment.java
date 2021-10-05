@@ -1,4 +1,4 @@
-package com.gnine.galleryg2;
+package com.gnine.galleryg2.fragments;
 
 import android.os.Bundle;
 
@@ -8,15 +8,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.gnine.galleryg2.R;
 
-public class TrashFragment extends Fragment {
-
-    public TrashFragment() {
+/**
+ * A simple {@link Fragment} subclass. Use the {@link FoldersFragment#newInstance} factory method to
+ * create an instance of this fragment.
+ */
+public class FoldersFragment extends Fragment {
+    public FoldersFragment() {
         // Required empty public constructor
     }
 
-    public static TrashFragment newInstance(String param1, String param2) {
-        return new TrashFragment();
+    public static FoldersFragment newInstance() {
+        return new FoldersFragment();
     }
 
     @Override
@@ -28,6 +32,6 @@ public class TrashFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_trash, container, false);
+        return inflater.inflate(R.layout.fragment_folders, container, false);
     }
 }

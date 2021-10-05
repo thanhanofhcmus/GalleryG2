@@ -5,21 +5,21 @@
     app:startDestination="@id/allPicturesFragment">
     <fragment
         android:id="@+id/allPicturesFragment"
-        android:name="com.gnine.galleryg2.AllPicturesFragment"
+        android:name="com.gnine.galleryg2.fragments.AllPicturesFragment"
         android:label="fragment_all_pictures"
         tools:layout="@layout/fragment_all_pictures" />
     <fragment
         android:id="@+id/foldersFragment"
-        android:name="com.gnine.galleryg2.FoldersFragment"
+        android:name="com.gnine.galleryg2.fragments.FoldersFragment"
         android:label="fragment_folders"
         tools:layout="@layout/fragment_folders" />
     <fragment
         android:id="@+id/trashFragment"
-        android:name="com.gnine.galleryg2.TrashFragment"
+        android:name="com.gnine.galleryg2.fragments.TrashFragment"
         android:label="fragment_trash"
         tools:layout="@layout/fragment_trash" />
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="com.gnine.galleryg2.SettingsFragment"
+        android:name="com.gnine.galleryg2.fragments.SettingsFragment"
         android:label="SettingsFragment" />
 </navigation>

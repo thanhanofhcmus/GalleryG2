@@ -3,13 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".FoldersFragment">
+    tools:context=".fragments.FoldersFragment">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
         android:textSize="50sp"
-        android:text="Folders" />
+        android:text="@string/folders" />
 
 </FrameLayout>

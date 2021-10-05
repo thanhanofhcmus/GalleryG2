@@ -1,5 +1,6 @@
-package com.gnine.galleryg2;
+package com.gnine.galleryg2.fragments;
 
+import android.media.Image;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -12,13 +13,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class AllPicturesFragment extends Fragment {
+import com.gnine.galleryg2.ImageRecyclerViewAdapter;
+import com.gnine.galleryg2.R;
+import com.gnine.galleryg2.tools.ImageLoader;
 
+import org.jetbrains.annotations.Contract;
+
+public class AllPicturesFragment extends Fragment {
 
     public AllPicturesFragment() {
         // Required empty public constructor
     }
 
+    @NonNull
+    @Contract("_, _ -> new")
     public static AllPicturesFragment newInstance(String param1, String param2) {
         return new AllPicturesFragment();
     }
@@ -29,7 +37,7 @@ public class AllPicturesFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_all_pictures, container, false);
@@ -39,8 +47,10 @@ public class AllPicturesFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if (getView() == null) { return; }
+
         RecyclerView recyclerView = getView().findViewById(R.id.allPicturesFragmentRecyclerView);
-        recyclerView.setAdapter(new ImageRecyclerView());
-        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3, GridLayoutManager.VERTICAL, false));
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setAdapter(new ImageRecyclerViewAdapter(ImageLoader.loadTestImageIdNTimes(6)));
+        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 4));
     }
 }
