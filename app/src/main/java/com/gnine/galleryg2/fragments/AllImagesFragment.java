@@ -1,6 +1,5 @@
 package com.gnine.galleryg2.fragments;
 
-import android.media.Image;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -19,16 +18,16 @@ import com.gnine.galleryg2.tools.ImageLoader;
 
 import org.jetbrains.annotations.Contract;
 
-public class AllPicturesFragment extends Fragment {
+public class AllImagesFragment extends Fragment {
 
-    public AllPicturesFragment() {
+    public AllImagesFragment() {
         // Required empty public constructor
     }
 
     @NonNull
     @Contract("_, _ -> new")
-    public static AllPicturesFragment newInstance(String param1, String param2) {
-        return new AllPicturesFragment();
+    public static AllImagesFragment newInstance(String param1, String param2) {
+        return new AllImagesFragment();
     }
 
     @Override
@@ -40,7 +39,7 @@ public class AllPicturesFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_all_pictures, container, false);
+        return inflater.inflate(R.layout.fragment_all_images, container, false);
     }
 
     @Override

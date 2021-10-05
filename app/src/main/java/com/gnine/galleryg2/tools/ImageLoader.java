@@ -10,15 +10,6 @@ public class ImageLoader {
     static private final int TEST_IMAGES_NUMBER = 23;
 
     @NonNull
-    public static int[] loadTestImageId() {
-        int[] resourceId = new int[TEST_IMAGES_NUMBER];
-        for (int i = 0; i < TEST_IMAGES_NUMBER; ++i) {
-            resourceId[i] = getResourceId("image_" + i, R.drawable.class);
-        }
-        return resourceId;
-    }
-
-    @NonNull
     public static int[] loadTestImageIdNTimes(int n) {
         int[] resourceId = new int[TEST_IMAGES_NUMBER * n];
         for (int j = 0; j < n; ++j) {

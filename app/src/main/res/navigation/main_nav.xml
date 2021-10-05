@@ -5,9 +5,9 @@
     app:startDestination="@id/allPicturesFragment">
     <fragment
         android:id="@+id/allPicturesFragment"
-        android:name="com.gnine.galleryg2.fragments.AllPicturesFragment"
+        android:name="com.gnine.galleryg2.fragments.AllImagesFragment"
         android:label="fragment_all_pictures"
-        tools:layout="@layout/fragment_all_pictures" />
+        tools:layout="@layout/fragment_all_images" />
     <fragment
         android:id="@+id/foldersFragment"
         android:name="com.gnine.galleryg2.fragments.FoldersFragment"
