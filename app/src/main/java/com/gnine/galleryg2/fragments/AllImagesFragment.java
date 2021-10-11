@@ -16,18 +16,10 @@ import com.gnine.galleryg2.ImageRecyclerViewAdapter;
 import com.gnine.galleryg2.R;
 import com.gnine.galleryg2.tools.ImageLoader;
 
-import org.jetbrains.annotations.Contract;
-
 public class AllImagesFragment extends Fragment {
 
     public AllImagesFragment() {
         // Required empty public constructor
-    }
-
-    @NonNull
-    @Contract("_, _ -> new")
-    public static AllImagesFragment newInstance(String param1, String param2) {
-        return new AllImagesFragment();
     }
 
     @Override
@@ -49,7 +41,8 @@ public class AllImagesFragment extends Fragment {
 
         RecyclerView recyclerView = getView().findViewById(R.id.allPicturesFragmentRecyclerView);
         recyclerView.setHasFixedSize(true);
-        recyclerView.setAdapter(new ImageRecyclerViewAdapter(ImageLoader.loadTestImageIdNTimes(6)));
+        assert getActivity() != null;
+        recyclerView.setAdapter(new ImageRecyclerViewAdapter(ImageLoader.loadUriImageFromSharedStorage(getActivity())));
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 4));
     }
 }
