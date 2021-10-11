@@ -42,7 +42,7 @@ public class AllImagesFragment extends Fragment {
         RecyclerView recyclerView = getView().findViewById(R.id.allPicturesFragmentRecyclerView);
         recyclerView.setHasFixedSize(true);
         assert getActivity() != null;
-        recyclerView.setAdapter(new ImageRecyclerViewAdapter(ImageLoader.loadUriImageFromSharedStorage(getActivity())));
+        recyclerView.setAdapter(new ImageRecyclerViewAdapter(ImageLoader.loadImageFromSharedStorage(getActivity())));
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 4));
     }
 }

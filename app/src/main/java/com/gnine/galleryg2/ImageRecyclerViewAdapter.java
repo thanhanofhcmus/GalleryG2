@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ImageRecyclerViewAdapter extends RecyclerView.Adapter<ImageRecyclerViewAdapter.ImageViewHolder> {
 
@@ -26,16 +27,16 @@ public class ImageRecyclerViewAdapter extends RecyclerView.Adapter<ImageRecycler
     }
 
     final private int[] resourceIds;
-    final private List<Uri> imageUris;
+    final private List<ImageData> imageDataList;
 
     public ImageRecyclerViewAdapter(int[] resourceIds) {
         this.resourceIds = resourceIds;
-        this.imageUris = null;
+        this.imageDataList = null;
     }
 
-    public ImageRecyclerViewAdapter(List<Uri> imageUris) {
+    public ImageRecyclerViewAdapter(List<ImageData> imageDataList) {
         this.resourceIds = null;
-        this.imageUris = imageUris;
+        this.imageDataList = imageDataList;
     }
 
     @NonNull
@@ -49,10 +50,11 @@ public class ImageRecyclerViewAdapter extends RecyclerView.Adapter<ImageRecycler
     @Override
     public void onBindViewHolder(@NonNull ImageViewHolder holder, int position) {
         ImageView imageView = holder.imageView;
-        if (imageUris != null ) {
-            Uri uri = imageUris.get(position);
+        if (imageDataList != null ) {
+            ImageData imageData = imageDataList.get(position);
             Glide.with(imageView.getContext())
-                    .load(uri)
+                    .load(imageData.uri)
+                    .placeholder(R.drawable.bird_thumbnail)
                     .into(imageView);
         } else {
             assert resourceIds != null;
@@ -62,8 +64,8 @@ public class ImageRecyclerViewAdapter extends RecyclerView.Adapter<ImageRecycler
 
     @Override
     public int getItemCount() {
-        if (imageUris != null ) {
-            return imageUris.size();
+        if (imageDataList != null ) {
+            return imageDataList.size();
         } else {
             assert resourceIds != null;
             return resourceIds.length;
