@@ -13,6 +13,7 @@ public class ImageData {
     public final String name;
     public final int size;
     public final long dateAdded;
+    public boolean checked;
 
     public ImageData(Uri uri, String name, int size, long dateAdded) {
         this.uri = uri;
@@ -24,5 +25,13 @@ public class ImageData {
     public String getDateTime() {
        return new SimpleDateFormat("hh:mm dd/MM/yyyy", Locale.getDefault())
                .format(new Date(dateAdded * 1000L));
+    }
+
+    public boolean isChecked() {
+        return checked;
+    }
+
+    public void setChecked(boolean checked) {
+        this.checked = checked;
     }
 }
