@@ -20,7 +20,7 @@
         android:label="fragment_edit"
         tools:layout="@layout/fragment_edit" >
         <action
-            android:id="@+id/toViewPagerFragment"
+            android:id="@+id/editToViewPagerFragment"
             app:destination="@id/viewPagerFragment" />
     </fragment>
 </navigation>
