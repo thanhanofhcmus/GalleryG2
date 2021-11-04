@@ -12,20 +12,22 @@
         android:theme="@style/Theme.GalleryG2"
         android:allowBackup="true"
         android:fullBackupContent="true">
-        
+
+        <activity
+            android:name=".FullImageActivity"
+            android:exported="true"
+            android:label="@string/title_activity_full_image"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"/>
         <activity
             android:name=".MainActivity"
-            android:label="@string/app_name"
-            android:exported="true">
+            android:exported="true"
+            android:label="test">
             <intent-filter>
-
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
-
             </intent-filter>
-
         </activity>
-
     </application>
 
 </manifest>
