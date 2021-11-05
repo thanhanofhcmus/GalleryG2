@@ -30,7 +30,7 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.FolderView
             title = itemView.findViewById(R.id.title);
             count = itemView.findViewById(R.id.count);
 
-//            itemView.setOnClickListener(v -> onFolderClick.onClick(v, getAbsoluteAdapterPosition()));
+            itemView.setOnClickListener(v -> onFolderClick.onClick(v, getAbsoluteAdapterPosition()));
         }
     }
 

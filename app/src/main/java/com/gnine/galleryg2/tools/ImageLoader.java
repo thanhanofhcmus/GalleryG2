@@ -12,6 +12,8 @@ import androidx.annotation.NonNull;
 import com.gnine.galleryg2.data.ImageData;
 import com.gnine.galleryg2.R;
 
+import java.io.File;
+import java.io.FileFilter;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
@@ -91,6 +93,29 @@ public class ImageLoader {
         cursor.close();
 
         return imageDataList;
+    }
+
+    private boolean isImageFile(String filePath) {
+        if (filePath.endsWith(".jpg") || filePath.endsWith(".png") || filePath.endsWith(".jpeg") || filePath.endsWith(".gif") || filePath.endsWith(".webp") || filePath.endsWith(".bmp"))
+            return true;
+        return false;
+    }
+
+    private boolean isVideoFile(String filePath) {
+        if (filePath.endsWith(".mp4") || filePath.endsWith(".mkv") || filePath.endsWith(".3gp") || filePath.endsWith(".webm"))
+            return true;
+        return false;
+    }
+
+    private class ImageAndVideoFileFilter implements FileFilter {
+        @Override
+        public boolean accept(File file) {
+            if (file.isDirectory())
+                return true;
+            else if (isImageFile(file.getAbsolutePath()) || isVideoFile(file.getAbsolutePath()))
+                return true;
+            return false;
+        }
     }
 
     private static int getResourceId(String resourceName, Class<?> c) {

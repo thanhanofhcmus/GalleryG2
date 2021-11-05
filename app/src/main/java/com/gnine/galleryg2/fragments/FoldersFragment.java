@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,13 +21,18 @@ import com.gnine.galleryg2.R;
 import com.gnine.galleryg2.data.TypeData;
 import com.gnine.galleryg2.adapters.TypesAdapter;
 import com.gnine.galleryg2.databinding.FragmentFoldersBinding;
+import com.gnine.galleryg2.tools.ImageLoader;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class FoldersFragment extends Fragment {
 
-    FragmentFoldersBinding binding;
+    static Fragment tempFragment;
+
+    static boolean checkBackPressed;
+
+    private List<FolderData> folderList;
 
     public FoldersFragment() {
         // Required empty public constructor
@@ -55,8 +61,17 @@ public class FoldersFragment extends Fragment {
         folderAdapter.setData(getListFolders());
         rcvFolder.setAdapter(folderAdapter);
 
-        folderAdapter.setOnFolderClick((view1, position) -> {
-            // TODO: move to a fragment show all images in that folder
+        folderAdapter.setOnFolderClick(new FolderAdapter.FolderClick() {
+            @Override
+            public void onClick(View view, int position) {
+                checkBackPressed = false;
+                FragmentTransaction ft = getChildFragmentManager().beginTransaction();
+                tempFragment = new AllImagesFragment();
+                ((AllImagesFragment)tempFragment).setFolder(true);
+                ft.replace(R.id.fragmentFolders, tempFragment);
+                ft.addToBackStack(null);
+                ft.commit();
+            }
         });
 
         //TypeData
@@ -68,26 +83,31 @@ public class FoldersFragment extends Fragment {
 
         typesAdapter.setData(getListTypes());
         rcvTypes.setAdapter(typesAdapter);
+
+        if (!checkBackPressed && tempFragment != null) { //not back from all images fragment of folder
+            FragmentTransaction ft = getChildFragmentManager().beginTransaction();
+            ft.replace(R.id.fragmentFolders, tempFragment);
+            ft.addToBackStack(null);
+            ft.commit();
+        }
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        binding = FragmentFoldersBinding.inflate(getLayoutInflater());
-        return binding.getRoot();
+        return inflater.inflate(R.layout.fragment_folders, container, false);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        binding = null;
     }
 
     private List<TypeData> getListTypes() {
         List<TypeData> list = new ArrayList<>();
         list.add(new TypeData(R.drawable.ic_video, "Videos", null));
-        list.add(new TypeData(R.drawable.ic_selfie, "Images", null));
+        list.add(new TypeData(R.drawable.ic_selfie, "Images", ImageLoader.loadImageFromSharedStorage(getActivity())));
         list.add(new TypeData(R.drawable.ic_screenshot, "Screenshots", null));
 
         return list;
@@ -95,7 +115,7 @@ public class FoldersFragment extends Fragment {
 
     private List<FolderData> getListFolders() {
         List<FolderData> list = new ArrayList<>();
-        list.add(new FolderData(R.drawable.ic_folder, null,"All Images & Videos", null));
+        list.add(new FolderData(R.drawable.ic_folder, null,"All Images & Videos", ImageLoader.loadImageFromSharedStorage(getActivity())));
         return list;
     }
 }

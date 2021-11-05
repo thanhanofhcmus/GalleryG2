@@ -2,6 +2,7 @@ package com.gnine.galleryg2.fragments;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -12,6 +13,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,6 +23,7 @@ import com.gnine.galleryg2.R;
 import com.gnine.galleryg2.tools.ImageLoader;
 
 import java.util.List;
+import java.util.Objects;
 
 public class AllImagesFragment extends Fragment {
 
@@ -29,9 +32,15 @@ public class AllImagesFragment extends Fragment {
     private int typeView;
     private int numImagesChecked;
     private List<ImageData> imageDataList;
+    private boolean folder;
+
 
     public AllImagesFragment() {
         // Required empty public constructor
+    }
+
+    public void setFolder(boolean folder) {
+        this.folder = folder;
     }
 
     @Override
@@ -51,6 +60,23 @@ public class AllImagesFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if (getView() == null) { return; }
+
+        if (folder == true) {
+            getView().setFocusableInTouchMode(true);
+            getView().requestFocus();
+            getView().setOnKeyListener(new View.OnKeyListener() {
+                @Override
+                public boolean onKey(View view, int i, KeyEvent keyEvent) {
+                    if (i == KeyEvent.KEYCODE_BACK) {
+                        FragmentManager manager = requireActivity().getSupportFragmentManager();
+                        manager.popBackStack();
+                        FoldersFragment.checkBackPressed = true;
+                        return true;
+                    }
+                    return false;
+                }
+            });
+        }
 
         assert getActivity() != null;
 
