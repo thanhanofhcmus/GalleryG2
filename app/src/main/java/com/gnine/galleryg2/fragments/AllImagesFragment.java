@@ -15,20 +15,24 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.gnine.galleryg2.ISendImageListListener;
+import com.gnine.galleryg2.MainActivity;
 import com.gnine.galleryg2.data.ImageData;
 import com.gnine.galleryg2.adapters.ImageRecyclerViewAdapter;
 import com.gnine.galleryg2.R;
 import com.gnine.galleryg2.tools.ImageLoader;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class AllImagesFragment extends Fragment {
+public class AllImagesFragment extends Fragment{
 
     private RecyclerView recyclerView;
     private ImageRecyclerViewAdapter imageAdapter;
     private int typeView;
     private int numImagesChecked;
-    private List<ImageData> imageDataList;
+    private ArrayList<ImageData> imageDataList=null;
+    private MainActivity mainActivity;
 
     public AllImagesFragment() {
         // Required empty public constructor
@@ -60,6 +64,8 @@ public class AllImagesFragment extends Fragment {
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), typeView));
 
         imageDataList = ImageLoader.loadImageFromSharedStorage(getActivity());
+        mainActivity=(MainActivity)getActivity();
+        mainActivity.sendImageList(imageDataList);
 
         imageAdapter = new ImageRecyclerViewAdapter(imageDataList);
         imageAdapter.setACTION_MODE(0);
@@ -84,6 +90,8 @@ public class AllImagesFragment extends Fragment {
                 }
                 getActivity().setTitle(String.valueOf(numImagesChecked));
                 imageAdapter.notifyItemChanged(position);
+            }else{
+                sendImagePosition(position);
             }
         });
 
@@ -138,4 +146,9 @@ public class AllImagesFragment extends Fragment {
 
         return super.onOptionsItemSelected(item);
     }
+
+    private void sendImagePosition(int position){
+        mainActivity.sendImagePosition(position);
+    }
+
 }

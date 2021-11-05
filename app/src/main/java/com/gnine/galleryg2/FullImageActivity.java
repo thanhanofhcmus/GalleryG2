@@ -12,28 +12,41 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 
-public class FullImageActivity extends AppCompatActivity {
+import com.gnine.galleryg2.data.ImageData;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+public class FullImageActivity extends AppCompatActivity{
+
+    //Find the solution to send list image, position to EditFragment, CutFragment
+    private ArrayList<ImageData> imageDataList;
+    private int position;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_full_image);
 
+        getDataFromMainActivity();
+
         Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setNavigationIcon(ContextCompat.getDrawable(this, R.drawable.ic_back));
+        setSupportActionBar(toolbar);
+        toolbar.setNavigationIcon(R.drawable.ic_back);
         toolbar.setNavigationOnClickListener(view -> backToMain());
 
-        setSupportActionBar(toolbar);
+        sendDataToViewPagerFragment();
+
     }
 
     private void backToMain() {
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(FullImageActivity.this, MainActivity.class);
         startActivity(intent);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-//        return super.onCreateOptionsMenu(menu);
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.top_menu, menu);
         return true;
@@ -52,5 +65,16 @@ public class FullImageActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private void getDataFromMainActivity(){
+        Bundle bundle= (Bundle) getIntent().getExtras().get("image list");
+        imageDataList= (ArrayList<ImageData>) bundle.get("image list");
+        position= (int) getIntent().getExtras().get("position");
+        System.out.println(position);
+    }
 
+    private void sendDataToViewPagerFragment(){
+        Bundle bundle=new Bundle();
+        bundle.putSerializable("image list", (Serializable) imageDataList);
+        bundle.putInt("position", position);
+    }
 }

@@ -2,7 +2,7 @@ package com.gnine.galleryg2.tools;
 
 public class SliderItem {
 
-    private int image;
+    private final int image;
 
     public SliderItem(int image) {
         this.image = image;
@@ -12,7 +12,7 @@ public class SliderItem {
         return image;
     }
 
-    public void setImage(int image) {
-        this.image = image;
-    }
+//    public void setImage(int image) {
+//        this.image = image;
+//    }
 }

@@ -56,8 +56,8 @@ public class ImageLoader {
     }
 
     @NonNull
-    public static List<ImageData> loadImageFromSharedStorage(Context context) {
-        List<ImageData> imageDataList = new ArrayList<>();
+    public static ArrayList<ImageData> loadImageFromSharedStorage(Context context) {
+        ArrayList<ImageData> imageDataList = new ArrayList<>();
 
         Uri collection = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
                        ? MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL)

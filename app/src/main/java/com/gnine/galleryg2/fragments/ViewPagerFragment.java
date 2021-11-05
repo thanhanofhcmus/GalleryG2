@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 
 import com.gnine.galleryg2.R;
 import com.gnine.galleryg2.adapters.SliderAdapter;
+import com.gnine.galleryg2.data.ImageData;
 import com.gnine.galleryg2.tools.SliderItem;
 
 import java.util.ArrayList;
@@ -22,6 +23,9 @@ import java.util.List;
 
 
 public class ViewPagerFragment extends Fragment {
+
+    private ArrayList<ImageData> imageDataList;
+    private int position;
 
     public ViewPagerFragment() {
         // Required empty public constructor
@@ -32,8 +36,12 @@ public class ViewPagerFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view=inflater.inflate(R.layout.fragment_view_pager,container,false);
+        assert getActivity() !=null;
         ((AppCompatActivity)getActivity()).getSupportActionBar().show();
         view.findViewById(R.id.editBtn).setOnClickListener(v-> Navigation.findNavController(view).navigate(R.id.viewPagerToEditFragment));
+
+        imageDataList= (ArrayList<ImageData>) getArguments().getSerializable("image list");
+        position= getArguments().getInt("position");
         return view;
 
     }
@@ -43,9 +51,7 @@ public class ViewPagerFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         assert getView() != null;
         ViewPager2 viewPager2= getView().findViewById(R.id.viewPagerImageSlider);
-        List<SliderItem> list=new ArrayList<>();
-        list.add(new SliderItem(R.drawable.image_0));
-        list.add(new SliderItem(R.drawable.image_1));
-        viewPager2.setAdapter(new SliderAdapter(list,viewPager2));
+//        ArrayList<ImageData> list=new ArrayList<>();
+        viewPager2.setAdapter(new SliderAdapter(imageDataList,viewPager2));
     }
 }
