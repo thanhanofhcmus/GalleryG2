@@ -14,58 +14,17 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.gnine.galleryg2.R;
-import com.gnine.galleryg2.slider.SliderAdapter;
-import com.gnine.galleryg2.slider.SliderItem;
+import com.gnine.galleryg2.adapters.SliderAdapter;
+import com.gnine.galleryg2.tools.SliderItem;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ViewPagerFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class ViewPagerFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-//    private static final String ARG_PARAM1 = "param1";
-//    private static final String ARG_PARAM2 = "param2";
-//
-//    // TODO: Rename and change types of parameters
-//    private String mParam1;
-//    private String mParam2;
+public class ViewPagerFragment extends Fragment {
 
     public ViewPagerFragment() {
         // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ViewPagerFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static ViewPagerFragment newInstance(String param1, String param2) {
-        ViewPagerFragment fragment = new ViewPagerFragment();
-        Bundle args = new Bundle();
-//        args.putString(ARG_PARAM1, param1);
-//        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-//        ViewPager2 viewPager2= getView().findViewById(R.id.viewPagerImageSlider);
-//        List<SliderItem> list=new ArrayList<>();
-//        list.add(new SliderItem(R.drawable.image0));
-//        list.add(new SliderItem(R.drawable.image1));
-//        viewPager2.setAdapter(new SliderAdapter(list,viewPager2));
     }
 
     @Override
@@ -82,6 +41,7 @@ public class ViewPagerFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        assert getView() != null;
         ViewPager2 viewPager2= getView().findViewById(R.id.viewPagerImageSlider);
         List<SliderItem> list=new ArrayList<>();
         list.add(new SliderItem(R.drawable.image_0));

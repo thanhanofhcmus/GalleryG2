@@ -1,4 +1,4 @@
-package com.gnine.galleryg2.slider;
+package com.gnine.galleryg2.adapters;
 
 import android.graphics.Matrix;
 import android.graphics.PointF;
@@ -14,11 +14,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.gnine.galleryg2.R;
+import com.gnine.galleryg2.tools.SliderItem;
 import com.makeramen.roundedimageview.RoundedImageView;
 
 import java.util.List;
 
-public class SliderAdapter extends RecyclerView.Adapter<SliderAdapter.SliderViewHolder> implements View.OnTouchListener {
+public class SliderAdapter extends RecyclerView.Adapter<SliderAdapter.SliderViewHolder> implements
+        View.OnTouchListener {
 
     private List<SliderItem> sliderItems;
     private ViewPager2 viewPager2;
@@ -26,7 +28,7 @@ public class SliderAdapter extends RecyclerView.Adapter<SliderAdapter.SliderView
 
     private static final String TAG = "Touch";
     @SuppressWarnings("unused")
-    private static final float MIN_ZOOM = 1f,MAX_ZOOM = 1f;
+    private static final float MIN_ZOOM = 1f, MAX_ZOOM = 1f;
 
     // These matrices will be used to scale points of the image
     Matrix matrix = new Matrix();
@@ -54,7 +56,7 @@ public class SliderAdapter extends RecyclerView.Adapter<SliderAdapter.SliderView
         return new SliderViewHolder(
                 LayoutInflater.from(parent.getContext()).inflate(
                         R.layout.slide_item_container,
-                        parent,false
+                        parent, false
                 )
         );
     }
@@ -78,8 +80,7 @@ public class SliderAdapter extends RecyclerView.Adapter<SliderAdapter.SliderView
         dumpEvent(event);
         // Handle touch events here...
 
-        switch (event.getAction() & MotionEvent.ACTION_MASK)
-        {
+        switch (event.getAction() & MotionEvent.ACTION_MASK) {
             case MotionEvent.ACTION_DOWN:   // first finger down only
                 matrix.set(view.getImageMatrix());
                 savedMatrix.set(matrix);
@@ -110,18 +111,15 @@ public class SliderAdapter extends RecyclerView.Adapter<SliderAdapter.SliderView
 
             case MotionEvent.ACTION_MOVE:
 
-                if (mode == DRAG)
-                {
+                if (mode == DRAG) {
                     matrix.set(savedMatrix);
-                    matrix.postTranslate(event.getX() - start.x, event.getY() - start.y); // create the transformation in the matrix  of points
-                }
-                else if (mode == ZOOM)
-                {
+                    matrix.postTranslate(event.getX() - start.x, event.getY()
+                            - start.y); // create the transformation in the matrix  of points
+                } else if (mode == ZOOM) {
                     // pinch zooming
                     float newDist = spacing(event);
                     Log.d(TAG, "newDist=" + newDist);
-                    if (newDist > 5f)
-                    {
+                    if (newDist > 5f) {
                         matrix.set(savedMatrix);
                         scale = newDist / oldDist; // setting the scaling of the
                         // matrix...if scale > 1 means
@@ -139,22 +137,21 @@ public class SliderAdapter extends RecyclerView.Adapter<SliderAdapter.SliderView
     }
 
 
-    class SliderViewHolder extends RecyclerView.ViewHolder{
+    class SliderViewHolder extends RecyclerView.ViewHolder {
         private RoundedImageView imageView;
 
         public SliderViewHolder(@NonNull View itemView) {
             super(itemView);
-            imageView=itemView.findViewById(R.id.imageSlide);
+            imageView = itemView.findViewById(R.id.imageSlide);
 //            imageView.setOnTouchListener((View.OnTouchListener) this);
         }
 
-        void setImage(SliderItem sliderItem){
+        void setImage(SliderItem sliderItem) {
             imageView.setImageResource(sliderItem.getImage());
         }
     }
 
-    private float spacing(MotionEvent event)
-    {
+    private float spacing(MotionEvent event) {
         float x = event.getX(0) - event.getX(1);
         float y = event.getY(0) - event.getY(1);
         return (float) Math.sqrt(x * x + y * y);
@@ -167,37 +164,39 @@ public class SliderAdapter extends RecyclerView.Adapter<SliderAdapter.SliderView
      * ------------------------------------------------------------
      */
 
-    private void midPoint(PointF point, MotionEvent event)
-    {
+    private void midPoint(PointF point, MotionEvent event) {
         float x = event.getX(0) + event.getX(1);
         float y = event.getY(0) + event.getY(1);
         point.set(x / 2, y / 2);
     }
 
-    /** Show an event in the LogCat view, for debugging */
-    private void dumpEvent(MotionEvent event)
-    {
-        String names[] = { "DOWN", "UP", "MOVE", "CANCEL", "OUTSIDE","POINTER_DOWN", "POINTER_UP", "7?", "8?", "9?" };
+    /**
+     * Show an event in the LogCat view, for debugging
+     */
+    private void dumpEvent(MotionEvent event) {
+        String names[] =
+                {"DOWN", "UP", "MOVE", "CANCEL", "OUTSIDE", "POINTER_DOWN", "POINTER_UP", "7?",
+                        "8?", "9?"};
         StringBuilder sb = new StringBuilder();
         int action = event.getAction();
         int actionCode = action & MotionEvent.ACTION_MASK;
         sb.append("event ACTION_").append(names[actionCode]);
 
-        if (actionCode == MotionEvent.ACTION_POINTER_DOWN || actionCode == MotionEvent.ACTION_POINTER_UP)
-        {
+        if (actionCode == MotionEvent.ACTION_POINTER_DOWN
+                || actionCode == MotionEvent.ACTION_POINTER_UP) {
             sb.append("(pid ").append(action >> MotionEvent.ACTION_POINTER_ID_SHIFT);
             sb.append(")");
         }
 
         sb.append("[");
-        for (int i = 0; i < event.getPointerCount(); i++)
-        {
+        for (int i = 0; i < event.getPointerCount(); i++) {
             sb.append("#").append(i);
             sb.append("(pid ").append(event.getPointerId(i));
             sb.append(")=").append((int) event.getX(i));
             sb.append(",").append((int) event.getY(i));
-            if (i + 1 < event.getPointerCount())
+            if (i + 1 < event.getPointerCount()) {
                 sb.append(";");
+            }
         }
 
         sb.append("]");

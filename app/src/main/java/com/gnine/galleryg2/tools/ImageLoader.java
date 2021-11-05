@@ -9,7 +9,7 @@ import android.provider.MediaStore;
 
 import androidx.annotation.NonNull;
 
-import com.gnine.galleryg2.ImageData;
+import com.gnine.galleryg2.data.ImageData;
 import com.gnine.galleryg2.R;
 
 import java.lang.reflect.Field;

@@ -1,4 +1,4 @@
-package com.gnine.galleryg2.slider;
+package com.gnine.galleryg2.tools;
 
 public class SliderItem {
 

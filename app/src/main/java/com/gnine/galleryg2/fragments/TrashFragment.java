@@ -17,10 +17,6 @@ public class TrashFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static TrashFragment newInstance() {
-        return new TrashFragment();
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
