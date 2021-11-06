@@ -17,10 +17,12 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.gnine.galleryg2.data.FolderData;
 import com.gnine.galleryg2.data.ImageData;
 import com.gnine.galleryg2.adapters.ImageRecyclerViewAdapter;
 import com.gnine.galleryg2.R;
 import com.gnine.galleryg2.tools.ImageLoader;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.List;
 import java.util.Objects;
@@ -42,6 +44,8 @@ public class AllImagesFragment extends Fragment {
     public void setFolder(boolean folder) {
         this.folder = folder;
     }
+
+    public void setImageDataList(List<ImageData> imageDataList) {this.imageDataList = imageDataList;}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -71,11 +75,18 @@ public class AllImagesFragment extends Fragment {
                         FragmentManager manager = requireActivity().getSupportFragmentManager();
                         manager.popBackStack();
                         FoldersFragment.checkBackPressed = true;
+                        FoldersFragment.tempFragment = null;
+                        BottomNavigationView bnv = (BottomNavigationView) getActivity().findViewById(R.id.bottomNavView);
+                        bnv.getMenu().getItem(1).setEnabled(true);
                         return true;
                     }
                     return false;
                 }
             });
+        }
+        else if (!folder && !FoldersFragment.checkBackPressed && FoldersFragment.tempFragment != null) {
+            BottomNavigationView bnv = (BottomNavigationView) getActivity().findViewById(R.id.bottomNavView);
+            bnv.getMenu().getItem(1).setEnabled(true);
         }
 
         assert getActivity() != null;
@@ -85,7 +96,7 @@ public class AllImagesFragment extends Fragment {
         typeView = 4;
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), typeView));
 
-        imageDataList = ImageLoader.loadImageFromSharedStorage(getActivity());
+        this.imageDataList = folder ? imageDataList : ImageLoader.loadImageFromSharedStorage(getActivity());
 
         imageAdapter = new ImageRecyclerViewAdapter(imageDataList);
         imageAdapter.setACTION_MODE(0);

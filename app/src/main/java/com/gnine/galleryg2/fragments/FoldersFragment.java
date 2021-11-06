@@ -20,8 +20,8 @@ import com.gnine.galleryg2.adapters.FolderAdapter;
 import com.gnine.galleryg2.R;
 import com.gnine.galleryg2.data.TypeData;
 import com.gnine.galleryg2.adapters.TypesAdapter;
-import com.gnine.galleryg2.databinding.FragmentFoldersBinding;
 import com.gnine.galleryg2.tools.ImageLoader;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,13 +61,16 @@ public class FoldersFragment extends Fragment {
         folderAdapter.setData(getListFolders());
         rcvFolder.setAdapter(folderAdapter);
 
-        folderAdapter.setOnFolderClick(new FolderAdapter.FolderClick() {
+        FolderAdapter.setOnFolderClick(new FolderAdapter.FolderClick() {
             @Override
             public void onClick(View view, int position) {
                 checkBackPressed = false;
                 FragmentTransaction ft = getChildFragmentManager().beginTransaction();
                 tempFragment = new AllImagesFragment();
                 ((AllImagesFragment)tempFragment).setFolder(true);
+                ((AllImagesFragment)tempFragment).setImageDataList(getListFolders().get(position).imageList);
+                BottomNavigationView bnv = (BottomNavigationView) getActivity().findViewById(R.id.bottomNavView);
+                bnv.getMenu().getItem(1).setEnabled(false);
                 ft.replace(R.id.fragmentFolders, tempFragment);
                 ft.addToBackStack(null);
                 ft.commit();
@@ -86,9 +89,14 @@ public class FoldersFragment extends Fragment {
 
         if (!checkBackPressed && tempFragment != null) { //not back from all images fragment of folder
             FragmentTransaction ft = getChildFragmentManager().beginTransaction();
+            BottomNavigationView bnv = (BottomNavigationView) getActivity().findViewById(R.id.bottomNavView);
+            bnv.getMenu().getItem(1).setEnabled(false);
             ft.replace(R.id.fragmentFolders, tempFragment);
             ft.addToBackStack(null);
             ft.commit();
+        }
+        else {
+            tempFragment = null;
         }
     }
 
@@ -107,7 +115,7 @@ public class FoldersFragment extends Fragment {
     private List<TypeData> getListTypes() {
         List<TypeData> list = new ArrayList<>();
         list.add(new TypeData(R.drawable.ic_video, "Videos", null));
-        list.add(new TypeData(R.drawable.ic_selfie, "Images", ImageLoader.loadImageFromSharedStorage(getActivity())));
+        list.add(new TypeData(R.drawable.ic_selfie, "Images", ImageLoader.loadImageFromSharedStorage(requireActivity())));
         list.add(new TypeData(R.drawable.ic_screenshot, "Screenshots", null));
 
         return list;
@@ -115,7 +123,8 @@ public class FoldersFragment extends Fragment {
 
     private List<FolderData> getListFolders() {
         List<FolderData> list = new ArrayList<>();
-        list.add(new FolderData(R.drawable.ic_folder, null,"All Images & Videos", ImageLoader.loadImageFromSharedStorage(getActivity())));
+        list.addAll(ImageLoader.retrieveFoldersHaveImage("/storage/"));
+        list.addAll(ImageLoader.retrieveFoldersHaveImage("/sdcard/"));
         return list;
     }
 }

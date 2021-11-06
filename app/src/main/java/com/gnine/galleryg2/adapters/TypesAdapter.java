@@ -17,7 +17,25 @@ import java.util.List;
 
 public class TypesAdapter extends RecyclerView.Adapter<TypesAdapter.TypesViewHolder> {
 
+    public static class TypesViewHolder extends RecyclerView.ViewHolder {
+
+        private final ImageView icon;
+        private final TextView title;
+        private final TextView count;
+
+        public TypesViewHolder(@NonNull View itemView) {
+            super(itemView);
+
+            icon = itemView.findViewById(R.id.icon);
+            title = itemView.findViewById(R.id.title);
+            count = itemView.findViewById(R.id.count);
+
+            itemView.setOnClickListener(v -> onTypesClick.onClick(v, getAbsoluteAdapterPosition()));
+        }
+    }
+
     private List<TypeData> mTypeDataList;
+    private static TypesClick onTypesClick = null;
 
     public void setData(List<TypeData> list) {
         this.mTypeDataList = list;
@@ -47,23 +65,14 @@ public class TypesAdapter extends RecyclerView.Adapter<TypesAdapter.TypesViewHol
 
     @Override
     public int getItemCount() {
-        if (mTypeDataList != null)
-            return mTypeDataList.size();
-        return 0;
+        return mTypeDataList != null ? mTypeDataList.size() : 0;
     }
 
-    public static class TypesViewHolder extends RecyclerView.ViewHolder {
+    public static void setOnTypesClick(TypesClick onTypesClick) {
+        TypesAdapter.onTypesClick = onTypesClick;
+    }
 
-        private final ImageView icon;
-        private final TextView title;
-        private final TextView count;
-
-        public TypesViewHolder(@NonNull View itemView) {
-            super(itemView);
-
-            icon = itemView.findViewById(R.id.icon);
-            title = itemView.findViewById(R.id.title);
-            count = itemView.findViewById(R.id.count);
-        }
+    public interface TypesClick {
+        void onClick(View view, int position);
     }
 }
