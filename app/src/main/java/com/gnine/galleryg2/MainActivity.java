@@ -17,15 +17,13 @@ import androidx.navigation.ui.NavigationUI;
 import com.gnine.galleryg2.data.ImageData;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements ISendImageListListener{
+public class MainActivity extends AppCompatActivity {
 
+    public static final String IMAGE_LIST_KEY = "IMAGE_LIST_KEY";
+    public static final String IMAGE_POSITION_KEY = "IMAGE_POSITION_KEY";
     private static final int READ_EXTERNAL_STORAGE_REQUEST_CODE = 111;
-    private ArrayList<ImageData> imageDataList;
-
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -39,16 +37,11 @@ public class MainActivity extends AppCompatActivity implements ISendImageListLis
                 != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(
                     this,
-                    new String[] { Manifest.permission.READ_EXTERNAL_STORAGE },
+                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
                     READ_EXTERNAL_STORAGE_REQUEST_CODE);
         } else {
             setupBottomNavigation();
         }
-//        imageDataList = ImageLoader.loadImageFromSharedStorage(this);
-//        allImagesFragment=(AllImagesFragment) getSupportFragmentManager().findFragmentById(R.id.allImagesFragment);
-//        allImagesFragment.sendImageList(imageDataList);
-//        iSendImageListListener.sendImageList(imageDataList);
-
     }
 
     @Override
@@ -56,32 +49,25 @@ public class MainActivity extends AppCompatActivity implements ISendImageListLis
             @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == READ_EXTERNAL_STORAGE_REQUEST_CODE
-            && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             setupBottomNavigation();
         }
     }
 
     private void setupBottomNavigation() {
-        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.navHostFragment);
+        NavHostFragment navHostFragment =
+                (NavHostFragment) getSupportFragmentManager().findFragmentById(
+                        R.id.navHostFragment);
         assert navHostFragment != null;
         NavController navController = navHostFragment.getNavController();
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavView);
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
     }
 
-
-    @Override
-    public void sendImageList(ArrayList<ImageData> list) {
-        imageDataList=list;
-    }
-
-    @Override
-    public void sendImagePosition(int position) {
-        Intent intent=new Intent(MainActivity.this, FullImageActivity.class);
-        Bundle bundle=new Bundle();
-        bundle.putSerializable("image list", (Serializable) imageDataList);
-        intent.putExtra("image list",bundle);
-        intent.putExtra("position",position);
+    public void invokeFullImageActivity(ArrayList<ImageData> imageDataList, int position) {
+        Intent intent = new Intent(MainActivity.this, FullImageActivity.class);
+        intent.putExtra(IMAGE_LIST_KEY, imageDataList);
+        intent.putExtra(IMAGE_POSITION_KEY, position);
 
         startActivity(intent);
     }

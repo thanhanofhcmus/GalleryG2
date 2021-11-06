@@ -29,17 +29,14 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.FolderView
             icon = itemView.findViewById(R.id.icon);
             title = itemView.findViewById(R.id.title);
             count = itemView.findViewById(R.id.count);
-
-//            itemView.setOnClickListener(v -> onFolderClick.onClick(v, getAbsoluteAdapterPosition()));
         }
     }
 
     private List<FolderData> mFolderDataList;
-    private static FolderClick onFolderClick = null;
 
     public void setData(List<FolderData> list) {
         this.mFolderDataList = list;
-        notifyDataSetChanged();
+        notifyItemRangeChanged(0, getItemCount());
     }
 
     @NonNull
@@ -68,11 +65,4 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.FolderView
         return mFolderDataList != null ? mFolderDataList.size() : 0;
     }
 
-    public static void setOnFolderClick(FolderClick onFolderClick) {
-        FolderAdapter.onFolderClick = onFolderClick;
-    }
-
-    public interface FolderClick {
-        void onClick(View view, int position);
-    }
 }

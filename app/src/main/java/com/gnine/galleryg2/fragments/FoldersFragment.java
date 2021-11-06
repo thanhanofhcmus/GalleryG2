@@ -55,10 +55,6 @@ public class FoldersFragment extends Fragment {
         folderAdapter.setData(getListFolders());
         rcvFolder.setAdapter(folderAdapter);
 
-        folderAdapter.setOnFolderClick((view1, position) -> {
-            // TODO: move to a fragment show all images in that folder
-        });
-
         //TypeData
         TypesAdapter typesAdapter = new TypesAdapter();
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.getContext());

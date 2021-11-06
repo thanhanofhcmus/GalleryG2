@@ -2,6 +2,7 @@ package com.gnine.galleryg2.fragments;
 
 import android.os.Bundle;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
@@ -25,9 +26,7 @@ public class EditFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_edit, container, false);
-//        Toolbar toolbar=getView().findViewById(R.id.toolbar);
         RoundedImageView imageView = view.findViewById(R.id.singleImage);
         Button closeBtn = view.findViewById(R.id.closeBtn);
         closeBtn.setOnClickListener(
@@ -47,8 +46,9 @@ public class EditFragment extends Fragment {
             toRotation[0] += 90;
         });
         assert getActivity() != null;
-        assert ((AppCompatActivity) getActivity()).getSupportActionBar() != null;
-        ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
+        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        assert actionBar != null;
+        actionBar.hide();
 
         return view;
     }

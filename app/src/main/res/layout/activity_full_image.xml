@@ -23,29 +23,22 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true" />
 
-        <RelativeLayout
+        <LinearLayout
             android:id="@+id/relativeLayout2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/toolbar">
 
-
-            <RelativeLayout
-                android:id="@+id/viewPagerLayout"
+            <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/fragmentContainerView"
+                android:name="androidx.navigation.fragment.NavHostFragment"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" >
+                android:layout_height="match_parent"
+                app:defaultNavHost="true"
+                app:navGraph="@navigation/full_image_nav" />
 
-                <androidx.fragment.app.FragmentContainerView
-                    android:id="@+id/fragmentContainerView"
-                    android:name="androidx.navigation.fragment.NavHostFragment"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:defaultNavHost="true"
-                    app:navGraph="@navigation/full_image_nav"/>
-            </RelativeLayout>
+        </LinearLayout>
 
-
-
-        </RelativeLayout>
     </RelativeLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

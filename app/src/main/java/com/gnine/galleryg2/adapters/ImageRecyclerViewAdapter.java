@@ -14,6 +14,9 @@ import com.gnine.galleryg2.data.ImageData;
 import com.gnine.galleryg2.R;
 
 import java.util.List;
+import java.util.function.BiConsumer;
+
+import com.gnine.galleryg2.fragments.AllImagesFragment.State;
 
 public class ImageRecyclerViewAdapter extends
         RecyclerView.Adapter<ImageRecyclerViewAdapter.ImageViewHolder> {
@@ -24,29 +27,40 @@ public class ImageRecyclerViewAdapter extends
         public View scrim;
         public CheckBox checkBox;
 
-        ImageViewHolder(@NonNull View view) {
+        ImageViewHolder(@NonNull View view,
+                BiConsumer<Integer, View> onItemClick,
+                BiConsumer<Integer, View> onItemLongClick) {
             super(view);
             imageView = view.findViewById(R.id.pictureItemImageView);
             scrim = itemView.findViewById(R.id.pictureItemScrim);
             checkBox = itemView.findViewById(R.id.pictureItemCheckCircle);
 
             itemView.setOnLongClickListener(view1 -> {
-                onItemLongClickListener.onItemLongClick(getAdapterPosition(), view1);
+                onItemLongClick.accept(getAbsoluteAdapterPosition(), view1);
                 return false;
             });
 
             itemView.setOnClickListener(
-                    view1 -> onItemClickListener.onItemClick(getAdapterPosition(), view1));
+                    view1 -> onItemClick.accept(getAbsoluteAdapterPosition(), view1));
         }
     }
 
-    @NonNull final private List<ImageData> imageDataList;
-    private int ACTION_MODE = 0;
-    private static OnItemLongClickListener onItemLongClickListener = null;
-    private static OnItemClickListener onItemClickListener = null;
 
-    public ImageRecyclerViewAdapter(@NonNull List<ImageData> imageDataList) {
+    @NonNull
+    private final List<ImageData> imageDataList;
+    @NonNull
+    private final BiConsumer<Integer, View> onItemClick;
+    @NonNull
+    private final BiConsumer<Integer, View> onItemLongClick;
+
+    private State state = State.Normal;
+
+    public ImageRecyclerViewAdapter(@NonNull List<ImageData> imageDataList,
+            @NonNull BiConsumer<Integer, View> onItemClick,
+            @NonNull BiConsumer<Integer, View> onItemLongClick) {
         this.imageDataList = imageDataList;
+        this.onItemClick = onItemClick;
+        this.onItemLongClick = onItemLongClick;
     }
 
     @NonNull
@@ -54,7 +68,7 @@ public class ImageRecyclerViewAdapter extends
     public ImageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View view = inflater.inflate(R.layout.picture_item, parent, false);
-        return new ImageViewHolder(view);
+        return new ImageViewHolder(view, onItemClick, onItemLongClick);
     }
 
     @Override
@@ -65,7 +79,7 @@ public class ImageRecyclerViewAdapter extends
                 .load(imageData.uri)
                 .placeholder(R.drawable.bird_thumbnail)
                 .into(imageView);
-        if (ACTION_MODE == 0) {
+        if (state == State.Normal) {
             holder.scrim.setVisibility(View.GONE);
             holder.checkBox.setVisibility(View.GONE);
             imageData.setChecked(false);
@@ -81,27 +95,7 @@ public class ImageRecyclerViewAdapter extends
         return imageDataList.size();
     }
 
-    public int getACTION_MODE() {
-        return ACTION_MODE;
-    }
+    public State getState() { return state; }
 
-    public void setACTION_MODE(int ACTION_MODE) {
-        this.ACTION_MODE = ACTION_MODE;
-    }
-
-    public void setOnItemLongClickListener(OnItemLongClickListener onItemLongClickListener) {
-        ImageRecyclerViewAdapter.onItemLongClickListener = onItemLongClickListener;
-    }
-
-    public interface OnItemLongClickListener {
-        void onItemLongClick(int position, View view);
-    }
-
-    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
-        ImageRecyclerViewAdapter.onItemClickListener = onItemClickListener;
-    }
-
-    public interface OnItemClickListener {
-        void onItemClick(int position, View view);
-    }
+    public void setState(State state) { this.state = state; }
 }

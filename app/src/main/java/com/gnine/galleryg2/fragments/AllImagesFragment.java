@@ -15,7 +15,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.gnine.galleryg2.ISendImageListListener;
 import com.gnine.galleryg2.MainActivity;
 import com.gnine.galleryg2.data.ImageData;
 import com.gnine.galleryg2.adapters.ImageRecyclerViewAdapter;
@@ -23,16 +22,20 @@ import com.gnine.galleryg2.R;
 import com.gnine.galleryg2.tools.ImageLoader;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.function.BiConsumer;
 
-public class AllImagesFragment extends Fragment{
+public class AllImagesFragment extends Fragment {
+
+    public enum State {
+        Normal,
+        MultipleSelect
+    }
 
     private RecyclerView recyclerView;
     private ImageRecyclerViewAdapter imageAdapter;
     private int typeView;
     private int numImagesChecked;
-    private ArrayList<ImageData> imageDataList=null;
-    private MainActivity mainActivity;
+    private ArrayList<ImageData> imageDataList = null;
 
     public AllImagesFragment() {
         // Required empty public constructor
@@ -64,23 +67,9 @@ public class AllImagesFragment extends Fragment{
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), typeView));
 
         imageDataList = ImageLoader.loadImageFromSharedStorage(getActivity());
-        mainActivity=(MainActivity)getActivity();
-        mainActivity.sendImageList(imageDataList);
 
-        imageAdapter = new ImageRecyclerViewAdapter(imageDataList);
-        imageAdapter.setACTION_MODE(0);
-        recyclerView.setAdapter(imageAdapter);
-
-        imageAdapter.setOnItemLongClickListener((position, view1) -> {
-            imageAdapter.setACTION_MODE(1);
-            getActivity().invalidateOptionsMenu();
-            imageDataList.get(position).setChecked(true);
-            imageAdapter.notifyDataSetChanged();
-            getActivity().setTitle(String.valueOf(++numImagesChecked));
-        });
-
-        imageAdapter.setOnItemClickListener((position, view12) -> {
-            if (imageAdapter.getACTION_MODE() == 1) {
+        BiConsumer<Integer, View> onItemClick = (position, view12) -> {
+            if (imageAdapter.getState() == State.MultipleSelect) {
                 if (!imageDataList.get(position).isChecked()) {
                     imageDataList.get(position).setChecked(true);
                     numImagesChecked++;
@@ -90,12 +79,24 @@ public class AllImagesFragment extends Fragment{
                 }
                 getActivity().setTitle(String.valueOf(numImagesChecked));
                 imageAdapter.notifyItemChanged(position);
-            }else{
-                sendImagePosition(position);
+            } else {
+                sendImageListAndPositionToMain(position);
             }
-        });
+        };
 
+        BiConsumer<Integer, View> onItemLongClick = (position, view1) -> {
+            imageAdapter.setState(State.MultipleSelect);
+            getActivity().invalidateOptionsMenu();
+            imageDataList.get(position).setChecked(true);
+            imageAdapter.notifyItemRangeChanged(0, imageAdapter.getItemCount());
+            getActivity().setTitle(String.valueOf(++numImagesChecked));
+        };
+
+        imageAdapter = new ImageRecyclerViewAdapter(imageDataList, onItemClick, onItemLongClick);
+        imageAdapter.setState(State.Normal);
+        recyclerView.setAdapter(imageAdapter);
     }
+
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.appbar_menu, menu);
@@ -104,19 +105,18 @@ public class AllImagesFragment extends Fragment{
 
         if (typeView == 2) {
             menu.getItem(1).setIcon(R.drawable.ic_grid_2);
-        }
-        else if (typeView == 1) {
+        } else if (typeView == 1) {
             menu.getItem(1).setIcon(R.drawable.ic_grid_1);
         }
 
-        if (imageAdapter.getACTION_MODE() == 1) {
+        if (imageAdapter.getState() == State.MultipleSelect) {
             menu.getItem(1).setVisible(false);
             menu.getItem(0).setVisible(true);
             activity.setTitle(String.valueOf(numImagesChecked));
         } else {
             menu.getItem(1).setVisible(true);
             menu.getItem(0).setVisible(false);
-            activity.setTitle("HopeGallery6");
+            activity.setTitle("HopeGallery");
         }
 
         super.onCreateOptionsMenu(menu, inflater);
@@ -129,7 +129,7 @@ public class AllImagesFragment extends Fragment{
             if (typeView == 4) {
                 typeView = 2;
                 item.setIcon(R.drawable.ic_grid_2);
-            } else if (typeView == 2 ) {
+            } else if (typeView == 2) {
                 typeView = 1;
                 item.setIcon(R.drawable.ic_grid_1);
             } else {
@@ -138,8 +138,8 @@ public class AllImagesFragment extends Fragment{
             }
             recyclerView.setLayoutManager(new GridLayoutManager(getContext(), typeView));
         } else if (item.getItemId() == R.id.clear_choose) {
-            imageAdapter.setACTION_MODE(0);
-            imageAdapter.notifyDataSetChanged();
+            imageAdapter.setState(State.Normal);
+            imageAdapter.notifyItemRangeChanged(0, imageAdapter.getItemCount());
             numImagesChecked = 0;
             getActivity().invalidateOptionsMenu();
         }
@@ -147,8 +147,9 @@ public class AllImagesFragment extends Fragment{
         return super.onOptionsItemSelected(item);
     }
 
-    private void sendImagePosition(int position){
-        mainActivity.sendImagePosition(position);
+    private void sendImageListAndPositionToMain(int position) {
+        MainActivity mainActivity = (MainActivity) getActivity();
+        assert mainActivity != null;
+        mainActivity.invokeFullImageActivity(imageDataList, position);
     }
-
 }

@@ -4,19 +4,18 @@ import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class ImageData implements Serializable, Parcelable {
+public class ImageData implements Parcelable {
     public static final int UNDEFINED_INT_DATA = -1;
 
     public final Uri uri;
     public final String name;
     public final int size;
     public final long dateAdded;
-    public boolean checked;
+    private boolean checked;
 
     public ImageData(Uri uri, String name, int size, long dateAdded) {
         this.uri = uri;
@@ -33,6 +32,19 @@ public class ImageData implements Serializable, Parcelable {
         checked = in.readByte() != 0;
     }
 
+    public String getDateTime() {
+        return new SimpleDateFormat("hh:mm dd/MM/yyyy", Locale.getDefault())
+                .format(new Date(dateAdded * 1000L));
+    }
+
+    public boolean isChecked() {
+        return checked;
+    }
+
+    public void setChecked(boolean checked) {
+        this.checked = checked;
+    }
+
     public static final Creator<ImageData> CREATOR = new Creator<ImageData>() {
         @Override
         public ImageData createFromParcel(Parcel in) {
@@ -44,19 +56,6 @@ public class ImageData implements Serializable, Parcelable {
             return new ImageData[size];
         }
     };
-
-    public String getDateTime() {
-       return new SimpleDateFormat("hh:mm dd/MM/yyyy", Locale.getDefault())
-               .format(new Date(dateAdded * 1000L));
-    }
-
-    public boolean isChecked() {
-        return checked;
-    }
-
-    public void setChecked(boolean checked) {
-        this.checked = checked;
-    }
 
     @Override
     public int describeContents() {
