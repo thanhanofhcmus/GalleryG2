@@ -21,7 +21,7 @@ public class TypesAdapter extends RecyclerView.Adapter<TypesAdapter.TypesViewHol
 
     public void setData(List<TypeData> list) {
         this.mTypeDataList = list;
-        notifyDataSetChanged();
+        notifyItemRangeChanged(0, getItemCount());
     }
 
     @NonNull

@@ -116,7 +116,7 @@ public class AllImagesFragment extends Fragment {
         } else {
             menu.getItem(1).setVisible(true);
             menu.getItem(0).setVisible(false);
-            activity.setTitle("HopeGallery");
+            activity.setTitle("GalleryG2");
         }
 
         super.onCreateOptionsMenu(menu, inflater);
