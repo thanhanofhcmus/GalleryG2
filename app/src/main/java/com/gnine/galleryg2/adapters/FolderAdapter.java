@@ -46,14 +46,14 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.FolderView
 
     public void setData(List<FolderData> list) {
         this.mFolderDataList = list;
-        notifyDataSetChanged();
+        notifyItemRangeChanged(0, getItemCount());
     }
 
     @NonNull
     @Override
     public FolderAdapter.FolderViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.folder_item, parent, false);
-        return new FolderViewHolder(view);
+        return new FolderViewHolder(view, onFolderClick);
     }
 
     @Override

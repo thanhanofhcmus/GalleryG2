@@ -99,7 +99,9 @@ public class ImageLoader {
         File[] files = new File(directoryPath).listFiles(new ImageAndVideoFileFilter());
         assert files != null;
         for (File file : files) {
-            if (file == null) { continue; }
+            if (file == null) {
+                continue;
+            }
             FileTime fileTime = null;
             try {
                 fileTime = (FileTime) Files.getAttribute(file.toPath(), "creationTime");

@@ -50,7 +50,7 @@ public class AllImagesFragment extends Fragment {
         this.folder = folder;
     }
 
-    public void setImageDataList(List<ImageData> imageDataList) {this.imageDataList = imageDataList;}
+    public void setImageDataList(ArrayList<ImageData> imageDataList) {this.imageDataList = imageDataList;}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -95,7 +95,7 @@ public class AllImagesFragment extends Fragment {
         typeView = 4;
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), typeView));
 
-        imageDataList = ImageLoader.loadImageFromSharedStorage(getActivity());
+        this.imageDataList = folder ? imageDataList : ImageLoader.loadImageFromSharedStorage(requireActivity());
 
         BiConsumer<Integer, View> onItemClick = (position, view12) -> {
             if (imageAdapter.getState() == State.MultipleSelect) {
@@ -106,7 +106,7 @@ public class AllImagesFragment extends Fragment {
                     imageDataList.get(position).setChecked(false);
                     numImagesChecked--;
                 }
-                getActivity().setTitle(String.valueOf(numImagesChecked));
+                requireActivity().setTitle(String.valueOf(numImagesChecked));
                 imageAdapter.notifyItemChanged(position);
             } else {
                 sendImageListAndPositionToMain(position);
@@ -115,10 +115,10 @@ public class AllImagesFragment extends Fragment {
 
         BiConsumer<Integer, View> onItemLongClick = (position, view1) -> {
             imageAdapter.setState(State.MultipleSelect);
-            getActivity().invalidateOptionsMenu();
+            requireActivity().invalidateOptionsMenu();
             imageDataList.get(position).setChecked(true);
             imageAdapter.notifyItemRangeChanged(0, imageAdapter.getItemCount());
-            getActivity().setTitle(String.valueOf(++numImagesChecked));
+            requireActivity().setTitle(String.valueOf(++numImagesChecked));
         };
 
         imageAdapter = new ImageRecyclerViewAdapter(imageDataList, onItemClick, onItemLongClick);

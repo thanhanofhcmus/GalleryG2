@@ -25,6 +25,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.BiConsumer;
 
 public class FoldersFragment extends Fragment {
@@ -61,8 +62,7 @@ public class FoldersFragment extends Fragment {
             FragmentTransaction ft = getChildFragmentManager().beginTransaction();
             tempFragment = new AllImagesFragment();
             ((AllImagesFragment) tempFragment).setFolder(true);
-            ((AllImagesFragment) tempFragment).setImageDataList(
-                    getListFolders().get(position).imageList);
+            ((AllImagesFragment) tempFragment).setImageDataList(getListFolders().get(position).imageList);
             BottomNavigationView bnv = requireActivity().findViewById(R.id.bottomNavView);
             bnv.getMenu().getItem(1).setEnabled(false);
             ft.replace(R.id.fragmentFolders, tempFragment);
@@ -118,9 +118,8 @@ public class FoldersFragment extends Fragment {
 
     private List<FolderData> getListFolders() {
         List<FolderData> list = new ArrayList<>();
-        list.addAll(ImageLoader.retrieveFoldersHaveImage("/storage/"));
-        list.addAll(ImageLoader.retrieveFoldersHaveImage(
-                Environment.getExternalStorageDirectory().getPath()));
+        list.addAll(Objects.requireNonNull(ImageLoader.retrieveFoldersHaveImage("/storage/")));
+        list.addAll(Objects.requireNonNull(ImageLoader.retrieveFoldersHaveImage(Environment.getExternalStorageDirectory().getPath())));
         return list;
     }
 }
