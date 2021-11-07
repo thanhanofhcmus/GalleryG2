@@ -14,6 +14,7 @@ import com.gnine.galleryg2.data.ImageData;
 import com.gnine.galleryg2.R;
 
 import java.util.List;
+import java.util.function.BiConsumer;
 
 public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.FolderViewHolder> {
 
@@ -23,20 +24,29 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.FolderView
         public final TextView title;
         public final TextView count;
 
-        public FolderViewHolder(@NonNull View itemView) {
+        public FolderViewHolder(@NonNull View itemView, BiConsumer<Integer, View> onFolderClick) {
             super(itemView);
 
             icon = itemView.findViewById(R.id.icon);
             title = itemView.findViewById(R.id.title);
             count = itemView.findViewById(R.id.count);
+
+            itemView.setOnClickListener(view -> onFolderClick.accept(getAbsoluteAdapterPosition(), view));
         }
     }
 
     private List<FolderData> mFolderDataList;
+    private final BiConsumer<Integer, View> onFolderClick;
+
+    public FolderAdapter(List<FolderData> folderDataList,
+            BiConsumer<Integer, View> onFolderClick) {
+        mFolderDataList = folderDataList;
+        this.onFolderClick = onFolderClick;
+    }
 
     public void setData(List<FolderData> list) {
         this.mFolderDataList = list;
-        notifyItemRangeChanged(0, getItemCount());
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -64,5 +74,4 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.FolderView
     public int getItemCount() {
         return mFolderDataList != null ? mFolderDataList.size() : 0;
     }
-
 }

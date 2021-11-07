@@ -1,15 +1,16 @@
 package com.gnine.galleryg2.data;
 
-import java.net.URI;
-import java.util.List;
+import android.net.Uri;
+
+import java.util.ArrayList;
 
 public class FolderData {
     public final int resourceId;
-    public final URI uri;
+    public final Uri uri;
     public final String title;
-    public final List<ImageData> imageList;
+    public final ArrayList<ImageData> imageList;
 
-    public FolderData(int resourceId, URI uri, String title, List<ImageData> list) {
+    public FolderData(int resourceId, Uri uri, String title, ArrayList<ImageData> list) {
         this.resourceId = resourceId;
         this.uri = uri;
         this.title = title;

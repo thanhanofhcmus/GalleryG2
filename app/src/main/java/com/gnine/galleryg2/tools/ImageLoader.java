@@ -9,9 +9,17 @@ import android.provider.MediaStore;
 
 import androidx.annotation.NonNull;
 
+import com.gnine.galleryg2.R;
+import com.gnine.galleryg2.data.FolderData;
 import com.gnine.galleryg2.data.ImageData;
 
+import java.io.File;
+import java.io.FileFilter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.attribute.FileTime;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ImageLoader {
 
@@ -20,9 +28,9 @@ public class ImageLoader {
         ArrayList<ImageData> imageDataList = new ArrayList<>();
 
         Uri collection = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
-                       ? MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL)
-                       : MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-        String[] projection = new String[] {
+                ? MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL)
+                : MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+        String[] projection = new String[]{
                 MediaStore.Images.Media._ID,
                 MediaStore.Images.Media.DISPLAY_NAME,
                 MediaStore.Images.Media.SIZE,
@@ -51,5 +59,80 @@ public class ImageLoader {
         cursor.close();
 
         return imageDataList;
+    }
+
+    private static boolean isImageFile(String filePath) {
+        return filePath.endsWith(".jpg") || filePath.endsWith(".png") || filePath.endsWith(".jpeg")
+                || filePath.endsWith(".gif") || filePath.endsWith(".webp") || filePath.endsWith(
+                ".bmp");
+    }
+
+    private static boolean isVideoFile(String filePath) {
+        return filePath.endsWith(".mp4") || filePath.endsWith(".mkv") || filePath.endsWith(".3gp")
+                || filePath.endsWith(".webm");
+    }
+
+    private static class ImageAndVideoFileFilter implements FileFilter {
+        @Override
+        public boolean accept(File file) {
+            return isImageFile(file.getAbsolutePath()) || isVideoFile(file.getAbsolutePath());
+        }
+    }
+
+    private static class SubDirFilter implements FileFilter {
+        @Override
+        public boolean accept(File file) {
+            return file.isDirectory();
+        }
+    }
+
+    private static class MyFilter implements FileFilter {
+        @Override
+        public boolean accept(File file) {
+            return file.isDirectory() || isImageFile(file.getAbsolutePath()) || isVideoFile(
+                    file.getAbsolutePath());
+        }
+    }
+
+    private static ArrayList<ImageData> getImagesFromFolder(String directoryPath) {
+        ArrayList<ImageData> imagesList = new ArrayList<>();
+        File[] files = new File(directoryPath).listFiles(new ImageAndVideoFileFilter());
+        assert files != null;
+        for (File file : files) {
+            if (file == null) { continue; }
+            FileTime fileTime = null;
+            try {
+                fileTime = (FileTime) Files.getAttribute(file.toPath(), "creationTime");
+            } catch (IOException ignored) {
+            }
+            imagesList.add(new ImageData(Uri.fromFile(file), file.getName(), (int) file.length(),
+                    fileTime != null ? fileTime.toMillis() : 0));
+        }
+        return imagesList;
+    }
+
+    public static List<FolderData> retrieveFoldersHaveImage(String directoryPath) {
+        List<FolderData> foldersList = new ArrayList<>();
+        File[] files = new File(directoryPath).listFiles(new MyFilter());
+        if (files != null) {
+            for (File file : files) {
+                // Add the directories containing images or sub-directories
+                if (file.isDirectory()) {
+                    if (file.listFiles(new ImageAndVideoFileFilter()) != null) { //contains images
+                        if (file.listFiles(new ImageAndVideoFileFilter()).length > 0) {
+                            foldersList.add(new FolderData(R.drawable.ic_folder,
+                                    Uri.parse(file.getPath()),
+                                    file.getPath(),
+                                    getImagesFromFolder(file.getPath())));
+                        }
+                    }
+                    if (file.listFiles(new SubDirFilter()) != null) {
+                        foldersList.addAll(retrieveFoldersHaveImage(file.getPath()));
+                    }
+                }
+            }
+            return foldersList;
+        }
+        return null;
     }
 }

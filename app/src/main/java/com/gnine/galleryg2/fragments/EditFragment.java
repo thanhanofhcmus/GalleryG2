@@ -26,7 +26,9 @@ public class EditFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_edit, container, false);
+//        Toolbar toolbar=getView().findViewById(R.id.toolbar);
         RoundedImageView imageView = view.findViewById(R.id.singleImage);
         Button closeBtn = view.findViewById(R.id.closeBtn);
         closeBtn.setOnClickListener(
@@ -45,9 +47,8 @@ public class EditFragment extends Fragment {
             fromRotation[0] += 90;
             toRotation[0] += 90;
         });
-        assert getActivity() != null;
-        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-        assert actionBar != null;
+        ActionBar actionBar = ((AppCompatActivity) requireActivity()).getSupportActionBar();
+        assert  actionBar != null;
         actionBar.hide();
 
         return view;

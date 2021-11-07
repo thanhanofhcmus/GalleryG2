@@ -14,13 +14,33 @@ import com.gnine.galleryg2.data.ImageData;
 import com.gnine.galleryg2.data.TypeData;
 
 import java.util.List;
+import java.util.function.BiConsumer;
 
 public class TypesAdapter extends RecyclerView.Adapter<TypesAdapter.TypesViewHolder> {
 
-    private List<TypeData> mTypeDataList;
+    public static class TypesViewHolder extends RecyclerView.ViewHolder {
 
-    public void setData(List<TypeData> list) {
+        private final ImageView icon;
+        private final TextView title;
+        private final TextView count;
+
+        public TypesViewHolder(@NonNull View itemView, BiConsumer<Integer, View> onTypeClick) {
+            super(itemView);
+
+            icon = itemView.findViewById(R.id.icon);
+            title = itemView.findViewById(R.id.title);
+            count = itemView.findViewById(R.id.count);
+
+            itemView.setOnClickListener(v -> onTypeClick.accept(getAbsoluteAdapterPosition(), v));
+        }
+    }
+
+    private final List<TypeData> mTypeDataList;
+    private final BiConsumer<Integer, View> onTypeClick;
+
+    public TypesAdapter(List<TypeData> list, BiConsumer<Integer, View> onTypeClick) {
         this.mTypeDataList = list;
+        this.onTypeClick = onTypeClick;
         notifyItemRangeChanged(0, getItemCount());
     }
 
@@ -28,7 +48,7 @@ public class TypesAdapter extends RecyclerView.Adapter<TypesAdapter.TypesViewHol
     @Override
     public TypesAdapter.TypesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.types_item, parent, false);
-        return new TypesViewHolder(view);
+        return new TypesViewHolder(view, onTypeClick);
     }
 
     @Override
@@ -47,23 +67,7 @@ public class TypesAdapter extends RecyclerView.Adapter<TypesAdapter.TypesViewHol
 
     @Override
     public int getItemCount() {
-        if (mTypeDataList != null)
-            return mTypeDataList.size();
-        return 0;
+        return mTypeDataList != null ? mTypeDataList.size() : 0;
     }
 
-    public static class TypesViewHolder extends RecyclerView.ViewHolder {
-
-        private final ImageView icon;
-        private final TextView title;
-        private final TextView count;
-
-        public TypesViewHolder(@NonNull View itemView) {
-            super(itemView);
-
-            icon = itemView.findViewById(R.id.icon);
-            title = itemView.findViewById(R.id.title);
-            count = itemView.findViewById(R.id.count);
-        }
-    }
 }

@@ -2,6 +2,7 @@ package com.gnine.galleryg2.fragments;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -12,6 +13,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,6 +22,7 @@ import com.gnine.galleryg2.data.ImageData;
 import com.gnine.galleryg2.adapters.ImageRecyclerViewAdapter;
 import com.gnine.galleryg2.R;
 import com.gnine.galleryg2.tools.ImageLoader;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 import java.util.function.BiConsumer;
@@ -36,10 +39,18 @@ public class AllImagesFragment extends Fragment {
     private int typeView;
     private int numImagesChecked;
     private ArrayList<ImageData> imageDataList = null;
+    private boolean folder;
+
 
     public AllImagesFragment() {
         // Required empty public constructor
     }
+
+    public void setFolder(boolean folder) {
+        this.folder = folder;
+    }
+
+    public void setImageDataList(List<ImageData> imageDataList) {this.imageDataList = imageDataList;}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -59,7 +70,25 @@ public class AllImagesFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         if (getView() == null) { return; }
 
-        assert getActivity() != null;
+        if (folder) {
+            getView().setFocusableInTouchMode(true);
+            getView().requestFocus();
+            getView().setOnKeyListener((view13, i, keyEvent) -> {
+                if (i == KeyEvent.KEYCODE_BACK) {
+                    FragmentManager manager = requireActivity().getSupportFragmentManager();
+                    manager.popBackStack();
+                    FoldersFragment.checkBackPressed = true;
+                    FoldersFragment.tempFragment = null;
+                    BottomNavigationView bnv = requireActivity().findViewById(R.id.bottomNavView);
+                    bnv.getMenu().getItem(1).setEnabled(true);
+                    return true;
+                }
+                return false;
+            });
+        } else if (!FoldersFragment.checkBackPressed && FoldersFragment.tempFragment != null) {
+            BottomNavigationView bnv = requireActivity().findViewById(R.id.bottomNavView);
+            bnv.getMenu().getItem(1).setEnabled(true);
+        }
 
         recyclerView = getView().findViewById(R.id.allPicturesFragmentRecyclerView);
         recyclerView.setHasFixedSize(true);
@@ -96,7 +125,6 @@ public class AllImagesFragment extends Fragment {
         imageAdapter.setState(State.Normal);
         recyclerView.setAdapter(imageAdapter);
     }
-
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.appbar_menu, menu);
@@ -105,7 +133,8 @@ public class AllImagesFragment extends Fragment {
 
         if (typeView == 2) {
             menu.getItem(1).setIcon(R.drawable.ic_grid_2);
-        } else if (typeView == 1) {
+        }
+        else if (typeView == 1) {
             menu.getItem(1).setIcon(R.drawable.ic_grid_1);
         }
 
@@ -129,7 +158,7 @@ public class AllImagesFragment extends Fragment {
             if (typeView == 4) {
                 typeView = 2;
                 item.setIcon(R.drawable.ic_grid_2);
-            } else if (typeView == 2) {
+            } else if (typeView == 2 ) {
                 typeView = 1;
                 item.setIcon(R.drawable.ic_grid_1);
             } else {
