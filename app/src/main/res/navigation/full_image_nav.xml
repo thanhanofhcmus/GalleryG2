@@ -22,5 +22,21 @@
         <action
             android:id="@+id/editToViewPagerFragment"
             app:destination="@id/viewPagerFragment" />
+        <action
+            android:id="@+id/editToRotateFragment"
+            app:destination="@id/rotateFragment" />
+        <action
+            android:id="@+id/action_editFragment_to_cropFragment"
+            app:destination="@id/cropFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/rotateFragment"
+        android:name="com.gnine.galleryg2.fragments.RotateFragment"
+        android:label="fragment_rotate"
+        tools:layout="@layout/fragment_rotate" />
+    <fragment
+        android:id="@+id/cropFragment"
+        android:name="com.gnine.galleryg2.fragments.CropFragment"
+        android:label="fragment_crop"
+        tools:layout="@layout/fragment_crop" />
 </navigation>

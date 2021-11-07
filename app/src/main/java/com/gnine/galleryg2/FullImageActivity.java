@@ -12,6 +12,8 @@ import androidx.appcompat.widget.Toolbar;
 
 public class FullImageActivity extends AppCompatActivity {
 
+    public static final String IMAGE_DATA_KEY= "IMAGE_DATA_KEY";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,4 +43,5 @@ public class FullImageActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
 }

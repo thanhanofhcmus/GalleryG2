@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".fragments.ViewPagerFragment">
 
-    <!-- TODO: Update blank fragment layout -->
+
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPagerImageSlider"
         android:layout_width="match_parent"
@@ -24,13 +24,14 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"/>
+
         <ImageButton
             android:id="@+id/editBtn"
-            android:text="Edit"
-            android:src="@drawable/ic_edit"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:src="@drawable/ic_edit"
+            android:text="Edit"/>
         <ImageButton
             android:id="@+id/trashBtn"
             android:text="Trash"
@@ -39,4 +40,5 @@
             android:layout_height="match_parent"
             android:layout_weight="1"/>
     </LinearLayout>
+
 </RelativeLayout>

@@ -33,14 +33,15 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/editTopLayout">
 
-        <com.makeramen.roundedimageview.RoundedImageView
+        <ImageView
             android:id="@+id/singleImage"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_centerInParent="true"
-            android:src="@drawable/image_0" />
+            android:layout_above="@+id/editBtns"/>
 
         <LinearLayout
+            android:id="@+id/editBtns"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true">

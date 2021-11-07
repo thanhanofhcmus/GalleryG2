@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.gnine.galleryg2.FullImageActivity;
 import com.gnine.galleryg2.MainActivity;
 import com.gnine.galleryg2.R;
 import com.gnine.galleryg2.adapters.SliderAdapter;
@@ -44,9 +45,15 @@ public class ViewPagerFragment extends Fragment {
 
         ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
         if (actionBar != null) { actionBar.show(); }
-        view.findViewById(R.id.editBtn).setOnClickListener(
-                v -> Navigation.findNavController(view).navigate(R.id.viewPagerToEditFragment));
 
+        view.findViewById(R.id.editBtn).setOnClickListener(
+                v ->{
+                    ViewPager2 viewPager2 = getView().findViewById(R.id.viewPagerImageSlider);
+                    int pos=viewPager2.getCurrentItem();
+                    Bundle _bundle=new Bundle();
+                    _bundle.putParcelable(FullImageActivity.IMAGE_DATA_KEY,imageDataList.get(pos));
+                    Navigation.findNavController(view).navigate(R.id.viewPagerToEditFragment,_bundle);
+                });
         return view;
     }
 
@@ -59,4 +66,5 @@ public class ViewPagerFragment extends Fragment {
         viewPager2.setAdapter(new SliderAdapter(imageDataList));
         new Handler().postDelayed(() -> viewPager2.setCurrentItem(position, false), 100);
     }
+
 }
