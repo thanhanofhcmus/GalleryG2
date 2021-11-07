@@ -2,6 +2,10 @@ package com.gnine.galleryg2.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Environment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -11,28 +15,23 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
-import com.gnine.galleryg2.data.FolderData;
-import com.gnine.galleryg2.adapters.FolderAdapter;
 import com.gnine.galleryg2.R;
-import com.gnine.galleryg2.data.TypeData;
+import com.gnine.galleryg2.adapters.FolderAdapter;
 import com.gnine.galleryg2.adapters.TypesAdapter;
+import com.gnine.galleryg2.data.FolderData;
+import com.gnine.galleryg2.data.TypeData;
 import com.gnine.galleryg2.tools.ImageLoader;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.BiConsumer;
 
 public class FoldersFragment extends Fragment {
 
     static Fragment tempFragment;
 
     static boolean checkBackPressed;
-
-    private List<FolderData> folderList;
 
     public FoldersFragment() {
         // Required empty public constructor
@@ -57,52 +56,47 @@ public class FoldersFragment extends Fragment {
         rcvFolder.setFocusable(false);
         rcvFolder.setNestedScrollingEnabled(false);
 
-        FolderAdapter folderAdapter = new FolderAdapter();
-        folderAdapter.setData(getListFolders());
-        rcvFolder.setAdapter(folderAdapter);
-
-        FolderAdapter.setOnFolderClick(new FolderAdapter.FolderClick() {
-            @Override
-            public void onClick(View view, int position) {
-                checkBackPressed = false;
-                FragmentTransaction ft = getChildFragmentManager().beginTransaction();
-                tempFragment = new AllImagesFragment();
-                ((AllImagesFragment)tempFragment).setFolder(true);
-                ((AllImagesFragment)tempFragment).setImageDataList(getListFolders().get(position).imageList);
-                BottomNavigationView bnv = (BottomNavigationView) getActivity().findViewById(R.id.bottomNavView);
-                bnv.getMenu().getItem(1).setEnabled(false);
-                ft.replace(R.id.fragmentFolders, tempFragment);
-                ft.addToBackStack(null);
-                ft.commit();
-            }
-        });
-
-        //TypeData
-        TypesAdapter typesAdapter = new TypesAdapter();
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.getContext());
-        rcvTypes.setLayoutManager(linearLayoutManager);
-        rcvTypes.setFocusable(false);
-        rcvTypes.setNestedScrollingEnabled(false);
-
-        typesAdapter.setData(getListTypes());
-        rcvTypes.setAdapter(typesAdapter);
-
-        if (!checkBackPressed && tempFragment != null) { //not back from all images fragment of folder
+        BiConsumer<Integer, View> onFolderClick = (position, view1) -> {
+            checkBackPressed = false;
             FragmentTransaction ft = getChildFragmentManager().beginTransaction();
-            BottomNavigationView bnv = (BottomNavigationView) getActivity().findViewById(R.id.bottomNavView);
+            tempFragment = new AllImagesFragment();
+            ((AllImagesFragment) tempFragment).setFolder(true);
+            ((AllImagesFragment) tempFragment).setImageDataList(
+                    getListFolders().get(position).imageList);
+            BottomNavigationView bnv = requireActivity().findViewById(R.id.bottomNavView);
             bnv.getMenu().getItem(1).setEnabled(false);
             ft.replace(R.id.fragmentFolders, tempFragment);
             ft.addToBackStack(null);
             ft.commit();
-        }
-        else {
+        };
+
+        FolderAdapter folderAdapter = new FolderAdapter(folderDataList, onFolderClick);
+        folderAdapter.setData(getListFolders());
+        rcvFolder.setAdapter(folderAdapter);
+
+        //TypeData
+        TypesAdapter typesAdapter = new TypesAdapter(getListTypes(), onFolderClick);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.getContext());
+        rcvTypes.setLayoutManager(linearLayoutManager);
+        rcvTypes.setFocusable(false);
+        rcvTypes.setNestedScrollingEnabled(false);
+        rcvTypes.setAdapter(typesAdapter);
+
+        if (!checkBackPressed && tempFragment != null) {
+            FragmentTransaction ft = getChildFragmentManager().beginTransaction();
+            BottomNavigationView bnv = requireActivity().findViewById(R.id.bottomNavView);
+            bnv.getMenu().getItem(1).setEnabled(false);
+            ft.replace(R.id.fragmentFolders, tempFragment);
+            ft.addToBackStack(null);
+            ft.commit();
+        } else {
             tempFragment = null;
         }
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+            Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_folders, container, false);
     }
@@ -115,7 +109,8 @@ public class FoldersFragment extends Fragment {
     private List<TypeData> getListTypes() {
         List<TypeData> list = new ArrayList<>();
         list.add(new TypeData(R.drawable.ic_video, "Videos", null));
-        list.add(new TypeData(R.drawable.ic_selfie, "Images", ImageLoader.loadImageFromSharedStorage(requireActivity())));
+        list.add(new TypeData(R.drawable.ic_selfie, "Images",
+                ImageLoader.loadImageFromSharedStorage(requireActivity())));
         list.add(new TypeData(R.drawable.ic_screenshot, "Screenshots", null));
 
         return list;
@@ -124,7 +119,8 @@ public class FoldersFragment extends Fragment {
     private List<FolderData> getListFolders() {
         List<FolderData> list = new ArrayList<>();
         list.addAll(ImageLoader.retrieveFoldersHaveImage("/storage/"));
-        list.addAll(ImageLoader.retrieveFoldersHaveImage("/sdcard/"));
+        list.addAll(ImageLoader.retrieveFoldersHaveImage(
+                Environment.getExternalStorageDirectory().getPath()));
         return list;
     }
 }

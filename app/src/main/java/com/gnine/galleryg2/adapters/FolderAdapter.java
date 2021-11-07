@@ -14,6 +14,7 @@ import com.gnine.galleryg2.data.ImageData;
 import com.gnine.galleryg2.R;
 
 import java.util.List;
+import java.util.function.BiConsumer;
 
 public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.FolderViewHolder> {
 
@@ -23,30 +24,36 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.FolderView
         public final TextView title;
         public final TextView count;
 
-        public FolderViewHolder(@NonNull View itemView) {
+        public FolderViewHolder(@NonNull View itemView, BiConsumer<Integer, View> onFolderClick) {
             super(itemView);
 
             icon = itemView.findViewById(R.id.icon);
             title = itemView.findViewById(R.id.title);
             count = itemView.findViewById(R.id.count);
 
-            itemView.setOnClickListener(v -> onFolderClick.onClick(v, getAbsoluteAdapterPosition()));
+            itemView.setOnClickListener(view -> onFolderClick.accept(getAbsoluteAdapterPosition(), view));
         }
     }
 
     private List<FolderData> mFolderDataList;
-    private static FolderClick onFolderClick = null;
+    private final BiConsumer<Integer, View> onFolderClick;
+
+    public FolderAdapter(List<FolderData> folderDataList,
+            BiConsumer<Integer, View> onFolderClick) {
+        mFolderDataList = folderDataList;
+        this.onFolderClick = onFolderClick;
+    }
 
     public void setData(List<FolderData> list) {
         this.mFolderDataList = list;
-        notifyDataSetChanged();
+        notifyItemRangeChanged(0, getItemCount());
     }
 
     @NonNull
     @Override
     public FolderAdapter.FolderViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.folder_item, parent, false);
-        return new FolderViewHolder(view);
+        return new FolderViewHolder(view, onFolderClick);
     }
 
     @Override
@@ -66,13 +73,5 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.FolderView
     @Override
     public int getItemCount() {
         return mFolderDataList != null ? mFolderDataList.size() : 0;
-    }
-
-    public static void setOnFolderClick(FolderClick onFolderClick) {
-        FolderAdapter.onFolderClick = onFolderClick;
-    }
-
-    public interface FolderClick {
-        void onClick(View view, int position);
     }
 }

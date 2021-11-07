@@ -47,9 +47,9 @@ public class EditFragment extends Fragment {
             fromRotation[0] += 90;
             toRotation[0] += 90;
         });
-        assert getActivity() != null;
-        assert ((AppCompatActivity) getActivity()).getSupportActionBar() != null;
-        ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
+        ActionBar actionBar = ((AppCompatActivity) requireActivity()).getSupportActionBar();
+        assert  actionBar != null;
+        actionBar.hide();
 
         return view;
     }

@@ -17,7 +17,6 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.gnine.galleryg2.data.FolderData;
 import com.gnine.galleryg2.data.ImageData;
 import com.gnine.galleryg2.adapters.ImageRecyclerViewAdapter;
 import com.gnine.galleryg2.R;
@@ -25,7 +24,6 @@ import com.gnine.galleryg2.tools.ImageLoader;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.List;
-import java.util.Objects;
 
 public class AllImagesFragment extends Fragment {
 
@@ -65,38 +63,32 @@ public class AllImagesFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         if (getView() == null) { return; }
 
-        if (folder == true) {
+        if (folder) {
             getView().setFocusableInTouchMode(true);
             getView().requestFocus();
-            getView().setOnKeyListener(new View.OnKeyListener() {
-                @Override
-                public boolean onKey(View view, int i, KeyEvent keyEvent) {
-                    if (i == KeyEvent.KEYCODE_BACK) {
-                        FragmentManager manager = requireActivity().getSupportFragmentManager();
-                        manager.popBackStack();
-                        FoldersFragment.checkBackPressed = true;
-                        FoldersFragment.tempFragment = null;
-                        BottomNavigationView bnv = (BottomNavigationView) getActivity().findViewById(R.id.bottomNavView);
-                        bnv.getMenu().getItem(1).setEnabled(true);
-                        return true;
-                    }
-                    return false;
+            getView().setOnKeyListener((view13, i, keyEvent) -> {
+                if (i == KeyEvent.KEYCODE_BACK) {
+                    FragmentManager manager = requireActivity().getSupportFragmentManager();
+                    manager.popBackStack();
+                    FoldersFragment.checkBackPressed = true;
+                    FoldersFragment.tempFragment = null;
+                    BottomNavigationView bnv = requireActivity().findViewById(R.id.bottomNavView);
+                    bnv.getMenu().getItem(1).setEnabled(true);
+                    return true;
                 }
+                return false;
             });
-        }
-        else if (!folder && !FoldersFragment.checkBackPressed && FoldersFragment.tempFragment != null) {
-            BottomNavigationView bnv = (BottomNavigationView) getActivity().findViewById(R.id.bottomNavView);
+        } else if (!FoldersFragment.checkBackPressed && FoldersFragment.tempFragment != null) {
+            BottomNavigationView bnv = requireActivity().findViewById(R.id.bottomNavView);
             bnv.getMenu().getItem(1).setEnabled(true);
         }
-
-        assert getActivity() != null;
 
         recyclerView = getView().findViewById(R.id.allPicturesFragmentRecyclerView);
         recyclerView.setHasFixedSize(true);
         typeView = 4;
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), typeView));
 
-        this.imageDataList = folder ? imageDataList : ImageLoader.loadImageFromSharedStorage(getActivity());
+        this.imageDataList = folder ? imageDataList : ImageLoader.loadImageFromSharedStorage(requireActivity());
 
         imageAdapter = new ImageRecyclerViewAdapter(imageDataList);
         imageAdapter.setACTION_MODE(0);
@@ -104,10 +96,10 @@ public class AllImagesFragment extends Fragment {
 
         imageAdapter.setOnItemLongClickListener((position, view1) -> {
             imageAdapter.setACTION_MODE(1);
-            getActivity().invalidateOptionsMenu();
+            requireActivity().invalidateOptionsMenu();
             imageDataList.get(position).setChecked(true);
-            imageAdapter.notifyDataSetChanged();
-            getActivity().setTitle(String.valueOf(++numImagesChecked));
+            imageAdapter.notifyItemRangeChanged(0, imageAdapter.getItemCount());
+            requireActivity().setTitle(String.valueOf(++numImagesChecked));
         });
 
         imageAdapter.setOnItemClickListener((position, view12) -> {
@@ -119,7 +111,7 @@ public class AllImagesFragment extends Fragment {
                     imageDataList.get(position).setChecked(false);
                     numImagesChecked--;
                 }
-                getActivity().setTitle(String.valueOf(numImagesChecked));
+                requireActivity().setTitle(String.valueOf(numImagesChecked));
                 imageAdapter.notifyItemChanged(position);
             }
         });
@@ -168,7 +160,7 @@ public class AllImagesFragment extends Fragment {
             recyclerView.setLayoutManager(new GridLayoutManager(getContext(), typeView));
         } else if (item.getItemId() == R.id.clear_choose) {
             imageAdapter.setACTION_MODE(0);
-            imageAdapter.notifyDataSetChanged();
+            imageAdapter.notifyItemRangeChanged(0, imageAdapter.getItemCount());
             numImagesChecked = 0;
             getActivity().invalidateOptionsMenu();
         }

@@ -14,6 +14,7 @@ import com.gnine.galleryg2.data.ImageData;
 import com.gnine.galleryg2.data.TypeData;
 
 import java.util.List;
+import java.util.function.BiConsumer;
 
 public class TypesAdapter extends RecyclerView.Adapter<TypesAdapter.TypesViewHolder> {
 
@@ -23,30 +24,31 @@ public class TypesAdapter extends RecyclerView.Adapter<TypesAdapter.TypesViewHol
         private final TextView title;
         private final TextView count;
 
-        public TypesViewHolder(@NonNull View itemView) {
+        public TypesViewHolder(@NonNull View itemView, BiConsumer<Integer, View> onTypeClick) {
             super(itemView);
 
             icon = itemView.findViewById(R.id.icon);
             title = itemView.findViewById(R.id.title);
             count = itemView.findViewById(R.id.count);
 
-            itemView.setOnClickListener(v -> onTypesClick.onClick(v, getAbsoluteAdapterPosition()));
+            itemView.setOnClickListener(v -> onTypeClick.accept(getAbsoluteAdapterPosition(), v));
         }
     }
 
-    private List<TypeData> mTypeDataList;
-    private static TypesClick onTypesClick = null;
+    private final List<TypeData> mTypeDataList;
+    private final BiConsumer<Integer, View> onTypeClick;
 
-    public void setData(List<TypeData> list) {
+    public TypesAdapter(List<TypeData> list, BiConsumer<Integer, View> onTypeClick) {
         this.mTypeDataList = list;
-        notifyDataSetChanged();
+        this.onTypeClick = onTypeClick;
+        notifyItemRangeChanged(0, getItemCount());
     }
 
     @NonNull
     @Override
     public TypesAdapter.TypesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.types_item, parent, false);
-        return new TypesViewHolder(view);
+        return new TypesViewHolder(view, onTypeClick);
     }
 
     @Override
@@ -68,11 +70,4 @@ public class TypesAdapter extends RecyclerView.Adapter<TypesAdapter.TypesViewHol
         return mTypeDataList != null ? mTypeDataList.size() : 0;
     }
 
-    public static void setOnTypesClick(TypesClick onTypesClick) {
-        TypesAdapter.onTypesClick = onTypesClick;
-    }
-
-    public interface TypesClick {
-        void onClick(View view, int position);
-    }
 }
