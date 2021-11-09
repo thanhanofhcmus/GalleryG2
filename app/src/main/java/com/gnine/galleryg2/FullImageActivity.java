@@ -18,6 +18,7 @@ import java.util.ArrayList;
 public class FullImageActivity extends AppCompatActivity {
 
     public static final String IMAGE_DATA_KEY= "IMAGE_DATA_KEY";
+    public static final String BITMAP_DATA_KEY="BITMAP_DATA_KEY";
     private ArrayList<ImageData> imageDataList;
     private int position;
     @Override

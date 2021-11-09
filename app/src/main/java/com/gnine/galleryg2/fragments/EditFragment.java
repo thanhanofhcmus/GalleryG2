@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import android.os.Environment;
 import android.view.LayoutInflater;
@@ -24,12 +25,15 @@ import com.gnine.galleryg2.R;
 import com.gnine.galleryg2.data.ImageData;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 
 public class EditFragment extends Fragment {
 
     private int angle;
     private ImageData imageData;
+    private Bitmap bitmap;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -41,16 +45,32 @@ public class EditFragment extends Fragment {
             Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_edit, container, false);
-
-        ImageView imageView = view.findViewById(R.id.singleImage);
-
         assert getArguments() !=null;
         imageData=(ImageData) getArguments().getParcelable(FullImageActivity.IMAGE_DATA_KEY);
+        bitmap=(Bitmap) getArguments().getParcelable(FullImageActivity.BITMAP_DATA_KEY);
+//        {
+//            final RotateAnimation rotateAnim = new RotateAnimation(
+//                    angle, angle + 90, RotateAnimation.RELATIVE_TO_SELF, .5f,
+//                    RotateAnimation.RELATIVE_TO_SELF, .5f);
+//            rotateAnim.setDuration(1000); // Use 0 ms to rotate instantly
+//            rotateAnim.setFillAfter(true); // Must be true or the animation will reset
+//            imageView.startAnimation(rotateAnim);
+//            angle += 90;
+//        }
+//        );
+
+
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        ImageView imageView = view.findViewById(R.id.singleImage);
         Glide.with(imageView.getContext())
                 .load(imageData.uri)
                 .placeholder(R.drawable.bird_thumbnail)
                 .into(imageView);
-
         view.findViewById(R.id.closeBtn).setOnClickListener(v -> {
             assert getActivity() !=null;
             getActivity().onBackPressed();
@@ -60,51 +80,42 @@ public class EditFragment extends Fragment {
         );
         angle=0;
         view.findViewById(R.id.rotateBtn).setOnClickListener(
-//                v ->Navigation.findNavController(view).navigate(R.id.editToRotateFragment)
-        v -> {
-            final RotateAnimation rotateAnim = new RotateAnimation(
-                    angle, angle + 90, RotateAnimation.RELATIVE_TO_SELF, .5f,
-                    RotateAnimation.RELATIVE_TO_SELF, .5f);
-            rotateAnim.setDuration(1000); // Use 0 ms to rotate instantly
-            rotateAnim.setFillAfter(true); // Must be true or the animation will reset
-            imageView.startAnimation(rotateAnim);
-            angle += 90;
-        });
+                v ->{
+                    Bundle bundle=new Bundle();
+                    bundle.putParcelable(FullImageActivity.IMAGE_DATA_KEY,imageData);
+                    Navigation.findNavController(view).navigate(R.id.editToRotateFragment,bundle);
+                });
+        view.findViewById(R.id.cropBtn).setOnClickListener(
+                v-> Navigation.findNavController(view).navigate(R.id.editToCropFragment));
         ActionBar actionBar = ((AppCompatActivity) requireActivity()).getSupportActionBar();
         assert  actionBar != null;
         actionBar.hide();
-
-        return view;
     }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-    }
-
-    private Bitmap rotate(Bitmap source, int angle){
-        Matrix matrix =new Matrix();
-        matrix.postRotate(angle);
-        return Bitmap.createBitmap(source,0,0,source.getWidth(),source.getHeight(),matrix,false);
-    }
 
     private void saveImage(ImageView imageView){
-        Bitmap bitmap=((BitmapDrawable)imageView.getDrawable()).getBitmap();
-        bitmap=rotate(bitmap,angle);
-        File file=Environment.getExternalStorageDirectory();
-        File dir=new File(file.getAbsolutePath());
-        dir.mkdirs();
-        File outFile=new File(dir,imageData.name);
-//        if(file.exists()) {
-//            System.out.println("exists");
-//            file.delete();
-//        }
-        try{
-            FileOutputStream fos=new FileOutputStream(outFile);
-            bitmap.compress(Bitmap.CompressFormat.JPEG,100,fos);
-            fos.flush();
-            fos.close();
-        }catch(Exception ex){
+        assert bitmap!=null;
+//        String path=Environment.getExternalStorageDirectory().toString();
+        String path=imageData.uri.getPath();
+        String path_=imageData.uri.toString();
+        FileOutputStream fout=null;
+        File file=new File(path,"1.jpg");
+        if(!file.exists()){
+            try {
+                file.createNewFile();
+            }catch(Exception ex){
+
+            }
+        }
+        try {
+            //cannot write data
+            fout = new FileOutputStream(file);
+            bitmap.compress(Bitmap.CompressFormat.JPEG,90,fout);
+            fout.flush();
+            fout.close();
+        }catch(FileNotFoundException ex){
+            ex.printStackTrace();
+        }catch (IOException ex){
             ex.printStackTrace();
         }
     }

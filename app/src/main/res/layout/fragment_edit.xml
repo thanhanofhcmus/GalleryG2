@@ -38,13 +38,13 @@
         android:text="@string/rotate"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@+id/cutBtn"/>
+        app:layout_constraintRight_toLeftOf="@+id/cropBtn"/>
 
     <Button
-        android:id="@+id/cutBtn"
+        android:id="@+id/cropBtn"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:text="@string/cut"
+        android:text="@string/crop"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toRightOf="@+id/rotateBtn"/>
