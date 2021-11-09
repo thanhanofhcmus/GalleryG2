@@ -10,6 +10,9 @@
     <string name="trash">Trash</string>
     <string name="rotate">Rotate</string>
     <string name="cut">Cut</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="crop_3_4">3:4</string>
+    <string name="crop_9_16">9:16</string>
+    <string name="crop_1_1">1:1</string>
+    <string name="crop_free">free</string>
+
 </resources>
