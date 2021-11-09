@@ -1,6 +1,7 @@
 package com.gnine.galleryg2.fragments;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
@@ -25,6 +26,7 @@ public class RotateFragment extends Fragment {
 
     private ImageData imageData;
     private int angle;
+    private ImageView imageView;
 
     public RotateFragment() {
         // Required empty public constructor
@@ -44,7 +46,7 @@ public class RotateFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ImageView imageView = view.findViewById(R.id.singleImage_rotate);
+        imageView = view.findViewById(R.id.singleImage_rotate);
         Glide.with(imageView.getContext())
                 .load(imageData.uri)
                 .placeholder(R.drawable.bird_thumbnail)
@@ -69,6 +71,24 @@ public class RotateFragment extends Fragment {
     private Bitmap rotateBitmap(Bitmap source, int angle){
         Matrix matrix =new Matrix();
         matrix.postRotate(angle);
-        return Bitmap.createBitmap(source,0,0,source.getWidth(),source.getHeight(),matrix,false);
+        Bitmap bm=Bitmap.createBitmap(source,0,0,source.getWidth(),source.getWidth(),matrix,true);
+        imageView.setImageBitmap(bm);;
+        return bm;
+    }
+
+
+
+    private Bitmap setReducedImageSize(){
+        int width=imageView.getWidth();
+        int height=imageView.getHeight();
+        BitmapFactory.Options bmOptions=new BitmapFactory.Options();
+        bmOptions.inJustDecodeBounds=true;
+        BitmapFactory.decodeFile(,bmOptions);
+        int cameraImageWidth=bmOptions.outWidth;
+        int cameraImageHeight=bmOptions.outHeight;
+        int scaleFactor=Math.min(cameraImageWidth/width,cameraImageHeight/height);
+        bmOptions.inSampleSize=scaleFactor;
+        bmOptions.inJustDecodeBounds=false;
+        return BitmapFactory.decodeFile();
     }
 }

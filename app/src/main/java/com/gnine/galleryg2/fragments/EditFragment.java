@@ -54,6 +54,7 @@ public class EditFragment extends Fragment {
 //                    RotateAnimation.RELATIVE_TO_SELF, .5f);
 //            rotateAnim.setDuration(1000); // Use 0 ms to rotate instantly
 //            rotateAnim.setFillAfter(true); // Must be true or the animation will reset
+//
 //            imageView.startAnimation(rotateAnim);
 //            angle += 90;
 //        }
@@ -95,28 +96,29 @@ public class EditFragment extends Fragment {
 
     private void saveImage(ImageView imageView){
         assert bitmap!=null;
-//        String path=Environment.getExternalStorageDirectory().toString();
-        String path=imageData.uri.getPath();
-        String path_=imageData.uri.toString();
-        FileOutputStream fout=null;
-        File file=new File(path,"1.jpg");
-        if(!file.exists()){
-            try {
-                file.createNewFile();
-            }catch(Exception ex){
 
-            }
-        }
-        try {
-            //cannot write data
-            fout = new FileOutputStream(file);
-            bitmap.compress(Bitmap.CompressFormat.JPEG,90,fout);
-            fout.flush();
-            fout.close();
-        }catch(FileNotFoundException ex){
-            ex.printStackTrace();
-        }catch (IOException ex){
-            ex.printStackTrace();
-        }
+//        String path=Environment.getExternalStorageDirectory().toString();
+//        String path=imageData.uri.getPath();
+//        String path_=imageData.uri.toString();
+//        FileOutputStream fout=null;
+//        File file=new File(path,"1.jpg");
+//        if(!file.exists()){
+//            try {
+//                file.createNewFile();
+//            }catch(Exception ex){
+//
+//            }
+//        }
+//        try {
+//            //cannot write data
+//            fout = new FileOutputStream(file);
+//            bitmap.compress(Bitmap.CompressFormat.JPEG,90,fout);
+//            fout.flush();
+//            fout.close();
+//        }catch(FileNotFoundException ex){
+//            ex.printStackTrace();
+//        }catch (IOException ex){
+//            ex.printStackTrace();
+//        }
     }
 }
