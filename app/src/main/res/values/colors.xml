@@ -8,4 +8,32 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="blue">#FF0000FF</color>
+    <!--Palette-->
+    <color name="gnine_color_black">#000</color>
+    <color name="gnine_color_blaze_orange">#FF6300</color>
+    <color name="gnine_color_ebony_clay">#20242F</color>
+    <color name="gnine_color_heather">#B3BECE</color>
+    <color name="gnine_color_white">#FFF</color>
+    <!--Crop activity-->
+    <color name="gnine_color_toolbar">@color/gnine_color_white</color>
+    <color name="gnine_color_statusbar">#f5f5f5</color>
+    <color name="gnine_color_toolbar_widget">@color/gnine_color_black</color>
+    <color name="gnine_color_widget">@color/gnine_color_black</color>
+    <color name="gnine_color_widget_active">@color/gnine_color_white</color>
+    <color name="gnine_color_active_controls_color">@color/gnine_color_blaze_orange</color>
+    <color name="gnine_color_inactive_controls_color">@color/gnine_color_heather</color>
+    <color name="gnine_color_widget_rotate_mid_line">@color/gnine_color_blaze_orange</color>
+    <color name="gnine_color_widget_rotate_angle">@color/gnine_color_ebony_clay</color>
+    <color name="gnine_color_active_aspect_ratio">@color/gnine_color_blaze_orange</color>
+    <color name="gnine_color_inactive_aspect_ratio">@color/gnine_color_ebony_clay</color>
+    <color name="gnine_color_widget_background">@color/gnine_color_ebony_clay</color>
+    <color name="gnine_color_widget_text">@color/gnine_color_blaze_orange</color>
+    <color name="gnine_color_progress_wheel_line">@color/gnine_color_ebony_clay</color>
+    <color name="gnine_color_crop_background">@color/gnine_color_black</color>
+
+    <!--Crop View-->
+    <color name="gnine_color_default_crop_grid">#80ffffff</color>
+    <color name="gnine_color_default_crop_frame">#ffffff</color>
+    <color name="gnine_color_default_dimmed">#8c000000</color>
+    <color name="gnine_color_default_logo">#4f212121</color>
 </resources>

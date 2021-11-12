@@ -1,4 +1,4 @@
-package com.gnine.galleryg2;
+package com.gnine.galleryg2.fragments;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -31,6 +31,8 @@ import androidx.transition.AutoTransition;
 import androidx.transition.Transition;
 import androidx.transition.TransitionManager;
 
+import com.gnine.galleryg2.R;
+import com.gnine.galleryg2.UCropFragmentCallback;
 import com.gnine.galleryg2.tools.UCrop;
 import com.gnine.galleryg2.callback.IBitmapCropCallback;
 import com.gnine.galleryg2.model.AspectRatio;

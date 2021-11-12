@@ -1,4 +1,4 @@
-package com.yalantis.ucrop.view.widget;
+package com.gnine.galleryg2.view.widget;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -10,10 +10,10 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.yalantis.ucrop.R;
-
 import androidx.annotation.ColorInt;
 import androidx.core.content.ContextCompat;
+
+import com.gnine.galleryg2.R;
 
 /**
  * Created by Oleksii Shliama (https://github.com/shliama).
@@ -128,21 +128,21 @@ public class HorizontalProgressWheelView extends View {
     }
 
     private void init() {
-        mMiddleLineColor = ContextCompat.getColor(getContext(), R.color.ucrop_color_widget_rotate_mid_line);
+        mMiddleLineColor = ContextCompat.getColor(getContext(), R.color.gnine_color_widget_rotate_mid_line);
 
-        mProgressLineWidth = getContext().getResources().getDimensionPixelSize(R.dimen.ucrop_width_horizontal_wheel_progress_line);
-        mProgressLineHeight = getContext().getResources().getDimensionPixelSize(R.dimen.ucrop_height_horizontal_wheel_progress_line);
-        mProgressLineMargin = getContext().getResources().getDimensionPixelSize(R.dimen.ucrop_margin_horizontal_wheel_progress_line);
+        mProgressLineWidth = getContext().getResources().getDimensionPixelSize(R.dimen.gnine_width_horizontal_wheel_progress_line);
+        mProgressLineHeight = getContext().getResources().getDimensionPixelSize(R.dimen.gnine_height_horizontal_wheel_progress_line);
+        mProgressLineMargin = getContext().getResources().getDimensionPixelSize(R.dimen.gnine_margin_horizontal_wheel_progress_line);
 
         mProgressLinePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mProgressLinePaint.setStyle(Paint.Style.STROKE);
         mProgressLinePaint.setStrokeWidth(mProgressLineWidth);
-        mProgressLinePaint.setColor(getResources().getColor(R.color.ucrop_color_progress_wheel_line));
-
+//        mProgressLinePaint.setColor(getResources().getColor(R.color.gnine_color_progress_wheel_line));
+        mProgressLinePaint.setColor(ContextCompat.getColor(getContext(),R.color.gnine_color_progress_wheel_line));
         mProgressMiddleLinePaint = new Paint(mProgressLinePaint);
         mProgressMiddleLinePaint.setColor(mMiddleLineColor);
         mProgressMiddleLinePaint.setStrokeCap(Paint.Cap.ROUND);
-        mProgressMiddleLinePaint.setStrokeWidth(getContext().getResources().getDimensionPixelSize(R.dimen.ucrop_width_middle_wheel_progress_line));
+        mProgressMiddleLinePaint.setStrokeWidth(getContext().getResources().getDimensionPixelSize(R.dimen.gnine_width_middle_wheel_progress_line));
     }
 
     public interface ScrollingListener {

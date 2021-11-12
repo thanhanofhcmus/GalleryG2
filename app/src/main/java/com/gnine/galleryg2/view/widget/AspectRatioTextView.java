@@ -1,4 +1,4 @@
-package com.yalantis.ucrop.view.widget;
+package com.gnine.galleryg2.view.widget;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -12,16 +12,16 @@ import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.Gravity;
 
-import com.yalantis.ucrop.R;
-import com.yalantis.ucrop.model.AspectRatio;
-import com.yalantis.ucrop.view.CropImageView;
-
-import java.util.Locale;
-
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.content.ContextCompat;
+
+import com.gnine.galleryg2.R;
+import com.gnine.galleryg2.model.AspectRatio;
+import com.gnine.galleryg2.view.CropImageView;
+
+import java.util.Locale;
 
 /**
  * Created by Oleksii Shliama (https://github.com/shliama).
@@ -48,7 +48,7 @@ public class AspectRatioTextView extends AppCompatTextView {
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public AspectRatioTextView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.ucrop_AspectRatioTextView);
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.gnine_AspectRatioTextView);
         init(a);
     }
 
@@ -101,9 +101,9 @@ public class AspectRatioTextView extends AppCompatTextView {
     private void init(@NonNull TypedArray a) {
         setGravity(Gravity.CENTER_HORIZONTAL);
 
-        mAspectRatioTitle = a.getString(R.styleable.ucrop_AspectRatioTextView_ucrop_artv_ratio_title);
-        mAspectRatioX = a.getFloat(R.styleable.ucrop_AspectRatioTextView_ucrop_artv_ratio_x, CropImageView.SOURCE_IMAGE_ASPECT_RATIO);
-        mAspectRatioY = a.getFloat(R.styleable.ucrop_AspectRatioTextView_ucrop_artv_ratio_y, CropImageView.SOURCE_IMAGE_ASPECT_RATIO);
+        mAspectRatioTitle = a.getString(R.styleable.gnine_AspectRatioTextView_gnine_artv_ratio_title);
+        mAspectRatioX = a.getFloat(R.styleable.gnine_AspectRatioTextView_gnine_artv_ratio_x, CropImageView.SOURCE_IMAGE_ASPECT_RATIO);
+        mAspectRatioY = a.getFloat(R.styleable.gnine_AspectRatioTextView_gnine_artv_ratio_y, CropImageView.SOURCE_IMAGE_ASPECT_RATIO);
 
         if (mAspectRatioX == CropImageView.SOURCE_IMAGE_ASPECT_RATIO || mAspectRatioY == CropImageView.SOURCE_IMAGE_ASPECT_RATIO) {
             mAspectRatio = CropImageView.SOURCE_IMAGE_ASPECT_RATIO;
@@ -111,13 +111,13 @@ public class AspectRatioTextView extends AppCompatTextView {
             mAspectRatio = mAspectRatioX / mAspectRatioY;
         }
 
-        mDotSize = getContext().getResources().getDimensionPixelSize(R.dimen.ucrop_size_dot_scale_text_view);
+        mDotSize = getContext().getResources().getDimensionPixelSize(R.dimen.gnine_size_dot_scale_text_view);
         mDotPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mDotPaint.setStyle(Paint.Style.FILL);
 
         setTitle();
 
-        int activeColor = getResources().getColor(R.color.ucrop_color_widget_active);
+        int activeColor = getResources().getColor(R.color.gnine_color_widget_active);
         applyActiveColor(activeColor);
 
         a.recycle();
@@ -134,7 +134,7 @@ public class AspectRatioTextView extends AppCompatTextView {
                 },
                 new int[]{
                         activeColor,
-                        ContextCompat.getColor(getContext(), R.color.ucrop_color_widget)
+                        ContextCompat.getColor(getContext(), R.color.gnine_color_widget)
                 }
         );
 

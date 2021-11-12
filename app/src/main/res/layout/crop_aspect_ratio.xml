@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout style="@style/ucrop_WrapperIconState">
+<FrameLayout style="@style/gnine_WrapperIconState">
 
-    <com.yalantis.ucrop.view.widget.AspectRatioTextView
-        style="@style/ucrop_TextViewCropAspectRatio"/>
+    <com.gnine.galleryg2.view.widget.AspectRatioTextView
+        style="@style/gnine_TextViewCropAspectRatio"/>
 
 </FrameLayout>

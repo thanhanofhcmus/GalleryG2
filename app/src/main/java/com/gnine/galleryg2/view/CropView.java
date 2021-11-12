@@ -1,4 +1,4 @@
-package com.yalantis.ucrop.view;
+package com.gnine.galleryg2.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -7,29 +7,29 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.FrameLayout;
 
-import com.yalantis.ucrop.R;
-import com.yalantis.ucrop.callback.CropBoundsChangeListener;
-import com.yalantis.ucrop.callback.OverlayViewChangeListener;
-
 import androidx.annotation.NonNull;
 
-public class UCropView extends FrameLayout {
+import com.gnine.galleryg2.R;
+import com.gnine.galleryg2.callback.ICropBoundsChangeListener;
+import com.gnine.galleryg2.callback.IOverlayViewChangeListener;
+
+public class CropView extends FrameLayout {
 
     private GestureCropImageView mGestureCropImageView;
     private final OverlayView mViewOverlay;
 
-    public UCropView(Context context, AttributeSet attrs) {
+    public CropView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public UCropView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public CropView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
-        LayoutInflater.from(context).inflate(R.layout.ucrop_view, this, true);
+        LayoutInflater.from(context).inflate(R.layout.crop_view, this, true);
         mGestureCropImageView = findViewById(R.id.image_view_crop);
         mViewOverlay = findViewById(R.id.view_overlay);
 
-        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.ucrop_UCropView);
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.gnine_CropView);
         mViewOverlay.processStyledAttributes(a);
         mGestureCropImageView.processStyledAttributes(a);
         a.recycle();
@@ -39,13 +39,13 @@ public class UCropView extends FrameLayout {
     }
 
     private void setListenersToViews() {
-        mGestureCropImageView.setCropBoundsChangeListener(new CropBoundsChangeListener() {
+        mGestureCropImageView.setCropBoundsChangeListener(new ICropBoundsChangeListener() {
             @Override
             public void onCropAspectRatioChanged(float cropRatio) {
                 mViewOverlay.setTargetAspectRatio(cropRatio);
             }
         });
-        mViewOverlay.setOverlayViewChangeListener(new OverlayViewChangeListener() {
+        mViewOverlay.setOverlayViewChangeListener(new IOverlayViewChangeListener() {
             @Override
             public void onCropRectUpdated(RectF cropRect) {
                 mGestureCropImageView.setCropRect(cropRect);

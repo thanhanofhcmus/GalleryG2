@@ -5,15 +5,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:visibility="gone"
-    tools:showIn="@layout/ucrop_controls"
+    tools:showIn="@layout/crop_controls"
     tools:visibility="visible">
 
     <TextView
         android:id="@+id/text_view_rotate"
-        style="@style/ucrop_TextViewWidgetText"
+        style="@style/gnine_TextViewWidgetText"
         tools:text="100°" />
 
-    <com.yalantis.ucrop.view.widget.HorizontalProgressWheelView
+    <com.gnine.galleryg2.view.widget.HorizontalProgressWheelView
         android:id="@+id/rotate_scroll_wheel"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -25,28 +25,26 @@
 
     <FrameLayout
         android:id="@+id/wrapper_reset_rotate"
-        style="@style/ucrop_WrapperRotateButton"
-        android:layout_centerVertical="true"
-        android:background="?attr/selectableItemBackground">
+        style="@style/gnine_WrapperRotateButton"
+        android:layout_centerVertical="true">
 
         <ImageView
-            style="@style/ucrop_ImageViewWidgetIcon"
-            app:srcCompat="@drawable/ucrop_ic_reset" />
+            style="@style/gnine_ImageViewWidgetIcon"
+            app:srcCompat="@drawable/crop_ic_reset" />
 
     </FrameLayout>
 
     <FrameLayout
         android:id="@+id/wrapper_rotate_by_angle"
-        style="@style/ucrop_WrapperRotateButton"
+        style="@style/gnine_WrapperRotateButton"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:background="?attr/selectableItemBackground">
+        android:layout_centerVertical="true">
 
         <ImageView
-            style="@style/ucrop_ImageViewWidgetIcon"
-            android:src="@drawable/ucrop_ic_angle"
-            android:tint="@color/ucrop_color_widget_rotate_angle" />
+            style="@style/gnine_ImageViewWidgetIcon"
+            android:src="@drawable/ic_rotate_right"
+            app:tint="@color/gnine_color_widget_rotate_angle" />
 
     </FrameLayout>
 

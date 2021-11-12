@@ -3,10 +3,36 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Hoc_Tap/mobile/temp/GalleryG2/app/src/main/res/drawable/crop_crop.xml" value="0.16458333333333333" />
+        <entry key="..\:/Hoc_Tap/mobile/temp/GalleryG2/app/src/main/res/drawable/crop_ic_crop.xml" value="0.1" />
+        <entry key="..\:/Hoc_Tap/mobile/temp/GalleryG2/app/src/main/res/drawable/crop_ic_crop_unselected.xml" value="0.1" />
+        <entry key="..\:/Hoc_Tap/mobile/temp/GalleryG2/app/src/main/res/drawable/crop_ic_cross.xml" value="0.1" />
+        <entry key="..\:/Hoc_Tap/mobile/temp/GalleryG2/app/src/main/res/drawable/crop_ic_next.xml" value="0.1" />
+        <entry key="..\:/Hoc_Tap/mobile/temp/GalleryG2/app/src/main/res/drawable/crop_ic_reset.xml" value="0.1" />
+        <entry key="..\:/Hoc_Tap/mobile/temp/GalleryG2/app/src/main/res/drawable/crop_ic_rotate.xml" value="0.1" />
+        <entry key="..\:/Hoc_Tap/mobile/temp/GalleryG2/app/src/main/res/drawable/crop_ic_rotate_unselected.xml" value="0.1" />
+        <entry key="..\:/Hoc_Tap/mobile/temp/GalleryG2/app/src/main/res/drawable/crop_ic_scale.xml" value="0.1" />
+        <entry key="..\:/Hoc_Tap/mobile/temp/GalleryG2/app/src/main/res/drawable/crop_ic_scale_unselected.xml" value="0.1" />
+        <entry key="..\:/Hoc_Tap/mobile/temp/GalleryG2/app/src/main/res/drawable/crop_rotate.xml" value="0.1" />
+        <entry key="..\:/Hoc_Tap/mobile/temp/GalleryG2/app/src/main/res/drawable/crop_scale.xml" value="0.1" />
+        <entry key="..\:/Hoc_Tap/mobile/temp/GalleryG2/app/src/main/res/drawable/crop_shadow_upside.xml" value="0.1" />
+        <entry key="..\:/Hoc_Tap/mobile/temp/GalleryG2/app/src/main/res/drawable/crop_vector_ic_crop.xml" value="0.15260416666666668" />
+        <entry key="..\:/Hoc_Tap/mobile/temp/GalleryG2/app/src/main/res/drawable/crop_vector_loader.xml" value="0.1" />
+        <entry key="..\:/Hoc_Tap/mobile/temp/GalleryG2/app/src/main/res/drawable/crop_vector_loader_animated.xml" value="0.1" />
+        <entry key="..\:/Hoc_Tap/mobile/temp/GalleryG2/app/src/main/res/drawable/ic_check.xml" value="0.16822916666666668" />
+        <entry key="..\:/Hoc_Tap/mobile/temp/GalleryG2/app/src/main/res/drawable/ic_checked.xml" value="0.16822916666666668" />
         <entry key="..\:/Hoc_Tap/mobile/temp/GalleryG2/app/src/main/res/drawable/ic_delete.xml" value="0.15677083333333333" />
         <entry key="..\:/Hoc_Tap/mobile/temp/GalleryG2/app/src/main/res/drawable/ic_edit.xml" value="0.15677083333333333" />
         <entry key="..\:/Hoc_Tap/mobile/temp/GalleryG2/app/src/main/res/drawable/ic_share.xml" value="0.15677083333333333" />
+        <entry key="..\:/Hoc_Tap/mobile/temp/GalleryG2/app/src/main/res/drawable/ucrop_wrapper_controls_shape.xml" value="0.16822916666666668" />
         <entry key="..\:/Hoc_Tap/mobile/temp/GalleryG2/app/src/main/res/layout/activity_full_image.xml" value="0.21331828442437922" />
+        <entry key="..\:/Hoc_Tap/mobile/temp/GalleryG2/app/src/main/res/layout/crop_activity_photobox.xml" value="0.2" />
+        <entry key="..\:/Hoc_Tap/mobile/temp/GalleryG2/app/src/main/res/layout/crop_aspect_ratio.xml" value="0.15208333333333332" />
+        <entry key="..\:/Hoc_Tap/mobile/temp/GalleryG2/app/src/main/res/layout/crop_controls.xml" value="0.25" />
+        <entry key="..\:/Hoc_Tap/mobile/temp/GalleryG2/app/src/main/res/layout/crop_fragment_photobox.xml" value="0.15052083333333333" />
+        <entry key="..\:/Hoc_Tap/mobile/temp/GalleryG2/app/src/main/res/layout/crop_layout_rotate_wheel.xml" value="0.67" />
+        <entry key="..\:/Hoc_Tap/mobile/temp/GalleryG2/app/src/main/res/layout/crop_layout_scale_wheel.xml" value="0.67" />
+        <entry key="..\:/Hoc_Tap/mobile/temp/GalleryG2/app/src/main/res/layout/crop_view.xml" value="0.20034742327735958" />
         <entry key="..\:/Hoc_Tap/mobile/temp/GalleryG2/app/src/main/res/layout/fragment_all_images.xml" value="0.1" />
         <entry key="..\:/Hoc_Tap/mobile/temp/GalleryG2/app/src/main/res/layout/fragment_crop.xml" value="0.18568840579710144" />
         <entry key="..\:/Hoc_Tap/mobile/temp/GalleryG2/app/src/main/res/layout/fragment_edit.xml" value="0.25" />
@@ -16,7 +42,10 @@
         <entry key="..\:/Hoc_Tap/mobile/temp/GalleryG2/app/src/main/res/layout/main_activity.xml" value="0.1" />
         <entry key="..\:/Hoc_Tap/mobile/temp/GalleryG2/app/src/main/res/layout/slide_item_container.xml" value="0.14166666666666666" />
         <entry key="..\:/Hoc_Tap/mobile/temp/GalleryG2/app/src/main/res/layout/toolbar.xml" value="0.140625" />
+        <entry key="..\:/Hoc_Tap/mobile/temp/GalleryG2/app/src/main/res/layout/ucrop_activity_photobox.xml" value="0.15208333333333332" />
         <entry key="..\:/Hoc_Tap/mobile/temp/GalleryG2/app/src/main/res/menu/bottom_menu.xml" value="0.1" />
+        <entry key="..\:/Hoc_Tap/mobile/temp/GalleryG2/app/src/main/res/menu/ucrop_menu_activity.xml" value="0.15208333333333332" />
+        <entry key="..\:/Hoc_Tap/mobile/temp/GalleryG2/app/src/main/res/xml/settings_layout.xml" value="0.1484375" />
         <entry key="..\:/University/Code/21-22_HKI/Mobile/Team/GalleryG2/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.22205128205128205" />
         <entry key="..\:/University/Code/21-22_HKI/Mobile/Team/GalleryG2/app/src/main/res/drawable/ic_about.xml" value="0.22205128205128205" />
         <entry key="..\:/University/Code/21-22_HKI/Mobile/Team/GalleryG2/app/src/main/res/drawable/ic_all_pictures.xml" value="0.22205128205128205" />

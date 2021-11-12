@@ -1,4 +1,4 @@
-package com.yalantis.ucrop.view;
+package com.gnine.galleryg2.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -6,7 +6,7 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 
-import com.yalantis.ucrop.util.RotationGestureDetector;
+import com.gnine.galleryg2.util.RotationGestureDetector;
 
 /**
  * Created by Oleksii Shliama (https://github.com/shliama).

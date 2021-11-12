@@ -1,2 +1,8 @@
-package com.gnine.galleryg2.callback;public interface IOverlayViewChangeListener {
+package com.gnine.galleryg2.callback;
+
+import android.graphics.RectF;
+
+public interface IOverlayViewChangeListener {
+
+    void onCropRectUpdated(RectF cropRect);
 }

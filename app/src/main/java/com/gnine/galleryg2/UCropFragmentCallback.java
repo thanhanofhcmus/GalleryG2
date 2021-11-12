@@ -1,4 +1,6 @@
-package com.yalantis.ucrop;
+package com.gnine.galleryg2;
+
+import com.gnine.galleryg2.fragments.UCropFragment;
 
 public interface UCropFragmentCallback {
 

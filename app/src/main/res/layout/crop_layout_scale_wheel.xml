@@ -3,15 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:showIn="@layout/ucrop_controls"
+    tools:showIn="@layout/crop_controls"
     tools:visibility="gone">
 
     <TextView
         android:id="@+id/text_view_scale"
-        style="@style/ucrop_TextViewWidgetText"
+        style="@style/gnine_TextViewWidgetText"
         android:text="100%" />
 
-    <com.yalantis.ucrop.view.widget.HorizontalProgressWheelView
+    <com.gnine.galleryg2.view.widget.HorizontalProgressWheelView
         android:id="@+id/scale_scroll_wheel"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

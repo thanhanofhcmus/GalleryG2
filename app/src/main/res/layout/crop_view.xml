@@ -5,16 +5,16 @@
 
     <!-- Padding for both views can be different -->
 
-    <com.yalantis.ucrop.view.GestureCropImageView
+    <com.gnine.galleryg2.view.GestureCropImageView
         android:id="@+id/image_view_crop"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="@dimen/ucrop_padding_crop_frame"/>
+        android:padding="@dimen/gnine_padding_crop_frame"/>
 
-    <com.yalantis.ucrop.view.OverlayView
+    <com.gnine.galleryg2.view.OverlayView
         android:id="@+id/view_overlay"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="@dimen/ucrop_padding_crop_frame"/>
+        android:padding="@dimen/gnine_padding_crop_frame"/>
 
 </merge>

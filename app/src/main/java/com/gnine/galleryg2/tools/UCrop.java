@@ -1,4 +1,4 @@
-package com.yalantis.ucrop;
+package com.gnine.galleryg2.tools;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -11,18 +11,20 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 
-import com.yalantis.ucrop.model.AspectRatio;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Locale;
-
 import androidx.annotation.ColorInt;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.FloatRange;
 import androidx.annotation.IntRange;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import com.gnine.galleryg2.BuildConfig;
+import com.gnine.galleryg2.fragments.UCropFragment;
+import com.gnine.galleryg2.model.AspectRatio;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Locale;
 
 /**
  * Created by Oleksii Shliama (https://github.com/shliama).
@@ -179,12 +181,12 @@ public class UCrop {
     }
 
     /**
-     * Get Intent to start {@link UCropActivity}
+     * Get Intent to start {@link com.gnine.galleryg2.UCropActivity}
      *
-     * @return Intent for {@link UCropActivity}
+     * @return Intent for {@link com.gnine.galleryg2.UCropActivity}
      */
     public Intent getIntent(@NonNull Context context) {
-        mCropIntent.setClass(context, UCropActivity.class);
+        mCropIntent.setClass(context, com.gnine.galleryg2.UCropActivity.class);
         mCropIntent.putExtras(mCropOptionsBundle);
         return mCropIntent;
     }
@@ -314,7 +316,7 @@ public class UCrop {
         }
 
         /**
-         * Set one of {@link android.graphics.Bitmap.CompressFormat} that will be used to save resulting Bitmap.
+         * Set one of {@link Bitmap.CompressFormat} that will be used to save resulting Bitmap.
          */
         public void setCompressionFormat(@NonNull Bitmap.CompressFormat format) {
             mOptionBundle.putString(EXTRA_COMPRESSION_FORMAT_NAME, format.name());
@@ -330,9 +332,9 @@ public class UCrop {
         /**
          * Choose what set of gestures will be enabled on each tab - if any.
          */
-        public void setAllowedGestures(@UCropActivity.GestureTypes int tabScale,
-                                       @UCropActivity.GestureTypes int tabRotate,
-                                       @UCropActivity.GestureTypes int tabAspectRatio) {
+        public void setAllowedGestures(@com.gnine.galleryg2.UCropActivity.GestureTypes int tabScale,
+                                       @com.gnine.galleryg2.UCropActivity.GestureTypes int tabRotate,
+                                       @com.gnine.galleryg2.UCropActivity.GestureTypes int tabAspectRatio) {
             mOptionBundle.putIntArray(EXTRA_ALLOWED_GESTURES, new int[]{tabScale, tabRotate, tabAspectRatio});
         }
 

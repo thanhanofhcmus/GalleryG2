@@ -1,4 +1,4 @@
-package com.yalantis.ucrop.view;
+package com.gnine.galleryg2.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -12,17 +12,17 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.yalantis.ucrop.R;
-import com.yalantis.ucrop.callback.OverlayViewChangeListener;
-import com.yalantis.ucrop.util.RectUtils;
-
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-
 import androidx.annotation.ColorInt;
 import androidx.annotation.IntDef;
 import androidx.annotation.IntRange;
 import androidx.annotation.NonNull;
+
+import com.gnine.galleryg2.R;
+import com.gnine.galleryg2.callback.IOverlayViewChangeListener;
+import com.gnine.galleryg2.util.RectUtils;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
 /**
  * Created by Oleksii Shliama (https://github.com/shliama).
@@ -69,14 +69,14 @@ public class OverlayView extends View {
     private int mCropRectMinSize;
     private int mCropRectCornerTouchAreaLineLength;
 
-    private OverlayViewChangeListener mCallback;
+    private IOverlayViewChangeListener mCallback;
 
     private boolean mShouldSetupCropBounds;
 
     {
-        mTouchPointThreshold = getResources().getDimensionPixelSize(R.dimen.ucrop_default_crop_rect_corner_touch_threshold);
-        mCropRectMinSize = getResources().getDimensionPixelSize(R.dimen.ucrop_default_crop_rect_min_size);
-        mCropRectCornerTouchAreaLineLength = getResources().getDimensionPixelSize(R.dimen.ucrop_default_crop_rect_corner_touch_area_line_length);
+        mTouchPointThreshold = getResources().getDimensionPixelSize(R.dimen.gnine_default_crop_rect_corner_touch_threshold);
+        mCropRectMinSize = getResources().getDimensionPixelSize(R.dimen.gnine_default_crop_rect_min_size);
+        mCropRectCornerTouchAreaLineLength = getResources().getDimensionPixelSize(R.dimen.gnine_default_crop_rect_corner_touch_area_line_length);
     }
 
     public OverlayView(Context context) {
@@ -92,11 +92,11 @@ public class OverlayView extends View {
         init();
     }
 
-    public OverlayViewChangeListener getOverlayViewChangeListener() {
+    public IOverlayViewChangeListener getOverlayViewChangeListener() {
         return mCallback;
     }
 
-    public void setOverlayViewChangeListener(OverlayViewChangeListener callback) {
+    public void setOverlayViewChangeListener(IOverlayViewChangeListener callback) {
         mCallback = callback;
     }
 
@@ -270,9 +270,7 @@ public class OverlayView extends View {
     }
 
     protected void init() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2) {
-            setLayerType(LAYER_TYPE_SOFTWARE, null);
-        }
+        setLayerType(LAYER_TYPE_SOFTWARE, null);
     }
 
     @Override
@@ -456,9 +454,9 @@ public class OverlayView extends View {
     protected void drawDimmedLayer(@NonNull Canvas canvas) {
         canvas.save();
         if (mCircleDimmedLayer) {
-            canvas.clipPath(mCircularPath, Region.Op.DIFFERENCE);
+            canvas.clipPath(mCircularPath);
         } else {
-            canvas.clipRect(mCropViewRect, Region.Op.DIFFERENCE);
+            canvas.clipRect(mCropViewRect);
         }
         canvas.drawColor(mDimmedColor);
         canvas.restore();
@@ -511,11 +509,11 @@ public class OverlayView extends View {
 
             mTempRect.set(mCropViewRect);
             mTempRect.inset(mCropRectCornerTouchAreaLineLength, -mCropRectCornerTouchAreaLineLength);
-            canvas.clipRect(mTempRect, Region.Op.DIFFERENCE);
+            canvas.clipRect(mTempRect);
 
             mTempRect.set(mCropViewRect);
             mTempRect.inset(-mCropRectCornerTouchAreaLineLength, mCropRectCornerTouchAreaLineLength);
-            canvas.clipRect(mTempRect, Region.Op.DIFFERENCE);
+            canvas.clipRect(mTempRect);
 
             canvas.drawRect(mCropViewRect, mCropFrameCornersPaint);
 
@@ -529,18 +527,18 @@ public class OverlayView extends View {
      */
     @SuppressWarnings("deprecation")
     protected void processStyledAttributes(@NonNull TypedArray a) {
-        mCircleDimmedLayer = a.getBoolean(R.styleable.ucrop_UCropView_ucrop_circle_dimmed_layer, DEFAULT_CIRCLE_DIMMED_LAYER);
-        mDimmedColor = a.getColor(R.styleable.ucrop_UCropView_ucrop_dimmed_color,
-                getResources().getColor(R.color.ucrop_color_default_dimmed));
+        mCircleDimmedLayer = a.getBoolean(R.styleable.gnine_CropView_gnine_circle_dimmed_layer, DEFAULT_CIRCLE_DIMMED_LAYER);
+        mDimmedColor = a.getColor(R.styleable.gnine_CropView_gnine_dimmed_color,
+                getResources().getColor(R.color.gnine_color_default_dimmed));
         mDimmedStrokePaint.setColor(mDimmedColor);
         mDimmedStrokePaint.setStyle(Paint.Style.STROKE);
         mDimmedStrokePaint.setStrokeWidth(1);
 
         initCropFrameStyle(a);
-        mShowCropFrame = a.getBoolean(R.styleable.ucrop_UCropView_ucrop_show_frame, DEFAULT_SHOW_CROP_FRAME);
+        mShowCropFrame = a.getBoolean(R.styleable.gnine_CropView_gnine_show_frame, DEFAULT_SHOW_CROP_FRAME);
 
         initCropGridStyle(a);
-        mShowCropGrid = a.getBoolean(R.styleable.ucrop_UCropView_ucrop_show_grid, DEFAULT_SHOW_CROP_GRID);
+        mShowCropGrid = a.getBoolean(R.styleable.gnine_CropView_gnine_show_grid, DEFAULT_SHOW_CROP_GRID);
     }
 
     /**
@@ -548,10 +546,10 @@ public class OverlayView extends View {
      */
     @SuppressWarnings("deprecation")
     private void initCropFrameStyle(@NonNull TypedArray a) {
-        int cropFrameStrokeSize = a.getDimensionPixelSize(R.styleable.ucrop_UCropView_ucrop_frame_stroke_size,
-                getResources().getDimensionPixelSize(R.dimen.ucrop_default_crop_frame_stoke_width));
-        int cropFrameColor = a.getColor(R.styleable.ucrop_UCropView_ucrop_frame_color,
-                getResources().getColor(R.color.ucrop_color_default_crop_frame));
+        int cropFrameStrokeSize = a.getDimensionPixelSize(R.styleable.gnine_CropView_gnine_frame_stroke_size,
+                getResources().getDimensionPixelSize(R.dimen.gnine_default_crop_frame_stoke_width));
+        int cropFrameColor = a.getColor(R.styleable.gnine_CropView_gnine_frame_color,
+                getResources().getColor(R.color.gnine_color_default_crop_frame));
 
         mCropFramePaint.setStrokeWidth(cropFrameStrokeSize);
         mCropFramePaint.setColor(cropFrameColor);
@@ -567,15 +565,15 @@ public class OverlayView extends View {
      */
     @SuppressWarnings("deprecation")
     private void initCropGridStyle(@NonNull TypedArray a) {
-        int cropGridStrokeSize = a.getDimensionPixelSize(R.styleable.ucrop_UCropView_ucrop_grid_stroke_size,
-                getResources().getDimensionPixelSize(R.dimen.ucrop_default_crop_grid_stoke_width));
-        int cropGridColor = a.getColor(R.styleable.ucrop_UCropView_ucrop_grid_color,
-                getResources().getColor(R.color.ucrop_color_default_crop_grid));
+        int cropGridStrokeSize = a.getDimensionPixelSize(R.styleable.gnine_CropView_gnine_grid_stroke_size,
+                getResources().getDimensionPixelSize(R.dimen.gnine_default_crop_grid_stoke_width));
+        int cropGridColor = a.getColor(R.styleable.gnine_CropView_gnine_grid_color,
+                getResources().getColor(R.color.gnine_color_default_crop_grid));
         mCropGridPaint.setStrokeWidth(cropGridStrokeSize);
         mCropGridPaint.setColor(cropGridColor);
 
-        mCropGridRowCount = a.getInt(R.styleable.ucrop_UCropView_ucrop_grid_row_count, DEFAULT_CROP_GRID_ROW_COUNT);
-        mCropGridColumnCount = a.getInt(R.styleable.ucrop_UCropView_ucrop_grid_column_count, DEFAULT_CROP_GRID_COLUMN_COUNT);
+        mCropGridRowCount = a.getInt(R.styleable.gnine_CropView_gnine_grid_row_count, DEFAULT_CROP_GRID_ROW_COUNT);
+        mCropGridColumnCount = a.getInt(R.styleable.gnine_CropView_gnine_grid_column_count, DEFAULT_CROP_GRID_COLUMN_COUNT);
     }
 
 
