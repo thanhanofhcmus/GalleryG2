@@ -6,16 +6,19 @@
         android:id="@+id/clear_choose"
         android:title=""
         android:icon="@drawable/ic_clear"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/menu_share"
+        android:title=""
+        android:icon="@drawable/ic_share"
+        app:showAsAction="ifRoom" />
+
 
     <item
         android:id="@+id/menu_chang_view"
-        android:icon="@drawable/ic_grid_4"
         android:title=""
+        android:icon="@drawable/ic_grid_4"
         app:showAsAction="always" />
 
-    <item
-        android:id="@+id/menu_home"
-        android:icon="@drawable/ic_menu"
-        android:title="Unknow" />
 </menu>
