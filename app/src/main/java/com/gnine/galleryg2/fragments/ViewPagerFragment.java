@@ -1,5 +1,6 @@
 package com.gnine.galleryg2.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,6 +15,7 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 
 import com.gnine.galleryg2.MainActivity;
 import com.gnine.galleryg2.R;
@@ -21,6 +23,7 @@ import com.gnine.galleryg2.adapters.SliderAdapter;
 import com.gnine.galleryg2.data.ImageData;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 
 public class ViewPagerFragment extends Fragment {
@@ -55,8 +58,31 @@ public class ViewPagerFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         assert getView() != null;
 
-        ViewPager2 viewPager2 = getView().findViewById(R.id.viewPagerImageSlider);
+        ViewPager2 viewPager2 = view.findViewById(R.id.viewPagerImageSlider);
         viewPager2.setAdapter(new SliderAdapter(imageDataList));
+
+        ImageButton shareButton = view.findViewById(R.id.shareBtn);
+        shareButton.setOnClickListener(v -> {
+            int currentPos = viewPager2.getCurrentItem();
+            ImageData imageData = imageDataList.get(currentPos);
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            intent.putExtra(Intent.EXTRA_STREAM, imageData.uri);
+
+            String imageName = imageData.name.toLowerCase(Locale.ROOT);
+
+            if (imageName.endsWith(".jpeg") || imageName.endsWith("jpg")) {
+                intent.setType("image/jpeg");
+            } else if (imageName.endsWith(".png")) {
+                intent.setType("image/png");
+            } else if (imageName.endsWith(".gif")) {
+                intent.setType("image/gif");
+            } else {
+                intent.setType("image/webp");
+            }
+
+            startActivity(Intent.createChooser(intent, null));
+        });
+
         new Handler().postDelayed(() -> viewPager2.setCurrentItem(position, false), 100);
     }
 }
