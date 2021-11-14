@@ -30,6 +30,10 @@
         <entry key="app/src/main/res/layout/fragment_all_images.xml" value="0.22871376811594202" />
         <entry key="app/src/main/res/layout/fragment_edit.xml" value="0.22509057971014493" />
         <entry key="app/src/main/res/layout/fragment_trash.xml" value="0.22871376811594202" />
+        <entry key="app/src/main/res/layout/fragment_view_pager.xml" value="0.328125" />
+        <entry key="app/src/main/res/layout/main_activity.xml" value="0.32135416666666666" />
+        <entry key="app/src/main/res/menu/appbar_menu.xml" value="0.328125" />
+        <entry key="app/src/main/res/xml/settings_layout.xml" value="0.28351449275362317" />
       </map>
     </option>
   </component>
