@@ -5,7 +5,7 @@
     <PreferenceCategory
         app:title="Theme">
 
-        <DropDownPreference
+        <ListPreference
             app:key="theme_mode"
             app:icon="@drawable/ic_dark_light_mode"
             android:title="Color Mode"
