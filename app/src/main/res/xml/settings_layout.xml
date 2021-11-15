@@ -4,18 +4,22 @@
 
     <PreferenceCategory
         app:title="Theme">
-        <SwitchPreferenceCompat
-            app:key="dark_mode"
+
+        <ListPreference
+            app:key="theme_mode"
             app:icon="@drawable/ic_dark_light_mode"
-            app:title="Dark mode"
-            app:summary="Toggle dark mode" />
+            android:title="Color Mode"
+            android:summary="Choose color mode"
+            android:entries="@array/menu_theme_mode"
+            android:entryValues="@array/menu_theme_mode" />
+
     </PreferenceCategory>
+
 
     <PreferenceCategory
         app:title="About" >
 
         <Preference
-            android:key="app_version"
             android:title="Version"
             app:icon="@drawable/ic_info"
             android:summary="1.0.0"/>
