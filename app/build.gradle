@@ -13,6 +13,15 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        ndk {
+            moduleName "ucrop"
+        }
+
+        sourceSets.main {
+            jni.srcDirs = []
+            jniLibs.srcDir "src/main/libs"
+        }
     }
 
     viewBinding{
@@ -28,6 +37,13 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+    sourceSets {
+        main {
+            jni {
+                srcDirs 'src\\main\\jni'
+            }
+        }
     }
 }
 

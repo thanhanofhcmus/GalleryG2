@@ -86,7 +86,7 @@ public class FullImageActivity extends AppCompatActivity {
 
     private void startCrop(@NonNull Uri uri){
         String destinationName=SAMPLE_CROP_IMAGE_NAME+".jpg";
-        String a=getCacheDir().getAbsolutePath();
+//        String a=getCacheDir().getAbsolutePath();
         UCrop uCrop=UCrop.of(uri,Uri.fromFile(new File(getCacheDir(),destinationName)));
         uCrop=uCrop.useSourceImageAspectRatio();
         UCrop.Options options=new UCrop.Options();
