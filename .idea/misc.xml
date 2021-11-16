@@ -33,6 +33,8 @@
         <entry key="app/src/main/res/layout/fragment_view_pager.xml" value="0.328125" />
         <entry key="app/src/main/res/layout/main_activity.xml" value="0.32135416666666666" />
         <entry key="app/src/main/res/menu/appbar_menu.xml" value="0.328125" />
+        <entry key="app/src/main/res/menu/top_menu.xml" value="0.321875" />
+        <entry key="app/src/main/res/xml/root_preferences.xml" value="0.3188405797101449" />
         <entry key="app/src/main/res/xml/settings_layout.xml" value="0.28351449275362317" />
       </map>
     </option>

@@ -9,11 +9,8 @@
         app:showAsAction="ifRoom"/>
     <item
         android:title="Information"
-        android:id="@+id/action_information"/>
-
-    <item
-        android:title="About us"
-        android:id="@+id/action_aboutUs"/>
-
+        android:icon="@drawable/ic_outline_info"
+        android:id="@+id/action_information"
+        app:showAsAction="always"/>
 
 </menu>
