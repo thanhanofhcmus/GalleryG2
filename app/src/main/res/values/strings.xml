@@ -9,6 +9,11 @@
     <string name="trash">Trash</string>
     <string name="rotate">Rotate</string>
     <string name="cut">Cut</string>
+    <string name="create_new_album">CREATE NEW ALBUM</string>
+    <string name="name">Name</string>
+    <string name="new_album">New album</string>
+    <string name="create">Create</string>
+    <string name="cancel">Cancel</string>
     <!-- Preference Titles -->
 
     <!-- Messages Preferences -->
