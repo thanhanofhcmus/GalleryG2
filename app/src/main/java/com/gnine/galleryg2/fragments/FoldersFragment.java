@@ -6,6 +6,7 @@ import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.gnine.galleryg2.AlbumDialog;
 import com.gnine.galleryg2.R;
 import com.gnine.galleryg2.adapters.FolderAdapter;
 import com.gnine.galleryg2.adapters.TypesAdapter;
@@ -34,8 +36,18 @@ public class FoldersFragment extends Fragment {
 
     static boolean checkBackPressed;
 
+    List<FolderData> folderDataList;
+    List<TypeData> typeDataList;
+
     public FoldersFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        folderDataList = getListFolders();
+        typeDataList = getListTypes();
     }
 
     @Override
@@ -48,9 +60,9 @@ public class FoldersFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         RecyclerView rcvFolder = view.findViewById(R.id.rcv_folders);
         RecyclerView rcvTypes = view.findViewById(R.id.rcv_types);
+        RecyclerView rcvAlbums = view.findViewById(R.id.rcv_albums);
 
-        //Folders
-        List<FolderData> folderDataList = getListFolders();
+        //Folder
         GridLayoutManager gridLayoutManager = new GridLayoutManager(view.getContext(),
                 folderDataList.size() > 4 ? 2 : 1, RecyclerView.HORIZONTAL, false);
         rcvFolder.setLayoutManager(gridLayoutManager);
@@ -70,17 +82,42 @@ public class FoldersFragment extends Fragment {
             ft.commit();
         };
 
+        BiConsumer<Integer, View> onTypeClick = (position, view1) -> {
+            if (getListTypes().get(position).list != null) {
+                checkBackPressed = false;
+                FragmentTransaction ft = getChildFragmentManager().beginTransaction();
+                tempFragment = new AllImagesFragment();
+                ((AllImagesFragment) tempFragment).setFolder(true);
+                ((AllImagesFragment) tempFragment).setImageDataList(getListTypes().get(position).list);
+                BottomNavigationView bnv = requireActivity().findViewById(R.id.bottomNavView);
+                bnv.getMenu().getItem(1).setEnabled(false);
+                ft.replace(R.id.fragmentFolders, tempFragment);
+                ft.addToBackStack(null);
+                ft.commit();
+            }
+        };
+
         FolderAdapter folderAdapter = new FolderAdapter(folderDataList, onFolderClick);
-        folderAdapter.setData(getListFolders());
+        folderAdapter.setData(folderDataList);
         rcvFolder.setAdapter(folderAdapter);
 
         //TypeData
-        TypesAdapter typesAdapter = new TypesAdapter(getListTypes(), onFolderClick);
+        TypesAdapter typesAdapter = new TypesAdapter(typeDataList, onTypeClick);
+        typesAdapter.setData(typeDataList);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.getContext());
         rcvTypes.setLayoutManager(linearLayoutManager);
         rcvTypes.setFocusable(false);
         rcvTypes.setNestedScrollingEnabled(false);
         rcvTypes.setAdapter(typesAdapter);
+
+        ImageButton addingBtn = (ImageButton) view.findViewById(R.id.addingBtn);
+        addingBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlbumDialog ad = new AlbumDialog(requireActivity());
+                ad.show();
+            }
+        });
 
         if (!checkBackPressed && tempFragment != null) {
             FragmentTransaction ft = getChildFragmentManager().beginTransaction();
@@ -110,7 +147,7 @@ public class FoldersFragment extends Fragment {
         List<TypeData> list = new ArrayList<>();
         list.add(new TypeData(R.drawable.ic_video, "Videos", null));
         list.add(new TypeData(R.drawable.ic_selfie, "Images",
-                ImageLoader.loadImageFromSharedStorage(requireActivity())));
+                ImageLoader.getAllImagesFromDevice(requireActivity())));
         list.add(new TypeData(R.drawable.ic_screenshot, "Screenshots", null));
 
         return list;
@@ -118,8 +155,10 @@ public class FoldersFragment extends Fragment {
 
     private List<FolderData> getListFolders() {
         List<FolderData> list = new ArrayList<>();
-        list.addAll(Objects.requireNonNull(ImageLoader.retrieveFoldersHaveImage("/storage/")));
-        list.addAll(Objects.requireNonNull(ImageLoader.retrieveFoldersHaveImage(Environment.getExternalStorageDirectory().getPath())));
+        if (ImageLoader.retrieveFoldersHaveImage("/storage/") != null)
+            list.addAll(Objects.requireNonNull(ImageLoader.retrieveFoldersHaveImage("/storage/")));
+        if (ImageLoader.retrieveFoldersHaveImage(Environment.getExternalStorageDirectory().getPath()) != null)
+            list.addAll(Objects.requireNonNull(ImageLoader.retrieveFoldersHaveImage(Environment.getExternalStorageDirectory().getPath())));
         return list;
     }
 }

@@ -35,12 +35,16 @@ public class TypesAdapter extends RecyclerView.Adapter<TypesAdapter.TypesViewHol
         }
     }
 
-    private final List<TypeData> mTypeDataList;
+    private List<TypeData> mTypeDataList;
     private final BiConsumer<Integer, View> onTypeClick;
 
     public TypesAdapter(List<TypeData> list, BiConsumer<Integer, View> onTypeClick) {
         this.mTypeDataList = list;
         this.onTypeClick = onTypeClick;
+    }
+
+    public void setData(List<TypeData> list) {
+        this.mTypeDataList = list;
         notifyItemRangeChanged(0, getItemCount());
     }
 

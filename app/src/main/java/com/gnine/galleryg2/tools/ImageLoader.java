@@ -1,10 +1,13 @@
 package com.gnine.galleryg2.tools;
 
+import static java.security.AccessController.getContext;
+
 import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Environment;
 import android.provider.MediaStore;
 
 import androidx.annotation.NonNull;
@@ -20,6 +23,7 @@ import java.nio.file.Files;
 import java.nio.file.attribute.FileTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class ImageLoader {
 
@@ -123,7 +127,7 @@ public class ImageLoader {
                     if (file.listFiles(new ImageAndVideoFileFilter()) != null) { //contains images
                         if (file.listFiles(new ImageAndVideoFileFilter()).length > 0) {
                             foldersList.add(new FolderData(R.drawable.ic_folder,
-                                    Uri.parse(file.getPath()),
+                                    Uri.fromFile(file),
                                     file.getPath(),
                                     getImagesFromFolder(file.getPath())));
                         }
@@ -136,5 +140,17 @@ public class ImageLoader {
             return foldersList;
         }
         return null;
+    }
+
+    public static ArrayList<ImageData> getAllImagesFromDevice(Context context) {
+        ArrayList<ImageData> res = new ArrayList<>();
+        List<FolderData> list = new ArrayList<>();
+        if (ImageLoader.retrieveFoldersHaveImage("/storage/") != null)
+            list.addAll(Objects.requireNonNull(ImageLoader.retrieveFoldersHaveImage("/storage/")));
+        if (ImageLoader.retrieveFoldersHaveImage(Environment.getExternalStorageDirectory().getPath()) != null)
+            list.addAll(Objects.requireNonNull(ImageLoader.retrieveFoldersHaveImage(Environment.getExternalStorageDirectory().getPath())));
+        for (FolderData folder : list)
+            res.addAll(getImagesFromFolder(folder.uri.getPath()));
+        return res;
     }
 }
