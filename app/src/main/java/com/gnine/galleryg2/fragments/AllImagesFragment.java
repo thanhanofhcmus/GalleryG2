@@ -56,6 +56,38 @@ public class AllImagesFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        this.imageDataList = (folder) ? imageDataList : ImageLoader.loadImageFromSharedStorage(requireActivity());
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        this.imageDataList = (folder) ? imageDataList : ImageLoader.loadImageFromSharedStorage(requireActivity());
+        BiConsumer<Integer, View> onItemClick = (position, view12) -> {
+            if (imageAdapter.getState() == State.MultipleSelect) {
+                if (!imageDataList.get(position).isChecked()) {
+                    imageDataList.get(position).setChecked(true);
+                    numImagesChecked++;
+                } else {
+                    imageDataList.get(position).setChecked(false);
+                    numImagesChecked--;
+                }
+                requireActivity().setTitle(String.valueOf(numImagesChecked));
+                imageAdapter.notifyItemChanged(position);
+            } else {
+                sendImageListAndPositionToMain(position);
+            }
+        };
+
+        BiConsumer<Integer, View> onItemLongClick = (position, view1) -> {
+            imageAdapter.setState(State.MultipleSelect);
+            requireActivity().invalidateOptionsMenu();
+            imageDataList.get(position).setChecked(true);
+            imageAdapter.notifyItemRangeChanged(0, imageAdapter.getItemCount());
+            requireActivity().setTitle(String.valueOf(++numImagesChecked));
+        };
+        imageAdapter = new ImageRecyclerViewAdapter(imageDataList, onItemClick, onItemLongClick);
+        recyclerView.setAdapter(imageAdapter);
     }
 
     @Override
@@ -94,8 +126,6 @@ public class AllImagesFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         typeView = 4;
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), typeView));
-
-        this.imageDataList = folder ? imageDataList : ImageLoader.loadImageFromSharedStorage(requireActivity());
 
         BiConsumer<Integer, View> onItemClick = (position, view12) -> {
             if (imageAdapter.getState() == State.MultipleSelect) {

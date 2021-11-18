@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.gnine.galleryg2.FullImageActivity;
@@ -96,14 +97,14 @@ public class EditFragment extends Fragment {
     private void saveImage(ImageView imageView){
         assert bitmap!=null;
 //        String path=Environment.getExternalStorageDirectory().toString();
-        String path=imageData.uri.getPath();
-        String path_=imageData.uri.toString();
+        File path= (new File(imageData.uri.getPath())).getParentFile();
+        //String path_=imageData.uri.toString();
         FileOutputStream fout=null;
         File file=new File(path,"1.jpg");
         if(!file.exists()){
             try {
                 file.createNewFile();
-            }catch(Exception ex){
+            }catch(Exception ignored) {
 
             }
         }

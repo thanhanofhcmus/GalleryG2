@@ -13,5 +13,10 @@
     <string name="crop_9_16">9:16</string>
     <string name="crop_1_1">1:1</string>
     <string name="crop_free">free</string>
+    <string name="create_new_album">CREATE NEW ALBUM</string>
+    <string name="new_album">New album</string>
+    <string name="name">Name:</string>
+    <string name="create">Create</string>
+    <string name="cancel">Cancel</string>
 
 </resources>

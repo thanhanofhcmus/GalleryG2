@@ -12,7 +12,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GalleryG2"
         android:allowBackup="true"
-        android:fullBackupContent="true">
+        android:fullBackupContent="true"
+        android:requestLegacyExternalStorage="true">
 
         <activity
             android:name=".FullImageActivity"
@@ -22,7 +23,7 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:label="test">
+            android:label="GalleryG2">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

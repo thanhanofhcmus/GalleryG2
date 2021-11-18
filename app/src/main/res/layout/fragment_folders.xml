@@ -42,6 +42,20 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:text="My Folders"
+                    android:textColor="@color/black"
+                    android:layout_weight="1"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rcv_folders"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
@@ -51,14 +65,24 @@
                         android:layout_height="wrap_content"
                         android:textSize="22sp"
                         android:textStyle="bold"
-                        android:text="My Folders"
+                        android:text="My Albums"
                         android:textColor="@color/black"
                         android:layout_weight="1"/>
+
+                    <ImageButton
+                        android:id="@+id/addingBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="5dp"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:background="@android:color/transparent"
+                        android:src="@drawable/ic_add"/>
 
                 </LinearLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rcv_folders"
+                    android:id="@+id/rcv_albums"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
 
