@@ -38,42 +38,23 @@ public class FoldersFragment extends Fragment {
 
     List<FolderData> folderDataList;
     List<TypeData> typeDataList;
+    FolderAdapter folderAdapter;
+    TypesAdapter typesAdapter;
+    RecyclerView rcvFolder, rcvTypes, rcvAlbums;
 
     public FoldersFragment() {
         // Required empty public constructor
     }
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    void update() {
         folderDataList = getListFolders();
         typeDataList = getListTypes();
-    }
-
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        RecyclerView rcvFolder = view.findViewById(R.id.rcv_folders);
-        RecyclerView rcvTypes = view.findViewById(R.id.rcv_types);
-        RecyclerView rcvAlbums = view.findViewById(R.id.rcv_albums);
-
-        //Folder
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(view.getContext(),
-                folderDataList.size() > 4 ? 2 : 1, RecyclerView.HORIZONTAL, false);
-        rcvFolder.setLayoutManager(gridLayoutManager);
-        rcvFolder.setFocusable(false);
-        rcvFolder.setNestedScrollingEnabled(false);
-
         BiConsumer<Integer, View> onFolderClick = (position, view1) -> {
             checkBackPressed = false;
             FragmentTransaction ft = getChildFragmentManager().beginTransaction();
             tempFragment = new AllImagesFragment();
             ((AllImagesFragment) tempFragment).setFolder(true);
+            ((AllImagesFragment) tempFragment).setFolderPath(getListFolders().get(position).uri.getPath());
             ((AllImagesFragment) tempFragment).setImageDataList(getListFolders().get(position).imageList);
             BottomNavigationView bnv = requireActivity().findViewById(R.id.bottomNavView);
             bnv.getMenu().getItem(1).setEnabled(false);
@@ -87,7 +68,7 @@ public class FoldersFragment extends Fragment {
                 checkBackPressed = false;
                 FragmentTransaction ft = getChildFragmentManager().beginTransaction();
                 tempFragment = new AllImagesFragment();
-                ((AllImagesFragment) tempFragment).setFolder(true);
+                ((AllImagesFragment) tempFragment).setTypes(true);
                 ((AllImagesFragment) tempFragment).setImageDataList(getListTypes().get(position).list);
                 BottomNavigationView bnv = requireActivity().findViewById(R.id.bottomNavView);
                 bnv.getMenu().getItem(1).setEnabled(false);
@@ -97,18 +78,53 @@ public class FoldersFragment extends Fragment {
             }
         };
 
-        FolderAdapter folderAdapter = new FolderAdapter(folderDataList, onFolderClick);
+        folderAdapter = new FolderAdapter(folderDataList, onFolderClick);
         folderAdapter.setData(folderDataList);
         rcvFolder.setAdapter(folderAdapter);
 
-        //TypeData
-        TypesAdapter typesAdapter = new TypesAdapter(typeDataList, onTypeClick);
+        typesAdapter = new TypesAdapter(typeDataList, onTypeClick);
         typesAdapter.setData(typeDataList);
+        rcvTypes.setAdapter(typesAdapter);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        update();
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        rcvFolder = view.findViewById(R.id.rcv_folders);
+        rcvTypes = view.findViewById(R.id.rcv_types);
+        rcvAlbums = view.findViewById(R.id.rcv_albums);
+
+        update();
+
+        //Folder
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(view.getContext(),
+                folderDataList.size() > 4 ? 2 : 1, RecyclerView.HORIZONTAL, false);
+        rcvFolder.setLayoutManager(gridLayoutManager);
+        rcvFolder.setFocusable(false);
+        rcvFolder.setNestedScrollingEnabled(false);
+
+        //TypeData
+
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.getContext());
         rcvTypes.setLayoutManager(linearLayoutManager);
         rcvTypes.setFocusable(false);
         rcvTypes.setNestedScrollingEnabled(false);
-        rcvTypes.setAdapter(typesAdapter);
 
         ImageButton addingBtn = (ImageButton) view.findViewById(R.id.addingBtn);
         addingBtn.setOnClickListener(new View.OnClickListener() {
