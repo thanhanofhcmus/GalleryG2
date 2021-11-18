@@ -43,6 +43,8 @@ public class AllImagesFragment extends Fragment {
     private int numImagesChecked;
     private ArrayList<ImageData> imageDataList = null;
     private boolean folder;
+    private boolean types;
+    private String folderPath;
 
 
     public AllImagesFragment() {
@@ -53,20 +55,15 @@ public class AllImagesFragment extends Fragment {
         this.folder = folder;
     }
 
+    public void setTypes(boolean types) { this.types = types; }
+
+    public void setFolderPath(String folderPath) { this.folderPath = folderPath; }
+
     public void setImageDataList(ArrayList<ImageData> imageDataList) {
         this.imageDataList = imageDataList;
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
-        this.imageDataList = (folder) ? imageDataList : ImageLoader.loadImageFromSharedStorage(requireActivity());
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
+    void update() {
         this.imageDataList = (folder) ? imageDataList : ImageLoader.loadImageFromSharedStorage(requireActivity());
         BiConsumer<Integer, View> onItemClick = (position, view12) -> {
             if (imageAdapter.getState() == State.MultipleSelect) {
@@ -92,7 +89,20 @@ public class AllImagesFragment extends Fragment {
             requireActivity().setTitle(String.valueOf(++numImagesChecked));
         };
         imageAdapter = new ImageRecyclerViewAdapter(imageDataList, onItemClick, onItemLongClick);
+        imageAdapter.setState(State.Normal);
         recyclerView.setAdapter(imageAdapter);
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        update();
     }
 
     @Override
@@ -129,38 +139,12 @@ public class AllImagesFragment extends Fragment {
             bnv.getMenu().getItem(1).setEnabled(true);
         }
 
-        recyclerView = getView().findViewById(R.id.allPicturesFragmentRecyclerView);
+        recyclerView = view.findViewById(R.id.allPicturesFragmentRecyclerView);
         recyclerView.setHasFixedSize(true);
         typeView = 4;
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), typeView));
 
-        BiConsumer<Integer, View> onItemClick = (position, view12) -> {
-            if (imageAdapter.getState() == State.MultipleSelect) {
-                if (!imageDataList.get(position).isChecked()) {
-                    imageDataList.get(position).setChecked(true);
-                    numImagesChecked++;
-                } else {
-                    imageDataList.get(position).setChecked(false);
-                    numImagesChecked--;
-                }
-                requireActivity().setTitle(String.valueOf(numImagesChecked));
-                imageAdapter.notifyItemChanged(position);
-            } else {
-                sendImageListAndPositionToMain(position);
-            }
-        };
-
-        BiConsumer<Integer, View> onItemLongClick = (position, view1) -> {
-            imageAdapter.setState(State.MultipleSelect);
-            requireActivity().invalidateOptionsMenu();
-            imageDataList.get(position).setChecked(true);
-            imageAdapter.notifyItemRangeChanged(0, imageAdapter.getItemCount());
-            requireActivity().setTitle(String.valueOf(++numImagesChecked));
-        };
-
-        imageAdapter = new ImageRecyclerViewAdapter(imageDataList, onItemClick, onItemLongClick);
-        imageAdapter.setState(State.Normal);
-        recyclerView.setAdapter(imageAdapter);
+        update();
     }
 
     @Override
