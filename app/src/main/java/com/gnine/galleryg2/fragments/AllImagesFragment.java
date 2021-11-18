@@ -1,6 +1,8 @@
 package com.gnine.galleryg2.fragments;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -26,6 +28,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 import java.util.function.BiConsumer;
+import java.util.stream.Collectors;
 
 public class AllImagesFragment extends Fragment {
 
@@ -50,7 +53,9 @@ public class AllImagesFragment extends Fragment {
         this.folder = folder;
     }
 
-    public void setImageDataList(ArrayList<ImageData> imageDataList) {this.imageDataList = imageDataList;}
+    public void setImageDataList(ArrayList<ImageData> imageDataList) {
+        this.imageDataList = imageDataList;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -92,7 +97,7 @@ public class AllImagesFragment extends Fragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
+                             Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_all_images, container, false);
     }
@@ -100,7 +105,9 @@ public class AllImagesFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if (getView() == null) { return; }
+        if (getView() == null) {
+            return;
+        }
 
         if (folder) {
             getView().setFocusableInTouchMode(true);
@@ -155,6 +162,7 @@ public class AllImagesFragment extends Fragment {
         imageAdapter.setState(State.Normal);
         recyclerView.setAdapter(imageAdapter);
     }
+
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.appbar_menu, menu);
@@ -163,18 +171,19 @@ public class AllImagesFragment extends Fragment {
 
         if (typeView == 2) {
             menu.getItem(1).setIcon(R.drawable.ic_grid_2);
-        }
-        else if (typeView == 1) {
+        } else if (typeView == 1) {
             menu.getItem(1).setIcon(R.drawable.ic_grid_1);
         }
 
         if (imageAdapter.getState() == State.MultipleSelect) {
-            menu.getItem(1).setVisible(false);
             menu.getItem(0).setVisible(true);
+            menu.getItem(1).setVisible(true);
+            menu.getItem(2).setVisible(false);
             activity.setTitle(String.valueOf(numImagesChecked));
         } else {
-            menu.getItem(1).setVisible(true);
             menu.getItem(0).setVisible(false);
+            menu.getItem(1).setVisible(false);
+            menu.getItem(2).setVisible(true);
             activity.setTitle("GalleryG2");
         }
 
@@ -188,7 +197,7 @@ public class AllImagesFragment extends Fragment {
             if (typeView == 4) {
                 typeView = 2;
                 item.setIcon(R.drawable.ic_grid_2);
-            } else if (typeView == 2 ) {
+            } else if (typeView == 2) {
                 typeView = 1;
                 item.setIcon(R.drawable.ic_grid_1);
             } else {
@@ -201,6 +210,15 @@ public class AllImagesFragment extends Fragment {
             imageAdapter.notifyItemRangeChanged(0, imageAdapter.getItemCount());
             numImagesChecked = 0;
             getActivity().invalidateOptionsMenu();
+        } else if (item.getItemId() == R.id.menu_share) {
+            ArrayList<Uri> checkedUriList = imageDataList .stream()
+                    .filter(ImageData::isChecked)
+                    .map(imageData -> imageData.uri)
+                    .collect(Collectors.toCollection(ArrayList::new));
+            Intent intent = new Intent(Intent.ACTION_SEND_MULTIPLE);
+            intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, checkedUriList);
+            intent.setType("image/*");
+            startActivity(Intent.createChooser(intent, null));
         }
 
         return super.onOptionsItemSelected(item);

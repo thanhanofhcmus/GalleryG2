@@ -1,0 +1,30 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory app:title="Information">
+
+        <Preference
+            app:key="Name"
+            app:summary="Something"
+            app:icon="@drawable/ic_all_pictures"
+            app:title="Name" />
+
+        <Preference
+            app:key="Path"
+            app:summary="Something"
+            app:icon="@drawable/ic_folder"
+            app:title="Path" />
+
+        <Preference
+            app:key="Size"
+            app:summary="Something"
+            app:icon="@drawable/ic_size"
+            app:title="Size" />
+
+        <Preference
+            app:key="Date"
+            app:summary="Date"
+            app:icon="@drawable/ic_calendar"
+            app:title="Date added" />
+    </PreferenceCategory>
+
+</PreferenceScreen>
