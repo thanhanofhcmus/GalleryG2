@@ -29,7 +29,6 @@
             android:text="Temp Type"
             android:paddingLeft="10dp"
             android:layout_gravity="center_vertical"
-            android:textColor="@color/blue"
             android:layout_weight="1">
 
         </TextView>
@@ -40,8 +39,7 @@
             android:textSize="16sp"
             android:text="0"
             android:paddingLeft="10dp"
-            android:layout_gravity="center_vertical"
-            android:textColor="#FF808080">
+            android:layout_gravity="center_vertical">
 
         </TextView>
         <ImageView
