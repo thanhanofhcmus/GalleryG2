@@ -72,6 +72,14 @@ public class AllImagesFragment extends Fragment {
         else {
             this.imageDataList = (types) ? ImageLoader.getAllImagesFromDevice() : ImageLoader.loadImageFromSharedStorage(requireActivity());
         }
+        if ((folder || types) && this.imageDataList.size() == 0) {
+            FragmentManager manager = requireActivity().getSupportFragmentManager();
+            manager.popBackStack();
+            FoldersFragment.checkBackPressed = true;
+            FoldersFragment.tempFragment = null;
+            BottomNavigationView bnv = requireActivity().findViewById(R.id.bottomNavView);
+            bnv.getMenu().getItem(1).setEnabled(true);
+        }
         BiConsumer<Integer, View> onItemClick = (position, view12) -> {
             if (imageAdapter.getState() == State.MultipleSelect) {
                 if (!imageDataList.get(position).isChecked()) {

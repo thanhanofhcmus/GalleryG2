@@ -1,7 +1,5 @@
 package com.gnine.galleryg2.tools;
 
-import static java.security.AccessController.getContext;
-
 import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
@@ -101,18 +99,19 @@ public class ImageLoader {
     public static ArrayList<ImageData> getImagesFromFolder(String directoryPath) {
         ArrayList<ImageData> imagesList = new ArrayList<>();
         File[] files = new File(directoryPath).listFiles(new ImageAndVideoFileFilter());
-        assert files != null;
-        for (File file : files) {
-            if (file == null) {
-                continue;
+        if (files != null) {
+            for (File file : files) {
+                if (file == null) {
+                    continue;
+                }
+                FileTime fileTime = null;
+                try {
+                    fileTime = (FileTime) Files.getAttribute(file.toPath(), "creationTime");
+                } catch (IOException ignored) {
+                }
+                imagesList.add(new ImageData(Uri.fromFile(file), file.getName(), (int) file.length(),
+                        fileTime != null ? fileTime.toMillis() : 0));
             }
-            FileTime fileTime = null;
-            try {
-                fileTime = (FileTime) Files.getAttribute(file.toPath(), "creationTime");
-            } catch (IOException ignored) {
-            }
-            imagesList.add(new ImageData(Uri.fromFile(file), file.getName(), (int) file.length(),
-                    fileTime != null ? fileTime.toMillis() : 0));
         }
         return imagesList;
     }
@@ -125,7 +124,7 @@ public class ImageLoader {
                 // Add the directories containing images or sub-directories
                 if (file.isDirectory()) {
                     if (file.listFiles(new ImageAndVideoFileFilter()) != null) { //contains images
-                        if (file.listFiles(new ImageAndVideoFileFilter()).length > 0) {
+                        if (Objects.requireNonNull(file.listFiles(new ImageAndVideoFileFilter())).length > 0) {
                             foldersList.add(new FolderData(R.drawable.ic_folder,
                                     Uri.fromFile(file),
                                     file.getPath(),
@@ -133,7 +132,7 @@ public class ImageLoader {
                         }
                     }
                     if (file.listFiles(new SubDirFilter()) != null) {
-                        foldersList.addAll(retrieveFoldersHaveImage(file.getPath()));
+                        foldersList.addAll(Objects.requireNonNull(retrieveFoldersHaveImage(file.getPath())));
                     }
                 }
             }

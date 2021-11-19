@@ -41,6 +41,7 @@ public class FoldersFragment extends Fragment {
     FolderAdapter folderAdapter;
     TypesAdapter typesAdapter;
     RecyclerView rcvFolder, rcvTypes, rcvAlbums;
+    GridLayoutManager gridLayoutManager;
 
     public FoldersFragment() {
         // Required empty public constructor
@@ -78,6 +79,9 @@ public class FoldersFragment extends Fragment {
             }
         };
 
+        gridLayoutManager = new GridLayoutManager(requireActivity(),
+                folderDataList.size() > 4 ? 2 : 1, RecyclerView.HORIZONTAL, false);
+        rcvFolder.setLayoutManager(gridLayoutManager);
         folderAdapter = new FolderAdapter(folderDataList, onFolderClick);
         folderAdapter.setData(folderDataList);
         rcvFolder.setAdapter(folderAdapter);
@@ -113,9 +117,7 @@ public class FoldersFragment extends Fragment {
         update();
 
         //Folder
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(view.getContext(),
-                folderDataList.size() > 4 ? 2 : 1, RecyclerView.HORIZONTAL, false);
-        rcvFolder.setLayoutManager(gridLayoutManager);
+
         rcvFolder.setFocusable(false);
         rcvFolder.setNestedScrollingEnabled(false);
 
@@ -126,13 +128,10 @@ public class FoldersFragment extends Fragment {
         rcvTypes.setFocusable(false);
         rcvTypes.setNestedScrollingEnabled(false);
 
-        ImageButton addingBtn = (ImageButton) view.findViewById(R.id.addingBtn);
-        addingBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AlbumDialog ad = new AlbumDialog(requireActivity());
-                ad.show();
-            }
+        ImageButton addingBtn = view.findViewById(R.id.addingBtn);
+        addingBtn.setOnClickListener(view1 -> {
+            AlbumDialog ad = new AlbumDialog(requireActivity());
+            ad.show();
         });
 
         if (!checkBackPressed && tempFragment != null) {
