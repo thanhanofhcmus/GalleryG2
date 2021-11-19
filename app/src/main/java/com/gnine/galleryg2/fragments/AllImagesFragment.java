@@ -32,11 +32,6 @@ import java.util.stream.Collectors;
 
 public class AllImagesFragment extends Fragment {
 
-    public enum State {
-        Normal,
-        MultipleSelect
-    }
-
     private RecyclerView recyclerView;
     private ImageRecyclerViewAdapter imageAdapter;
     private int typeView;
@@ -66,7 +61,7 @@ public class AllImagesFragment extends Fragment {
     void update() {
         this.imageDataList = (folder) ? imageDataList : ImageLoader.loadImageFromSharedStorage(requireActivity());
         BiConsumer<Integer, View> onItemClick = (position, view12) -> {
-            if (imageAdapter.getState() == State.MultipleSelect) {
+            if (imageAdapter.getState() == ImageRecyclerViewAdapter.State.MultipleSelect) {
                 if (!imageDataList.get(position).isChecked()) {
                     imageDataList.get(position).setChecked(true);
                     numImagesChecked++;
@@ -82,14 +77,14 @@ public class AllImagesFragment extends Fragment {
         };
 
         BiConsumer<Integer, View> onItemLongClick = (position, view1) -> {
-            imageAdapter.setState(State.MultipleSelect);
+            imageAdapter.setState(ImageRecyclerViewAdapter.State.MultipleSelect);
             requireActivity().invalidateOptionsMenu();
             imageDataList.get(position).setChecked(true);
             imageAdapter.notifyItemRangeChanged(0, imageAdapter.getItemCount());
             requireActivity().setTitle(String.valueOf(++numImagesChecked));
         };
         imageAdapter = new ImageRecyclerViewAdapter(imageDataList, onItemClick, onItemLongClick);
-        imageAdapter.setState(State.Normal);
+        imageAdapter.setState(ImageRecyclerViewAdapter.State.Normal);
         recyclerView.setAdapter(imageAdapter);
     }
 
@@ -159,7 +154,7 @@ public class AllImagesFragment extends Fragment {
             menu.getItem(1).setIcon(R.drawable.ic_grid_1);
         }
 
-        if (imageAdapter.getState() == State.MultipleSelect) {
+        if (imageAdapter.getState() == ImageRecyclerViewAdapter.State.MultipleSelect) {
             menu.getItem(0).setVisible(true);
             menu.getItem(1).setVisible(true);
             menu.getItem(2).setVisible(false);
@@ -190,7 +185,7 @@ public class AllImagesFragment extends Fragment {
             }
             recyclerView.setLayoutManager(new GridLayoutManager(getContext(), typeView));
         } else if (item.getItemId() == R.id.clear_choose) {
-            imageAdapter.setState(State.Normal);
+            imageAdapter.setState(ImageRecyclerViewAdapter.State.Normal);
             imageAdapter.notifyItemRangeChanged(0, imageAdapter.getItemCount());
             numImagesChecked = 0;
             getActivity().invalidateOptionsMenu();
