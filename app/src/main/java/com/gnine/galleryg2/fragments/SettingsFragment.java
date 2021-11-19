@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 
+import com.gnine.galleryg2.MainActivity;
 import com.gnine.galleryg2.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -33,16 +34,10 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
         listener = (pref, key) -> {
             if (key.equals("theme_mode")) {
-                String value = pref.getString(key, "INVALID");
-                if (value.equals("Light")) {
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                } else if (value.equals("Dark")) {
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                } else {
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
-                }
+                MainActivity.setNightMode(pref.getString(key, "INVALID"));
             }
         };
         sharedPreferences.registerOnSharedPreferenceChangeListener(listener);
     }
+
 }

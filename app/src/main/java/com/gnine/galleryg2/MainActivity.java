@@ -2,17 +2,20 @@ package com.gnine.galleryg2;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
+import androidx.preference.PreferenceManager;
 
 import com.gnine.galleryg2.data.ImageData;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -55,6 +58,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupBottomNavigation() {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        setNightMode(preferences.getString("theme_mode", "invalid"));
+
         NavHostFragment navHostFragment =
                 (NavHostFragment) getSupportFragmentManager().findFragmentById(
                         R.id.navHostFragment);
@@ -70,5 +76,15 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra(IMAGE_POSITION_KEY, position);
 
         startActivity(intent);
+    }
+
+    public static void setNightMode(String value) {
+        if (value.equals("Light")) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        } else if (value.equals("Dark")) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+        }
     }
 }
