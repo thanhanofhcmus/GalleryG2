@@ -119,7 +119,7 @@ public class AllImagesFragment extends Fragment {
             return;
         }
 
-        if (folder) {
+        if (folder || types) {
             getView().setFocusableInTouchMode(true);
             getView().requestFocus();
             getView().setOnKeyListener((view13, i, keyEvent) -> {
