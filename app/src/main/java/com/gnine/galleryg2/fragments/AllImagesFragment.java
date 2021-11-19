@@ -14,11 +14,13 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.gnine.galleryg2.BuildConfig;
 import com.gnine.galleryg2.MainActivity;
 import com.gnine.galleryg2.data.ImageData;
 import com.gnine.galleryg2.adapters.ImageRecyclerViewAdapter;
@@ -26,6 +28,7 @@ import com.gnine.galleryg2.R;
 import com.gnine.galleryg2.tools.ImageLoader;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
@@ -90,6 +93,7 @@ public class AllImagesFragment extends Fragment {
         };
         imageAdapter = new ImageRecyclerViewAdapter(imageDataList, onItemClick, onItemLongClick);
         imageAdapter.setState(State.Normal);
+        numImagesChecked = 0;
         recyclerView.setAdapter(imageAdapter);
     }
 
@@ -103,6 +107,7 @@ public class AllImagesFragment extends Fragment {
     public void onResume() {
         super.onResume();
         update();
+        requireActivity().invalidateOptionsMenu();
     }
 
     @Override
@@ -197,7 +202,8 @@ public class AllImagesFragment extends Fragment {
         } else if (item.getItemId() == R.id.menu_share) {
             ArrayList<Uri> checkedUriList = imageDataList .stream()
                     .filter(ImageData::isChecked)
-                    .map(imageData -> imageData.uri)
+                    .map(imageData -> FileProvider.getUriForFile(this.requireActivity(), BuildConfig.APPLICATION_ID + "." + requireActivity().getLocalClassName() + ".provider", //(use your app signature + ".provider" )
+                            new File(imageData.uri.getPath())))
                     .collect(Collectors.toCollection(ArrayList::new));
             Intent intent = new Intent(Intent.ACTION_SEND_MULTIPLE);
             intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, checkedUriList);
