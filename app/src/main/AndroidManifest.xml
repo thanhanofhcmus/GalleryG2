@@ -15,6 +15,18 @@
         android:fullBackupContent="true"
         android:requestLegacyExternalStorage="true">
 
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.gnine.galleryg2.MainActivity.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <!-- ressource file to create -->
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths">
+            </meta-data>
+        </provider>
+
         <activity
             android:name=".FullImageActivity"
             android:exported="true"
