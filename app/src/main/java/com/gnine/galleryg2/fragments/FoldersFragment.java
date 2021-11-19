@@ -163,7 +163,7 @@ public class FoldersFragment extends Fragment {
         List<TypeData> list = new ArrayList<>();
         list.add(new TypeData(R.drawable.ic_video, "Videos", null));
         list.add(new TypeData(R.drawable.ic_selfie, "Images",
-                ImageLoader.getAllImagesFromDevice(requireActivity())));
+                ImageLoader.getAllImagesFromDevice()));
         list.add(new TypeData(R.drawable.ic_screenshot, "Screenshots", null));
 
         return list;

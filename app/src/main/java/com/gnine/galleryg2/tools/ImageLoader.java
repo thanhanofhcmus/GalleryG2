@@ -98,7 +98,7 @@ public class ImageLoader {
         }
     }
 
-    private static ArrayList<ImageData> getImagesFromFolder(String directoryPath) {
+    public static ArrayList<ImageData> getImagesFromFolder(String directoryPath) {
         ArrayList<ImageData> imagesList = new ArrayList<>();
         File[] files = new File(directoryPath).listFiles(new ImageAndVideoFileFilter());
         assert files != null;
@@ -142,7 +142,7 @@ public class ImageLoader {
         return null;
     }
 
-    public static ArrayList<ImageData> getAllImagesFromDevice(Context context) {
+    public static ArrayList<ImageData> getAllImagesFromDevice() {
         ArrayList<ImageData> res = new ArrayList<>();
         List<FolderData> list = new ArrayList<>();
         if (ImageLoader.retrieveFoldersHaveImage("/storage/") != null)
