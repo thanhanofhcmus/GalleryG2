@@ -45,9 +45,9 @@ public class AllImagesFragment extends Fragment {
     private int typeView;
     private int numImagesChecked;
     private ArrayList<ImageData> imageDataList = null;
-    private boolean folder;
-    private boolean types;
-    private String folderPath;
+    private boolean folder = false;
+    private boolean types = false;
+    private String folderPath = null;
 
 
     public AllImagesFragment() {
@@ -67,7 +67,19 @@ public class AllImagesFragment extends Fragment {
     }
 
     void update() {
-        this.imageDataList = (folder) ? imageDataList : ImageLoader.loadImageFromSharedStorage(requireActivity());
+        if (folder)
+            this.imageDataList = ImageLoader.getImagesFromFolder(folderPath);
+        else {
+            this.imageDataList = (types) ? ImageLoader.getAllImagesFromDevice() : ImageLoader.loadImageFromSharedStorage(requireActivity());
+        }
+        if ((folder || types) && this.imageDataList.size() == 0) {
+            FragmentManager manager = requireActivity().getSupportFragmentManager();
+            manager.popBackStack();
+            FoldersFragment.checkBackPressed = true;
+            FoldersFragment.tempFragment = null;
+            BottomNavigationView bnv = requireActivity().findViewById(R.id.bottomNavView);
+            bnv.getMenu().getItem(1).setEnabled(true);
+        }
         BiConsumer<Integer, View> onItemClick = (position, view12) -> {
             if (imageAdapter.getState() == State.MultipleSelect) {
                 if (!imageDataList.get(position).isChecked()) {
@@ -202,7 +214,8 @@ public class AllImagesFragment extends Fragment {
         } else if (item.getItemId() == R.id.menu_share) {
             ArrayList<Uri> checkedUriList = imageDataList .stream()
                     .filter(ImageData::isChecked)
-                    .map(imageData -> FileProvider.getUriForFile(this.requireActivity(), BuildConfig.APPLICATION_ID + "." + requireActivity().getLocalClassName() + ".provider", //(use your app signature + ".provider" )
+                    .map(imageData -> FileProvider.getUriForFile(this.requireActivity(),
+                            BuildConfig.APPLICATION_ID + "." + requireActivity().getLocalClassName() + ".provider", //(use your app signature + ".provider" )
                             new File(imageData.uri.getPath())))
                     .collect(Collectors.toCollection(ArrayList::new));
             Intent intent = new Intent(Intent.ACTION_SEND_MULTIPLE);
