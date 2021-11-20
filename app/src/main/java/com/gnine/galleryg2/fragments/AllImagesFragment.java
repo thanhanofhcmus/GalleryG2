@@ -1,9 +1,13 @@
 package com.gnine.galleryg2.fragments;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -19,16 +23,20 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.gnine.galleryg2.LocalDataManager;
 import com.gnine.galleryg2.MainActivity;
 import com.gnine.galleryg2.data.ImageData;
 import com.gnine.galleryg2.adapters.ImageRecyclerViewAdapter;
 import com.gnine.galleryg2.R;
+import com.gnine.galleryg2.data.TrashData;
 import com.gnine.galleryg2.tools.ImageLoader;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
+
 
 public class AllImagesFragment extends Fragment {
 
@@ -37,6 +45,7 @@ public class AllImagesFragment extends Fragment {
     private int typeView;
     private int numImagesChecked;
     private ArrayList<ImageData> imageDataList = null;
+    private ArrayList<TrashData> trashList = null;
     private boolean folder;
     private boolean types;
     private String folderPath;
@@ -81,6 +90,7 @@ public class AllImagesFragment extends Fragment {
             requireActivity().invalidateOptionsMenu();
             imageDataList.get(position).setChecked(true);
             imageAdapter.notifyItemRangeChanged(0, imageAdapter.getItemCount());
+            numImagesChecked = 0;
             requireActivity().setTitle(String.valueOf(++numImagesChecked));
         };
         imageAdapter = new ImageRecyclerViewAdapter(imageDataList, onItemClick, onItemLongClick);
@@ -98,6 +108,7 @@ public class AllImagesFragment extends Fragment {
     public void onResume() {
         super.onResume();
         update();
+        requireActivity().invalidateOptionsMenu();
     }
 
     @Override
@@ -113,6 +124,8 @@ public class AllImagesFragment extends Fragment {
         if (getView() == null) {
             return;
         }
+
+        trashList = LocalDataManager.getObjectListData("TRASH_LIST");
 
         if (folder || types) {
             getView().setFocusableInTouchMode(true);
@@ -157,12 +170,16 @@ public class AllImagesFragment extends Fragment {
         if (imageAdapter.getState() == ImageRecyclerViewAdapter.State.MultipleSelect) {
             menu.getItem(0).setVisible(true);
             menu.getItem(1).setVisible(true);
-            menu.getItem(2).setVisible(false);
+            menu.getItem(2).setVisible(true);
+            menu.getItem(3).setVisible(false);
+            menu.getItem(4).setVisible(false);
             activity.setTitle(String.valueOf(numImagesChecked));
         } else {
             menu.getItem(0).setVisible(false);
             menu.getItem(1).setVisible(false);
-            menu.getItem(2).setVisible(true);
+            menu.getItem(2).setVisible(false);
+            menu.getItem(3).setVisible(true);
+            menu.getItem(4).setVisible(true);
             activity.setTitle("GalleryG2");
         }
 
@@ -190,17 +207,76 @@ public class AllImagesFragment extends Fragment {
             numImagesChecked = 0;
             getActivity().invalidateOptionsMenu();
         } else if (item.getItemId() == R.id.menu_share) {
-            ArrayList<Uri> checkedUriList = imageDataList .stream()
-                    .filter(ImageData::isChecked)
-                    .map(imageData -> imageData.uri)
-                    .collect(Collectors.toCollection(ArrayList::new));
+            ArrayList<Uri> checkedUriList = getSelectedImages();
             Intent intent = new Intent(Intent.ACTION_SEND_MULTIPLE);
             intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, checkedUriList);
             intent.setType("image/*");
             startActivity(Intent.createChooser(intent, null));
+        } else if (item.getItemId() == R.id.delete_images) {
+            AddToTrash();
+            onResume();
+        } else if (item.getItemId() == R.id.select_all) {
+            for (int i = 0; i < imageDataList.size(); i++) {
+                imageDataList.get(i).setChecked(true);
+            }
+            imageAdapter.setState(ImageRecyclerViewAdapter.State.MultipleSelect);
+            imageAdapter.notifyItemRangeChanged(0, imageAdapter.getItemCount());
+            requireActivity().invalidateOptionsMenu();
+            numImagesChecked = imageDataList.size();
+            requireActivity().setTitle(String.valueOf(numImagesChecked));
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private ArrayList<Uri> getSelectedImages() {
+        return imageDataList .stream()
+                .filter(ImageData::isChecked)
+                .map(imageData -> imageData.uri)
+                .collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    private void AddToTrash() {
+        ArrayList<ImageData> selectedImages = imageDataList .stream()
+                .filter(ImageData::isChecked)
+                .collect(Collectors.toCollection(ArrayList::new));
+
+        File file = new File(Environment.getExternalStorageDirectory() + "/" + ".nomedia");
+
+        if ((file.exists() && file.isDirectory()) || file.mkdir()) {
+            for (int i = 0; i < selectedImages.size(); i++) {
+                String sourcePath = getRealPath(selectedImages.get(i).uri);
+                if (moveFile(sourcePath, file.getPath())) {
+                    // add to arraylist trash and remove from imageDataList
+                    imageDataList.remove(selectedImages.get(i));
+                    trashList.add(new TrashData(file.getPath(), sourcePath, 0));
+                }
+                trashList.add(new TrashData(file.getPath(), sourcePath, 0));
+            }
+        }
+
+        LocalDataManager.setObjectListData("TRASH_LIST", trashList);
+    }
+
+    private String getRealPath(Uri contentUri) {
+        String[] projection = new String[]{ MediaStore.Images.Media.DATA };
+        Cursor cursor = requireActivity().getApplicationContext().getContentResolver().query(contentUri,  projection, null, null, null);
+        String realPath = null;
+        if (cursor.moveToFirst()) {
+            int columnIndex = cursor.getColumnIndex(projection[0]);
+            realPath = cursor.getString(columnIndex);
+        }
+        cursor.close();
+        return realPath;
+    }
+
+    // Ham nay dell chay duoc, chua viet lai
+    private boolean moveFile(String sourcePath, String targetPath) {
+        File from = new File(sourcePath);
+        File to = new File(targetPath);
+        File target = new File(to, from.getName());
+
+        return from.renameTo(target);
     }
 
     private void sendImageListAndPositionToMain(int position) {

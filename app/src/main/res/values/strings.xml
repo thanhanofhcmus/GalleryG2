@@ -18,6 +18,8 @@
     <string name="my_albums">My Albums</string>
     <string name="media_types_and_utilities">Media Types and Utilities</string>
     <string name="my_folders">My Folders</string>
+    <string name="select_all">Select All</string>
+    <string name="empty">Empty</string>
     <!-- Preference Titles -->
 
     <!-- Messages Preferences -->

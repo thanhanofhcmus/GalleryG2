@@ -65,6 +65,12 @@
         <entry key="..\:/University/Code/21-22_HKI/Mobile/Team/GalleryG2/app/src/main/res/layout/picture_item.xml" value="0.18432971014492755" />
         <entry key="..\:/University/Code/21-22_HKI/Mobile/Team/GalleryG2/app/src/main/res/menu/appbar_menu.xml" value="0.209375" />
         <entry key="..\:/University/Code/21-22_HKI/Mobile/Team/GalleryG2/app/src/main/res/menu/bottom_menu.xml" value="0.209375" />
+        <entry key="..\:/University/Code/21-22_HKI/Mobile/Team/New/GalleryG2/app/src/main/res/drawable/ic_delete.xml" value="0.22552083333333334" />
+        <entry key="..\:/University/Code/21-22_HKI/Mobile/Team/New/GalleryG2/app/src/main/res/layout/fragment_all_images.xml" value="0.20742753623188406" />
+        <entry key="..\:/University/Code/21-22_HKI/Mobile/Team/New/GalleryG2/app/src/main/res/layout/fragment_trash.xml" value="0.20742753623188406" />
+        <entry key="..\:/University/Code/21-22_HKI/Mobile/Team/New/GalleryG2/app/src/main/res/layout/picture_item.xml" value="0.20742753623188406" />
+        <entry key="..\:/University/Code/21-22_HKI/Mobile/Team/New/GalleryG2/app/src/main/res/menu/appbar_menu.xml" value="0.209375" />
+        <entry key="..\:/University/Code/21-22_HKI/Mobile/Team/New/GalleryG2/app/src/main/res/menu/trash_menu.xml" value="0.209375" />
         <entry key="app/src/main/res/layout/activity_full_image.xml" value="0.33" />
         <entry key="app/src/main/res/layout/folder_item.xml" value="0.22509057971014493" />
         <entry key="app/src/main/res/layout/fragment_all_images.xml" value="0.22871376811594202" />
