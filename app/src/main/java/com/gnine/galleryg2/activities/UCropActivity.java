@@ -1,4 +1,4 @@
-package com.gnine.galleryg2;
+package com.gnine.galleryg2.activities;
 
 import static android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION;
 import static android.content.Intent.FLAG_GRANT_WRITE_URI_PERMISSION;
@@ -54,6 +54,7 @@ import androidx.transition.AutoTransition;
 import androidx.transition.Transition;
 import androidx.transition.TransitionManager;
 
+import com.gnine.galleryg2.R;
 import com.gnine.galleryg2.tools.UCrop;
 import com.gnine.galleryg2.callback.IBitmapCropCallback;
 import com.gnine.galleryg2.model.AspectRatio;

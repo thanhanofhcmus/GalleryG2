@@ -19,6 +19,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.gnine.galleryg2.BuildConfig;
+import com.gnine.galleryg2.activities.UCropActivity;
 import com.gnine.galleryg2.fragments.UCropFragment;
 import com.gnine.galleryg2.model.AspectRatio;
 
@@ -181,12 +182,12 @@ public class UCrop {
     }
 
     /**
-     * Get Intent to start {@link com.gnine.galleryg2.UCropActivity}
+     * Get Intent to start {@link UCropActivity}
      *
-     * @return Intent for {@link com.gnine.galleryg2.UCropActivity}
+     * @return Intent for {@link UCropActivity}
      */
     public Intent getIntent(@NonNull Context context) {
-        mCropIntent.setClass(context, com.gnine.galleryg2.UCropActivity.class);
+        mCropIntent.setClass(context, UCropActivity.class);
         mCropIntent.putExtras(mCropOptionsBundle);
         return mCropIntent;
     }
@@ -332,9 +333,9 @@ public class UCrop {
         /**
          * Choose what set of gestures will be enabled on each tab - if any.
          */
-        public void setAllowedGestures(@com.gnine.galleryg2.UCropActivity.GestureTypes int tabScale,
-                                       @com.gnine.galleryg2.UCropActivity.GestureTypes int tabRotate,
-                                       @com.gnine.galleryg2.UCropActivity.GestureTypes int tabAspectRatio) {
+        public void setAllowedGestures(@UCropActivity.GestureTypes int tabScale,
+                                       @UCropActivity.GestureTypes int tabRotate,
+                                       @UCropActivity.GestureTypes int tabAspectRatio) {
             mOptionBundle.putIntArray(EXTRA_ALLOWED_GESTURES, new int[]{tabScale, tabRotate, tabAspectRatio});
         }
 

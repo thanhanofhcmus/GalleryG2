@@ -1,4 +1,4 @@
-package com.gnine.galleryg2;
+package com.gnine.galleryg2.callback;
 
 import com.gnine.galleryg2.fragments.UCropFragment;
 

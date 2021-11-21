@@ -2,11 +2,9 @@ package com.gnine.galleryg2.fragments;
 
 import android.os.Bundle;
 
-import androidx.appcompat.widget.Toolbar;
-import androidx.preference.EditTextPreference;
 import androidx.preference.PreferenceFragmentCompat;
 
-import com.gnine.galleryg2.FullImageActivity;
+import com.gnine.galleryg2.activities.FullImageActivity;
 import com.gnine.galleryg2.R;
 import com.gnine.galleryg2.data.ImageData;
 

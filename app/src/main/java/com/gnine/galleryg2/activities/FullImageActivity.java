@@ -1,6 +1,5 @@
-package com.gnine.galleryg2;
+package com.gnine.galleryg2.activities;
 
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -10,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.gnine.galleryg2.R;
 import com.gnine.galleryg2.data.ImageData;
 import com.gnine.galleryg2.tools.UCrop;
 

@@ -1,4 +1,4 @@
-package com.gnine.galleryg2;
+package com.gnine.galleryg2.activities;
 
 import android.Manifest;
 import android.content.Intent;
@@ -17,7 +17,9 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 import androidx.preference.PreferenceManager;
 
+import com.gnine.galleryg2.R;
 import com.gnine.galleryg2.data.ImageData;
+import com.gnine.galleryg2.tools.LocalDataManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;

@@ -6,11 +6,10 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 
-import com.gnine.galleryg2.MainActivity;
+import com.gnine.galleryg2.activities.MainActivity;
 import com.gnine.galleryg2.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 

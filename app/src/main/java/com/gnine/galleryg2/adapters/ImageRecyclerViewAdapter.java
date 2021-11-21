@@ -3,7 +3,6 @@ package com.gnine.galleryg2.adapters;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
@@ -25,7 +24,6 @@ public class ImageRecyclerViewAdapter extends
 
         public ImageView imageView;
         public View scrim, check;
-        //public CheckBox checkBox;
 
         ImageViewHolder(@NonNull View view,
                 BiConsumer<Integer, View> onItemClick,
@@ -34,7 +32,6 @@ public class ImageRecyclerViewAdapter extends
             imageView = view.findViewById(R.id.pictureItemImageView);
             scrim = itemView.findViewById(R.id.pictureItemScrim);
             check = itemView.findViewById(R.id.pictureItemCheck);
-            //checkBox = itemView.findViewById(R.id.pictureItemCheckCircle);
 
             itemView.setOnLongClickListener(view1 -> {
                 onItemLongClick.accept(getAbsoluteAdapterPosition(), view1);
@@ -83,21 +80,17 @@ public class ImageRecyclerViewAdapter extends
         Glide.with(imageView.getContext())
                 .load(imageData.uri)
                 .placeholder(R.drawable.bird_thumbnail)
-                .transform(new CenterCrop(), new RoundedCorners(36))
+                .transform(new CenterCrop(), new RoundedCorners(24))
                 .into(imageView);
         if (state == State.Normal) {
             holder.scrim.setVisibility(View.GONE);
             holder.check.setVisibility(View.GONE);
-            //holder.checkBox.setVisibility(View.GONE);
             imageData.setChecked(false);
         } else {
             if (imageData.isChecked()) {
-                //holder.checkBox.setVisibility(View.VISIBLE);
                 holder.scrim.setVisibility(View.VISIBLE);
                 holder.check.setVisibility(View.VISIBLE);
-                //holder.checkBox.setChecked(imageData.isChecked());
             } else {
-                //holder.checkBox.setVisibility(View.GONE);
                 holder.scrim.setVisibility(View.GONE);
                 holder.check.setVisibility(View.GONE);
             }

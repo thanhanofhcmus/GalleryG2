@@ -21,8 +21,8 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 
-import com.gnine.galleryg2.FullImageActivity;
-import com.gnine.galleryg2.MainActivity;
+import com.gnine.galleryg2.activities.FullImageActivity;
+import com.gnine.galleryg2.activities.MainActivity;
 import com.gnine.galleryg2.R;
 import com.gnine.galleryg2.adapters.SliderAdapter;
 import com.gnine.galleryg2.data.ImageData;

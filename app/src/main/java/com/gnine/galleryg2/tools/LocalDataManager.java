@@ -1,7 +1,8 @@
-package com.gnine.galleryg2;
+package com.gnine.galleryg2.tools;
 
 import android.content.Context;
 
+import com.gnine.galleryg2.MySharedPreferences;
 import com.gnine.galleryg2.data.TrashData;
 
 import java.util.ArrayList;

@@ -1,7 +1,8 @@
 package com.gnine.galleryg2.fragments;
 
+import static com.gnine.galleryg2.adapters.ImageRecyclerViewAdapter.*;
+
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -25,8 +26,8 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.gnine.galleryg2.BuildConfig;
-import com.gnine.galleryg2.LocalDataManager;
-import com.gnine.galleryg2.MainActivity;
+import com.gnine.galleryg2.tools.LocalDataManager;
+import com.gnine.galleryg2.activities.MainActivity;
 import com.gnine.galleryg2.data.ImageData;
 import com.gnine.galleryg2.adapters.ImageRecyclerViewAdapter;
 import com.gnine.galleryg2.R;
@@ -51,10 +52,6 @@ public class AllImagesFragment extends Fragment {
     private boolean types = false;
     private String folderPath = null;
     private ArrayList<TrashData> trashList = null;
-    private boolean folder;
-    private boolean types;
-    private String folderPath = null;
-
 
     public AllImagesFragment() {
         // Required empty public constructor
@@ -73,9 +70,9 @@ public class AllImagesFragment extends Fragment {
     }
 
     void update() {
-        if (folder)
+        if (folder) {
             this.imageDataList = ImageLoader.getImagesFromFolder(folderPath);
-        else {
+        } else {
             this.imageDataList = (types) ? ImageLoader.getAllImagesFromDevice() : ImageLoader.loadImageFromSharedStorage(requireActivity());
         }
         if ((folder || types) && this.imageDataList.size() == 0) {
@@ -87,7 +84,7 @@ public class AllImagesFragment extends Fragment {
             bnv.getMenu().getItem(1).setEnabled(true);
         }
         BiConsumer<Integer, View> onItemClick = (position, view12) -> {
-            if (imageAdapter.getState() == ImageRecyclerViewAdapter.State.MultipleSelect) {
+            if (imageAdapter.getState() == State.MultipleSelect) {
                 if (!imageDataList.get(position).isChecked()) {
                     imageDataList.get(position).setChecked(true);
                     numImagesChecked++;
@@ -103,7 +100,7 @@ public class AllImagesFragment extends Fragment {
         };
 
         BiConsumer<Integer, View> onItemLongClick = (position, view1) -> {
-            imageAdapter.setState(ImageRecyclerViewAdapter.State.MultipleSelect);
+            imageAdapter.setState(State.MultipleSelect);
             requireActivity().invalidateOptionsMenu();
             imageDataList.get(position).setChecked(true);
             imageAdapter.notifyItemRangeChanged(0, imageAdapter.getItemCount());
@@ -111,7 +108,7 @@ public class AllImagesFragment extends Fragment {
             requireActivity().setTitle(String.valueOf(++numImagesChecked));
         };
         imageAdapter = new ImageRecyclerViewAdapter(imageDataList, onItemClick, onItemLongClick);
-        imageAdapter.setState(ImageRecyclerViewAdapter.State.Normal);
+        imageAdapter.setState(State.Normal);
         recyclerView.setAdapter(imageAdapter);
     }
 
@@ -184,7 +181,7 @@ public class AllImagesFragment extends Fragment {
             menu.getItem(1).setIcon(R.drawable.ic_grid_1);
         }
 
-        if (imageAdapter.getState() == ImageRecyclerViewAdapter.State.MultipleSelect) {
+        if (imageAdapter.getState() == State.MultipleSelect) {
             menu.getItem(0).setVisible(true);
             menu.getItem(1).setVisible(true);
             menu.getItem(2).setVisible(true);
@@ -219,7 +216,7 @@ public class AllImagesFragment extends Fragment {
             }
             recyclerView.setLayoutManager(new GridLayoutManager(getContext(), typeView));
         } else if (item.getItemId() == R.id.clear_choose) {
-            imageAdapter.setState(ImageRecyclerViewAdapter.State.Normal);
+            imageAdapter.setState(State.Normal);
             imageAdapter.notifyItemRangeChanged(0, imageAdapter.getItemCount());
             numImagesChecked = 0;
             getActivity().invalidateOptionsMenu();
@@ -242,7 +239,7 @@ public class AllImagesFragment extends Fragment {
             for (int i = 0; i < imageDataList.size(); i++) {
                 imageDataList.get(i).setChecked(true);
             }
-            imageAdapter.setState(ImageRecyclerViewAdapter.State.MultipleSelect);
+            imageAdapter.setState(State.MultipleSelect);
             imageAdapter.notifyItemRangeChanged(0, imageAdapter.getItemCount());
             requireActivity().invalidateOptionsMenu();
             numImagesChecked = imageDataList.size();
@@ -292,7 +289,7 @@ public class AllImagesFragment extends Fragment {
         return realPath;
     }
 
-    // Ham nay dell chay duoc, chua viet lai
+    // TODO: fix this after fix file permission
     private boolean moveFile(String sourcePath, String targetPath) {
         File from = new File(sourcePath);
         File to = new File(targetPath);

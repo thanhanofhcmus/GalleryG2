@@ -1,4 +1,4 @@
-package com.gnine.galleryg2;
+package com.gnine.galleryg2.activities;
 
 import android.content.DialogInterface;
 
@@ -7,6 +7,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+
+import com.gnine.galleryg2.R;
 
 /**
  * Created by Oleksii Shliama (https://github.com/shliama).
@@ -38,13 +40,8 @@ public class BaseActivity extends AppCompatActivity {
     protected void requestPermission(final String permission, String rationale, final int requestCode) {
         if (ActivityCompat.shouldShowRequestPermissionRationale(this, permission)) {
             showAlertDialog(getString(R.string.permission_title_rationale), rationale,
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            ActivityCompat.requestPermissions(BaseActivity.this,
-                                    new String[]{permission}, requestCode);
-                        }
-                    }, getString(R.string.label_ok), null, getString(R.string.label_cancel));
+                    (dialog, which) -> ActivityCompat.requestPermissions(BaseActivity.this,
+                            new String[]{permission}, requestCode), getString(R.string.label_ok), null, getString(R.string.label_cancel));
         } else {
             ActivityCompat.requestPermissions(this, new String[]{permission}, requestCode);
         }
