@@ -12,7 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.gnine.galleryg2.callback.IBitmapLoadCallback;
-import com.gnine.galleryg2.model.ExifInfor;
+import com.gnine.galleryg2.model.ExifInformation;
 import com.gnine.galleryg2.util.BitmapLoadUtils;
 
 import java.io.File;
@@ -28,11 +28,7 @@ import okio.BufferedSource;
 import okio.Okio;
 import okio.Sink;
 
-/**
- * Creates and returns a Bitmap for a given Uri(String url).
- * inSampleSize is calculated based on requiredWidth property. However can be adjusted if OOM occurs.
- * If any EXIF config is found - bitmap is transformed properly.
- */
+
 public class BitmapLoadTask extends AsyncTask<Void, Void, BitmapLoadTask.BitmapWorkerResult> {
 
     private static final String TAG = "BitmapWorkerTask";
@@ -50,12 +46,12 @@ public class BitmapLoadTask extends AsyncTask<Void, Void, BitmapLoadTask.BitmapW
     public static class BitmapWorkerResult {
 
         Bitmap mBitmapResult;
-        ExifInfor mExifInfor;
+        ExifInformation mExifInformation;
         Exception mBitmapWorkerException;
 
-        public BitmapWorkerResult(@NonNull Bitmap bitmapResult, @NonNull ExifInfor exifInfor) {
+        public BitmapWorkerResult(@NonNull Bitmap bitmapResult, @NonNull ExifInformation exifInformation) {
             mBitmapResult = bitmapResult;
-            mExifInfor = exifInfor;
+            mExifInformation = exifInformation;
         }
 
         public BitmapWorkerResult(@NonNull Exception bitmapWorkerException) {
@@ -127,7 +123,7 @@ public class BitmapLoadTask extends AsyncTask<Void, Void, BitmapLoadTask.BitmapW
         int exifDegrees = BitmapLoadUtils.exifToDegrees(exifOrientation);
         int exifTranslation = BitmapLoadUtils.exifToTranslation(exifOrientation);
 
-        ExifInfor exifInfo = new ExifInfor(exifOrientation, exifDegrees, exifTranslation);
+        ExifInformation exifInfo = new ExifInformation(exifOrientation, exifDegrees, exifTranslation);
 
         Matrix matrix = new Matrix();
         if (exifDegrees != 0) {
@@ -241,7 +237,7 @@ public class BitmapLoadTask extends AsyncTask<Void, Void, BitmapLoadTask.BitmapW
     @Override
     protected void onPostExecute(@NonNull BitmapWorkerResult result) {
         if (result.mBitmapWorkerException == null) {
-            iBitmapLoadCallback.onBitmapLoaded(result.mBitmapResult, result.mExifInfor, inputUri.getPath(), (outputUri == null) ? null : outputUri.getPath());
+            iBitmapLoadCallback.onBitmapLoaded(result.mBitmapResult, result.mExifInformation, inputUri.getPath(), (outputUri == null) ? null : outputUri.getPath());
         } else {
             iBitmapLoadCallback.onFailure(result.mBitmapWorkerException);
         }

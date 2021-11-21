@@ -22,11 +22,7 @@ public class EglUtils {
 
     public static int getMaxTextureSize() {
         try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                return getMaxTextureEgl14();
-            } else {
-                return getMaxTextureEgl10();
-            }
+            return getMaxTextureEgl14();
         } catch (Exception e) {
             Log.d(TAG, "getMaxTextureSize: ", e);
             return 0;
@@ -36,8 +32,8 @@ public class EglUtils {
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     private static int getMaxTextureEgl14() {
         EGLDisplay dpy = EGL14.eglGetDisplay(EGL14.EGL_DEFAULT_DISPLAY);
-        int[] vers = new int[2];
-        EGL14.eglInitialize(dpy, vers, 0, vers, 1);
+        int[] offset = new int[2];
+        EGL14.eglInitialize(dpy, offset, 0, offset, 1);
 
         int[] configAttr = {
                 EGL14.EGL_COLOR_BUFFER_TYPE, EGL14.EGL_RGB_BUFFER,
@@ -87,8 +83,8 @@ public class EglUtils {
         EGL10 egl = (EGL10) javax.microedition.khronos.egl.EGLContext.getEGL();
 
         javax.microedition.khronos.egl.EGLDisplay dpy = egl.eglGetDisplay(EGL10.EGL_DEFAULT_DISPLAY);
-        int[] vers = new int[2];
-        egl.eglInitialize(dpy, vers);
+        int[] offsets = new int[2];
+        egl.eglInitialize(dpy, offsets);
 
         int[] configAttr = {
                 EGL10.EGL_COLOR_BUFFER_TYPE, EGL10.EGL_RGB_BUFFER,

@@ -27,11 +27,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Locale;
 
-/**
- * Created by Oleksii Shliama (https://github.com/shliama).
- * <p/>
- * Builder class to ease Intent setup.
- */
+
+// TODO: clean this
 public class UCrop {
 
     public static final int REQUEST_CROP = 69;
@@ -55,15 +52,9 @@ public class UCrop {
     public static final String EXTRA_MAX_SIZE_X = EXTRA_PREFIX + ".MaxSizeX";
     public static final String EXTRA_MAX_SIZE_Y = EXTRA_PREFIX + ".MaxSizeY";
 
-    private Intent mCropIntent;
+    private final Intent mCropIntent;
     private Bundle mCropOptionsBundle;
 
-    /**
-     * This method creates new Intent builder and sets both source and destination image URIs.
-     *
-     * @param source      Uri for image to crop
-     * @param destination Uri for saving the cropped image
-     */
     public static UCrop of(@NonNull Uri source, @NonNull Uri destination) {
         return new UCrop(source, destination);
     }
@@ -75,35 +66,19 @@ public class UCrop {
         mCropOptionsBundle.putParcelable(EXTRA_OUTPUT_URI, destination);
     }
 
-    /**
-     * Set an aspect ratio for crop bounds.
-     * User won't see the menu with other ratios options.
-     *
-     * @param x aspect ratio X
-     * @param y aspect ratio Y
-     */
     public UCrop withAspectRatio(float x, float y) {
         mCropOptionsBundle.putFloat(EXTRA_ASPECT_RATIO_X, x);
         mCropOptionsBundle.putFloat(EXTRA_ASPECT_RATIO_Y, y);
         return this;
     }
 
-    /**
-     * Set an aspect ratio for crop bounds that is evaluated from source image width and height.
-     * User won't see the menu with other ratios options.
-     */
     public UCrop useSourceImageAspectRatio() {
         mCropOptionsBundle.putFloat(EXTRA_ASPECT_RATIO_X, 0);
         mCropOptionsBundle.putFloat(EXTRA_ASPECT_RATIO_Y, 0);
         return this;
     }
 
-    /**
-     * Set maximum size for result cropped image. Maximum size cannot be less then {@value MIN_SIZE}
-     *
-     * @param width  max cropped image width
-     * @param height max cropped image height
-     */
+
     public UCrop withMaxResultSize(@IntRange(from = MIN_SIZE) int width, @IntRange(from = MIN_SIZE) int height) {
         if (width < MIN_SIZE) {
             width = MIN_SIZE;
@@ -123,80 +98,37 @@ public class UCrop {
         return this;
     }
 
-    /**
-     * Send the crop Intent from an Activity
-     *
-     * @param activity Activity to receive result
-     */
     public void start(@NonNull Activity activity) {
         start(activity, REQUEST_CROP);
     }
 
-    /**
-     * Send the crop Intent from an Activity with a custom request code
-     *
-     * @param activity    Activity to receive result
-     * @param requestCode requestCode for result
-     */
     public void start(@NonNull Activity activity, int requestCode) {
         activity.startActivityForResult(getIntent(activity), requestCode);
     }
 
-    /**
-     * Send the crop Intent from a Fragment
-     *
-     * @param fragment Fragment to receive result
-     */
     public void start(@NonNull Context context, @NonNull Fragment fragment) {
         start(context, fragment, REQUEST_CROP);
     }
 
-    /**
-     * Send the crop Intent from a support library Fragment
-     *
-     * @param fragment Fragment to receive result
-     */
     public void start(@NonNull Context context, @NonNull androidx.fragment.app.Fragment fragment) {
         start(context, fragment, REQUEST_CROP);
     }
 
-    /**
-     * Send the crop Intent with a custom request code
-     *
-     * @param fragment    Fragment to receive result
-     * @param requestCode requestCode for result
-     */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public void start(@NonNull Context context, @NonNull Fragment fragment, int requestCode) {
         fragment.startActivityForResult(getIntent(context), requestCode);
     }
 
-    /**
-     * Send the crop Intent with a custom request code
-     *
-     * @param fragment    Fragment to receive result
-     * @param requestCode requestCode for result
-     */
     public void start(@NonNull Context context, @NonNull androidx.fragment.app.Fragment fragment, int requestCode) {
         fragment.startActivityForResult(getIntent(context), requestCode);
     }
 
-    /**
-     * Get Intent to start {@link UCropActivity}
-     *
-     * @return Intent for {@link UCropActivity}
-     */
     public Intent getIntent(@NonNull Context context) {
         mCropIntent.setClass(context, UCropActivity.class);
         mCropIntent.putExtras(mCropOptionsBundle);
         return mCropIntent;
     }
 
-    /**
-     * Get Fragment {@link UCropFragment}
-     *
-     * @return Fragment of {@link UCropFragment}
-     */
     public UCropFragment getFragment() {
         return UCropFragment.newInstance(mCropOptionsBundle);
     }
@@ -206,60 +138,28 @@ public class UCrop {
         return getFragment();
     }
 
-    /**
-     * Retrieve cropped image Uri from the result Intent
-     *
-     * @param intent crop result intent
-     */
     @Nullable
     public static Uri getOutput(@NonNull Intent intent) {
         return intent.getParcelableExtra(EXTRA_OUTPUT_URI);
     }
 
-    /**
-     * Retrieve the width of the cropped image
-     *
-     * @param intent crop result intent
-     */
     public static int getOutputImageWidth(@NonNull Intent intent) {
         return intent.getIntExtra(EXTRA_OUTPUT_IMAGE_WIDTH, -1);
     }
 
-    /**
-     * Retrieve the height of the cropped image
-     *
-     * @param intent crop result intent
-     */
     public static int getOutputImageHeight(@NonNull Intent intent) {
         return intent.getIntExtra(EXTRA_OUTPUT_IMAGE_HEIGHT, -1);
     }
 
-    /**
-     * Retrieve cropped image aspect ratio from the result Intent
-     *
-     * @param intent crop result intent
-     * @return aspect ratio as a floating point value (x:y) - so it will be 1 for 1:1 or 4/3 for 4:3
-     */
     public static float getOutputCropAspectRatio(@NonNull Intent intent) {
         return intent.getFloatExtra(EXTRA_OUTPUT_CROP_ASPECT_RATIO, 0f);
     }
 
-    /**
-     * Method retrieves error from the result intent.
-     *
-     * @param result crop result Intent
-     * @return Throwable that could happen while image processing
-     */
     @Nullable
     public static Throwable getError(@NonNull Intent result) {
         return (Throwable) result.getSerializableExtra(EXTRA_ERROR);
     }
 
-
-    /**
-     * Class that helps to setup advanced configs that are not commonly used.
-     * Use it with method {@link #withOptions(Options)}
-     */
     public static class Options {
 
         public static final String EXTRA_COMPRESSION_FORMAT_NAME = EXTRA_PREFIX + ".CompressionFormatName";

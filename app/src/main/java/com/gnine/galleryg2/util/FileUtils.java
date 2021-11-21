@@ -5,7 +5,6 @@ import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
@@ -14,7 +13,6 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -113,10 +111,8 @@ public class FileUtils {
      */
     @SuppressLint("NewApi")
     public static String getPath(final Context context, final Uri uri) {
-        final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
-
         // DocumentProvider
-        if (isKitKat && DocumentsContract.isDocumentUri(context, uri)) {
+        if (DocumentsContract.isDocumentUri(context, uri)) {
             if (isExternalStorageDocument(uri)) {
                 final String docId = DocumentsContract.getDocumentId(uri);
                 final String[] split = docId.split(":");
@@ -135,7 +131,7 @@ public class FileUtils {
                 if (!TextUtils.isEmpty(id)) {
                     try {
                         final Uri contentUri = ContentUris.withAppendedId(
-                                Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
+                                Uri.parse("content://downloads/public_downloads"), Long.parseLong(id));
                         return getDataColumn(context, contentUri, null, null);
                     } catch (NumberFormatException e) {
                         Log.i(TAG, e.getMessage());
@@ -196,16 +192,9 @@ public class FileUtils {
             return;
         }
 
-        FileChannel outputChannel = null;
-        FileChannel inputChannel = null;
-        try {
-            inputChannel = new FileInputStream(new File(pathFrom)).getChannel();
-            outputChannel = new FileOutputStream(new File(pathTo)).getChannel();
+        try (FileChannel inputChannel = new FileInputStream(pathFrom).getChannel();
+             FileChannel outputChannel = new FileOutputStream(pathTo).getChannel()) {
             inputChannel.transferTo(0, inputChannel.size(), outputChannel);
-            inputChannel.close();
-        } finally {
-            if (inputChannel != null) inputChannel.close();
-            if (outputChannel != null) outputChannel.close();
         }
     }
 }

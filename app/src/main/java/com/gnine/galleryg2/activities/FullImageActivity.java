@@ -22,9 +22,9 @@ public class FullImageActivity extends AppCompatActivity {
     private static boolean isInViewpagerFragment;
     private static int currentImagePosition = 0;
 
-//    public static final String IMAGE_DATA_KEY = "IMAGE_DATA_KEY";
+    //    public static final String IMAGE_DATA_KEY = "IMAGE_DATA_KEY";
 //    public static final String BITMAP_DATA_KEY = "BITMAP_DATA_KEY";
-    public static final String IMAGE_DATA = "IMAGE_DATA";
+//    public static final String IMAGE_DATA = "IMAGE_DATA";
     private static final String SAMPLE_CROP_IMAGE_NAME = "SampleCropImage";
     private ArrayList<ImageData> imageDataList;
 

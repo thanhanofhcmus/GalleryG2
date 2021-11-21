@@ -39,7 +39,7 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.FolderView
     private final BiConsumer<Integer, View> onFolderClick;
 
     public FolderAdapter(List<FolderData> folderDataList,
-            BiConsumer<Integer, View> onFolderClick) {
+                         BiConsumer<Integer, View> onFolderClick) {
         mFolderDataList = folderDataList;
         this.onFolderClick = onFolderClick;
     }

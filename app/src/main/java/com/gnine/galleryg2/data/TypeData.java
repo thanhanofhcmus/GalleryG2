@@ -1,7 +1,6 @@
 package com.gnine.galleryg2.data;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class TypeData {
     public final int resourceId;

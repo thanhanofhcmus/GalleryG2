@@ -9,7 +9,6 @@ import java.util.Date;
 import java.util.Locale;
 
 public class ImageData implements Parcelable {
-    public static final int UNDEFINED_INT_DATA = -1;
 
     public final Uri uri;
     public final String name;

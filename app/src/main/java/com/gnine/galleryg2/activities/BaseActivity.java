@@ -10,9 +10,7 @@ import androidx.core.app.ActivityCompat;
 
 import com.gnine.galleryg2.R;
 
-/**
- * Created by Oleksii Shliama (https://github.com/shliama).
- */
+
 public class BaseActivity extends AppCompatActivity {
 
     protected static final int REQUEST_STORAGE_READ_ACCESS_PERMISSION = 101;

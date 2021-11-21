@@ -12,20 +12,22 @@ public class AspectRatio implements Parcelable {
     private final float aspectRatioX;
     private final float aspectRatioY;
 
-    public AspectRatio(@Nullable String aspectRadioTitle,float aspectRatioX,  float aspectRatioY){
-        this.aspectRadioTitle=aspectRadioTitle;
-        this.aspectRatioX=aspectRatioX;
-        this.aspectRatioY=aspectRatioY;
+    public AspectRatio(@Nullable String aspectRadioTitle, float aspectRatioX, float aspectRatioY) {
+        this.aspectRadioTitle = aspectRadioTitle;
+        this.aspectRatioX = aspectRatioX;
+        this.aspectRatioY = aspectRatioY;
     }
 
-    protected AspectRatio(Parcel in){
-        aspectRadioTitle=in.readString();
-        aspectRatioX=in.readFloat();
-        aspectRatioY=in.readFloat();
+    protected AspectRatio(Parcel in) {
+        aspectRadioTitle = in.readString();
+        aspectRatioX = in.readFloat();
+        aspectRatioY = in.readFloat();
     }
 
     @Override
-    public int describeContents() { return 0;}
+    public int describeContents() {
+        return 0;
+    }
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
@@ -34,17 +36,29 @@ public class AspectRatio implements Parcelable {
         parcel.writeFloat(aspectRatioY);
     }
 
-    public static final Creator<AspectRatio> CREATOR=new Creator<AspectRatio>() {
+    public static final Creator<AspectRatio> CREATOR = new Creator<AspectRatio>() {
         @Override
-        public AspectRatio createFromParcel(Parcel parcel) { return new AspectRatio(parcel); }
+        public AspectRatio createFromParcel(Parcel parcel) {
+            return new AspectRatio(parcel);
+        }
 
         @Override
-        public AspectRatio[] newArray(int size) { return new AspectRatio[size];}
+        public AspectRatio[] newArray(int size) {
+            return new AspectRatio[size];
+        }
     };
 
     @Nullable
-    public String getAspectRatioTitle(){ return aspectRadioTitle;}
-    public float getAspectRatioX(){ return aspectRatioX;}
-    public float getAspectRatioY(){ return aspectRatioY;}
+    public String getAspectRatioTitle() {
+        return aspectRadioTitle;
+    }
+
+    public float getAspectRatioX() {
+        return aspectRatioX;
+    }
+
+    public float getAspectRatioY() {
+        return aspectRatioY;
+    }
 
 }

@@ -12,39 +12,42 @@ public class LocalDataManager {
     private static LocalDataManager instance;
     private MySharedPreferences mySharedPreferences;
 
-    public static void init(Context context){
+    public static void init(Context context) {
         instance = new LocalDataManager();
         instance.mySharedPreferences = new MySharedPreferences(context);
     }
 
-    public  static LocalDataManager getInstance(){
-        if(instance == null){
+    public static LocalDataManager getInstance() {
+        if (instance == null) {
             instance = new LocalDataManager();
         }
         return instance;
     }
+
     //layout
-    public static void setLayoutSetting(int isFirst){
-        LocalDataManager.getInstance().mySharedPreferences.putIntValue("LAYOUT",isFirst);
+    public static void setLayoutSetting(int isFirst) {
+        LocalDataManager.getInstance().mySharedPreferences.putIntValue("LAYOUT", isFirst);
     }
 
-    public static int getLayoutSetting(){
+    public static int getLayoutSetting() {
         return LocalDataManager.getInstance().mySharedPreferences.getIntValue("LAYOUT");
     }
+
     //list object
-    public static void setObjectListData(String key, ArrayList<TrashData> list){
-        LocalDataManager.getInstance().mySharedPreferences.saveObjectList(key,list);
+    public static void setObjectListData(String key, ArrayList<TrashData> list) {
+        LocalDataManager.getInstance().mySharedPreferences.saveObjectList(key, list);
     }
-    public static ArrayList<TrashData> getObjectListData(String key){
+
+    public static ArrayList<TrashData> getObjectListData(String key) {
         return LocalDataManager.getInstance().mySharedPreferences.getObjectList(key);
     }
 
     //setting
-    public static void setSetting(String isFirst){
-        LocalDataManager.getInstance().mySharedPreferences.putStringValue("SETTING",isFirst);
+    public static void setSetting(String isFirst) {
+        LocalDataManager.getInstance().mySharedPreferences.putStringValue("SETTING", isFirst);
     }
 
-    public static String getSetting(){
+    public static String getSetting() {
         return LocalDataManager.getInstance().mySharedPreferences.getStringValue("SETTING");
     }
 }

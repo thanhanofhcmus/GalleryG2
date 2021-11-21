@@ -21,7 +21,6 @@ import android.widget.TextView;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.IdRes;
-import androidx.annotation.IntDef;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -46,8 +45,6 @@ import com.gnine.galleryg2.view.CropView;
 import com.gnine.galleryg2.view.widget.AspectRatioTextView;
 import com.gnine.galleryg2.view.widget.HorizontalProgressWheelView;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -62,11 +59,6 @@ public class UCropFragment extends Fragment {
     public static final int SCALE = 1;
     public static final int ROTATE = 2;
     public static final int ALL = 3;
-
-    @IntDef({NONE, SCALE, ROTATE, ALL})
-    @Retention(RetentionPolicy.SOURCE)
-    public @interface GestureTypes {
-    }
 
     public static final String TAG = "UCropFragment";
 
@@ -91,7 +83,7 @@ public class UCropFragment extends Fragment {
     private OverlayView mOverlayView;
     private ViewGroup mWrapperStateAspectRatio, mWrapperStateRotate, mWrapperStateScale;
     private ViewGroup mLayoutAspectRatio, mLayoutRotate, mLayoutScale;
-    private List<ViewGroup> mCropAspectRatioViews = new ArrayList<>();
+    private final List<ViewGroup> mCropAspectRatioViews = new ArrayList<>();
     private TextView mTextViewRotateAngle, mTextViewScalePercent;
     private View mBlockingView;
 
@@ -110,7 +102,7 @@ public class UCropFragment extends Fragment {
     }
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         if (getParentFragment() instanceof UCropFragmentCallback)
             callback = (UCropFragmentCallback) getParentFragment();
@@ -225,7 +217,7 @@ public class UCropFragment extends Fragment {
         mGestureCropImageView.setImageToWrapCropBoundsAnimDuration(bundle.getInt(UCrop.Options.EXTRA_IMAGE_TO_CROP_BOUNDS_ANIM_DURATION, CropImageView.DEFAULT_IMAGE_TO_CROP_BOUNDS_ANIM_DURATION));
 
         // Overlay view options
-        mOverlayView.setFreestyleCropEnabled(bundle.getBoolean(UCrop.Options.EXTRA_FREE_STYLE_CROP, OverlayView.DEFAULT_FREESTYLE_CROP_MODE != OverlayView.FREESTYLE_CROP_MODE_DISABLE));
+        mOverlayView.setFreestyleCropModeFromBoolean(bundle.getBoolean(UCrop.Options.EXTRA_FREE_STYLE_CROP, OverlayView.DEFAULT_FREESTYLE_CROP_MODE != OverlayView.FREESTYLE_CROP_MODE_DISABLE));
 
         mOverlayView.setDimmedColor(bundle.getInt(UCrop.Options.EXTRA_DIMMED_LAYER_COLOR, getResources().getColor(R.color.gnine_color_default_dimmed)));
         mOverlayView.setCircleDimmedLayer(bundle.getBoolean(UCrop.Options.EXTRA_CIRCLE_DIMMED_LAYER, OverlayView.DEFAULT_CIRCLE_DIMMED_LAYER));
@@ -281,7 +273,7 @@ public class UCropFragment extends Fragment {
         view.findViewById(R.id.ucrop_frame).setBackgroundColor(mRootViewBackgroundColor);
     }
 
-    private TransformImageView.TransformImageListener mImageListener = new TransformImageView.TransformImageListener() {
+    private final TransformImageView.TransformImageListener mImageListener = new TransformImageView.TransformImageListener() {
         @Override
         public void onRotate(float currentAngle) {
             setAngleText(currentAngle);
@@ -389,7 +381,7 @@ public class UCropFragment extends Fragment {
 
 
         view.findViewById(R.id.wrapper_reset_rotate).setOnClickListener(v -> resetRotation());
-        view.findViewById(R.id.wrapper_rotate_by_angle).setOnClickListener(v -> rotateByAngle(90));
+        view.findViewById(R.id.wrapper_rotate_by_angle).setOnClickListener(v -> rotateByAngle());
         setAngleTextColor(mActiveControlsWidgetColor);
     }
 
@@ -452,8 +444,8 @@ public class UCropFragment extends Fragment {
         mGestureCropImageView.setImageToWrapCropBounds();
     }
 
-    private void rotateByAngle(int angle) {
-        mGestureCropImageView.postRotate(angle);
+    private void rotateByAngle() {
+        mGestureCropImageView.postRotate(90);
         mGestureCropImageView.setImageToWrapCropBounds();
     }
 
@@ -561,7 +553,7 @@ public class UCropFragment extends Fragment {
         return new UCropResult(UCrop.RESULT_ERROR, new Intent().putExtra(UCrop.EXTRA_ERROR, throwable));
     }
 
-    public class UCropResult {
+    public static class UCropResult {
 
         public int mResultCode;
         public Intent mResultData;

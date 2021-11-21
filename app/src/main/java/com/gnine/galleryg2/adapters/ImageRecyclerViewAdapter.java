@@ -26,8 +26,8 @@ public class ImageRecyclerViewAdapter extends
         public View scrim, check;
 
         ImageViewHolder(@NonNull View view,
-                BiConsumer<Integer, View> onItemClick,
-                BiConsumer<Integer, View> onItemLongClick) {
+                        BiConsumer<Integer, View> onItemClick,
+                        BiConsumer<Integer, View> onItemLongClick) {
             super(view);
             imageView = view.findViewById(R.id.pictureItemImageView);
             scrim = itemView.findViewById(R.id.pictureItemScrim);
@@ -58,8 +58,8 @@ public class ImageRecyclerViewAdapter extends
     private State state = State.Normal;
 
     public ImageRecyclerViewAdapter(@NonNull List<ImageData> imageDataList,
-            @NonNull BiConsumer<Integer, View> onItemClick,
-            @NonNull BiConsumer<Integer, View> onItemLongClick) {
+                                    @NonNull BiConsumer<Integer, View> onItemClick,
+                                    @NonNull BiConsumer<Integer, View> onItemLongClick) {
         this.imageDataList = imageDataList;
         this.onItemClick = onItemClick;
         this.onItemLongClick = onItemLongClick;
@@ -102,7 +102,11 @@ public class ImageRecyclerViewAdapter extends
         return imageDataList.size();
     }
 
-    public State getState() { return state; }
+    public State getState() {
+        return state;
+    }
 
-    public void setState(State state) { this.state = state; }
+    public void setState(State state) {
+        this.state = state;
+    }
 }

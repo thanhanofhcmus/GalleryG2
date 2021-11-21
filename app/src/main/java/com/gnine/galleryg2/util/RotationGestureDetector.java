@@ -13,7 +13,7 @@ public class RotationGestureDetector {
     private float mAngle;
     private boolean mIsFirstTouch;
 
-    private OnRotationGestureListener mListener;
+    private final OnRotationGestureListener mListener;
 
     public RotationGestureDetector(OnRotationGestureListener listener) {
         mListener = listener;
