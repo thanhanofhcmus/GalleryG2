@@ -10,6 +10,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.gnine.galleryg2.data.ImageData;
 import com.gnine.galleryg2.R;
 
@@ -22,8 +24,8 @@ public class ImageRecyclerViewAdapter extends
     public static class ImageViewHolder extends RecyclerView.ViewHolder {
 
         public ImageView imageView;
-        public View scrim;
-        public CheckBox checkBox;
+        public View scrim, check;
+        //public CheckBox checkBox;
 
         ImageViewHolder(@NonNull View view,
                 BiConsumer<Integer, View> onItemClick,
@@ -31,7 +33,8 @@ public class ImageRecyclerViewAdapter extends
             super(view);
             imageView = view.findViewById(R.id.pictureItemImageView);
             scrim = itemView.findViewById(R.id.pictureItemScrim);
-            checkBox = itemView.findViewById(R.id.pictureItemCheckCircle);
+            check = itemView.findViewById(R.id.pictureItemCheck);
+            //checkBox = itemView.findViewById(R.id.pictureItemCheckCircle);
 
             itemView.setOnLongClickListener(view1 -> {
                 onItemLongClick.accept(getAbsoluteAdapterPosition(), view1);
@@ -80,15 +83,24 @@ public class ImageRecyclerViewAdapter extends
         Glide.with(imageView.getContext())
                 .load(imageData.uri)
                 .placeholder(R.drawable.bird_thumbnail)
+                .transform(new CenterCrop(), new RoundedCorners(36))
                 .into(imageView);
         if (state == State.Normal) {
             holder.scrim.setVisibility(View.GONE);
-            holder.checkBox.setVisibility(View.GONE);
+            holder.check.setVisibility(View.GONE);
+            //holder.checkBox.setVisibility(View.GONE);
             imageData.setChecked(false);
         } else {
-            holder.checkBox.setVisibility(View.VISIBLE);
-            holder.scrim.setVisibility(View.VISIBLE);
-            holder.checkBox.setChecked(imageData.isChecked());
+            if (imageData.isChecked()) {
+                //holder.checkBox.setVisibility(View.VISIBLE);
+                holder.scrim.setVisibility(View.VISIBLE);
+                holder.check.setVisibility(View.VISIBLE);
+                //holder.checkBox.setChecked(imageData.isChecked());
+            } else {
+                //holder.checkBox.setVisibility(View.GONE);
+                holder.scrim.setVisibility(View.GONE);
+                holder.check.setVisibility(View.GONE);
+            }
         }
     }
 

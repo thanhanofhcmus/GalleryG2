@@ -214,7 +214,8 @@ public class AllImagesFragment extends Fragment {
             startActivity(Intent.createChooser(intent, null));
         } else if (item.getItemId() == R.id.delete_images) {
             AddToTrash();
-            onResume();
+            update();
+            requireActivity().invalidateOptionsMenu();
         } else if (item.getItemId() == R.id.select_all) {
             for (int i = 0; i < imageDataList.size(); i++) {
                 imageDataList.get(i).setChecked(true);
@@ -254,7 +255,6 @@ public class AllImagesFragment extends Fragment {
                 trashList.add(new TrashData(file.getPath(), sourcePath, 0));
             }
         }
-
         LocalDataManager.setObjectListData("TRASH_LIST", trashList);
     }
 

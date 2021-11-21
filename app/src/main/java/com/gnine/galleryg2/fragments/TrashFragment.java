@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.documentfile.provider.DocumentFile;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -79,18 +80,22 @@ public class TrashFragment extends Fragment {
         recyclerView.setAdapter(imageAdapter);
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
+    private void resume() {
         if (trashList.size() > 0) {
             textView.setVisibility(View.GONE);
             recyclerView.setVisibility(View.VISIBLE);
             update();
-            requireActivity().invalidateOptionsMenu();
         } else {
             textView.setVisibility(View.VISIBLE);
             recyclerView.setVisibility(View.GONE);
         }
+        requireActivity().invalidateOptionsMenu();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        resume();
     }
 
     @Override
@@ -160,10 +165,10 @@ public class TrashFragment extends Fragment {
                 getActivity().invalidateOptionsMenu();
             } else if (item.getItemId() == R.id.restore_images) {
                 RestoreToTrash();
-                onResume();
+                resume();
             } else if (item.getItemId() == R.id.delete_images) {
                 deleteToTrash();
-                onResume();
+                resume();
             } else if (item.getItemId() == R.id.select_all) {
                 for (int i = 0; i < trashList.size(); i++) {
                     trashList.get(i).setChecked(true);
@@ -204,7 +209,9 @@ public class TrashFragment extends Fragment {
     }
 
     private boolean deleteFile(String path) {
-        return false;
+        File file = new File(path);
+        boolean success = file.delete();
+        return success;
     }
 
     private void RestoreToTrash() {
