@@ -33,6 +33,10 @@
             android:label="@string/title_activity_full_image"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"/>
         <activity
+            android:name="com.gnine.galleryg2.UCropActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
             android:name=".MainActivity"
             android:exported="true"
             android:label="GalleryG2">

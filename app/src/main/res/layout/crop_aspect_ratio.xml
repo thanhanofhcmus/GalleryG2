@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout style="@style/gnine_WrapperIconState">
+
+    <com.gnine.galleryg2.view.widget.AspectRatioTextView
+        style="@style/gnine_TextViewCropAspectRatio"/>
+
+</FrameLayout>

@@ -1,0 +1,35 @@
+<resources>
+
+    <declare-styleable name="gnine_CropView">
+
+        <!--Crop image view-->
+        <attr name="gnine_aspect_ratio_x" format="float"/>
+        <attr name="gnine_aspect_ratio_y" format="float"/>
+
+        <!--Overlay view-->
+        <attr name="gnine_show_oval_crop_frame" format="boolean"/>
+        <attr name="gnine_circle_dimmed_layer" format="boolean"/>
+        <attr name="gnine_dimmed_color" format="color"/>
+
+        <attr name="gnine_grid_stroke_size" format="dimension"/>
+        <attr name="gnine_grid_color" format="color"/>
+        <attr name="gnine_grid_row_count" format="integer"/>
+        <attr name="gnine_grid_column_count" format="integer"/>
+        <attr name="gnine_show_grid" format="boolean"/>
+
+        <attr name="gnine_frame_stroke_size" format="dimension"/>
+        <attr name="gnine_frame_color" format="color"/>
+        <attr name="gnine_show_frame" format="boolean"/>
+
+    </declare-styleable>
+
+    <declare-styleable name="gnine_AspectRatioTextView">
+
+        <attr name="gnine_artv_ratio_title" format="string"/>
+
+        <attr name="gnine_artv_ratio_x" format="float"/>
+        <attr name="gnine_artv_ratio_y" format="float"/>
+
+    </declare-styleable>
+
+</resources>
