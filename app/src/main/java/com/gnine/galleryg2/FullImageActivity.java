@@ -27,12 +27,10 @@ public class FullImageActivity extends AppCompatActivity {
     public static final String IMAGE_DATA="IMAGE_DATA";
     private static final String SAMPLE_CROP_IMAGE_NAME="SampleCropImage";
     private ArrayList<ImageData> imageDataList;
-    private int position;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_full_image);
-
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_back);
@@ -41,8 +39,6 @@ public class FullImageActivity extends AppCompatActivity {
             getData();
             startCropActivity();
         });
-
-
     }
 
     @Override
@@ -86,7 +82,6 @@ public class FullImageActivity extends AppCompatActivity {
 
     private void startCrop(@NonNull Uri uri){
         String destinationName=SAMPLE_CROP_IMAGE_NAME+".jpg";
-//        String a=getCacheDir().getAbsolutePath();
         UCrop uCrop=UCrop.of(uri,Uri.fromFile(new File(getCacheDir(),destinationName)));
         uCrop=uCrop.useSourceImageAspectRatio();
         UCrop.Options options=new UCrop.Options();

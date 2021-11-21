@@ -10,41 +10,5 @@
         android:name="com.gnine.galleryg2.fragments.ViewPagerFragment"
         android:label="fragment_view_pager"
         tools:layout="@layout/fragment_view_pager" >
-        <action
-            android:id="@+id/viewPagerToEditFragment"
-            app:destination="@id/editFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/editFragment"
-        android:name="com.gnine.galleryg2.fragments.EditFragment"
-        android:label="fragment_edit"
-        tools:layout="@layout/fragment_edit" >
-        <action
-            android:id="@+id/editToViewPagerFragment"
-            app:destination="@id/viewPagerFragment" />
-        <action
-            android:id="@+id/editToRotateFragment"
-            app:destination="@id/rotateFragment" />
-        <action
-            android:id="@+id/editToCropFragment"
-            app:destination="@id/cropFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/rotateFragment"
-        android:name="com.gnine.galleryg2.fragments.RotateFragment"
-        android:label="fragment_rotate"
-        tools:layout="@layout/fragment_rotate" >
-        <action
-            android:id="@+id/rotateToEditFragment"
-            app:destination="@id/editFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/cropFragment"
-        android:name="com.gnine.galleryg2.fragments.CropFragment"
-        android:label="fragment_crop"
-        tools:layout="@layout/fragment_crop" >
-        <action
-            android:id="@+id/cropToEditFragment"
-            app:destination="@id/editFragment" />
     </fragment>
 </navigation>

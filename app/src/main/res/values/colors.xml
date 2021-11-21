@@ -10,7 +10,7 @@
     <color name="blue">#FF0000FF</color>
     <!--Palette-->
     <color name="gnine_color_black">#000</color>
-    <color name="gnine_color_blaze_orange">#FF6300</color>
+    <color name="gnine_color_blaze_purple">#3a00a5</color>
     <color name="gnine_color_ebony_clay">#20242F</color>
     <color name="gnine_color_heather">#B3BECE</color>
     <color name="gnine_color_white">#FFF</color>
@@ -20,14 +20,14 @@
     <color name="gnine_color_toolbar_widget">@color/gnine_color_black</color>
     <color name="gnine_color_widget">@color/gnine_color_black</color>
     <color name="gnine_color_widget_active">@color/gnine_color_white</color>
-    <color name="gnine_color_active_controls_color">@color/gnine_color_blaze_orange</color>
+    <color name="gnine_color_active_controls_color">@color/gnine_color_blaze_purple</color>
     <color name="gnine_color_inactive_controls_color">@color/gnine_color_heather</color>
-    <color name="gnine_color_widget_rotate_mid_line">@color/gnine_color_blaze_orange</color>
+    <color name="gnine_color_widget_rotate_mid_line">@color/gnine_color_blaze_purple</color>
     <color name="gnine_color_widget_rotate_angle">@color/gnine_color_ebony_clay</color>
-    <color name="gnine_color_active_aspect_ratio">@color/gnine_color_blaze_orange</color>
+    <color name="gnine_color_active_aspect_ratio">@color/gnine_color_blaze_purple</color>
     <color name="gnine_color_inactive_aspect_ratio">@color/gnine_color_ebony_clay</color>
     <color name="gnine_color_widget_background">@color/gnine_color_ebony_clay</color>
-    <color name="gnine_color_widget_text">@color/gnine_color_blaze_orange</color>
+    <color name="gnine_color_widget_text">@color/gnine_color_blaze_purple</color>
     <color name="gnine_color_progress_wheel_line">@color/gnine_color_ebony_clay</color>
     <color name="gnine_color_crop_background">@color/gnine_color_black</color>
 
