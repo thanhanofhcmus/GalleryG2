@@ -8,6 +8,11 @@
         android:title="Favorite"
         app:showAsAction="ifRoom"/>
     <item
+        android:id="@+id/action_share"
+        android:icon="@drawable/ic_share"
+        android:title="Share"
+        app:showAsAction="ifRoom"/>
+    <item
         android:title="Information"
         android:icon="@drawable/ic_outline_info"
         android:id="@+id/action_information"

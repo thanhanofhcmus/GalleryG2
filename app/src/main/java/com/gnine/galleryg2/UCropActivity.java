@@ -9,7 +9,6 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -44,10 +43,7 @@ import androidx.annotation.DrawableRes;
 import androidx.annotation.IdRes;
 import androidx.annotation.IntDef;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
@@ -58,7 +54,6 @@ import androidx.transition.AutoTransition;
 import androidx.transition.Transition;
 import androidx.transition.TransitionManager;
 
-import com.gnine.galleryg2.data.ImageData;
 import com.gnine.galleryg2.tools.UCrop;
 import com.gnine.galleryg2.callback.IBitmapCropCallback;
 import com.gnine.galleryg2.model.AspectRatio;
@@ -81,10 +76,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
-
-/**
- * Created by Oleksii Shliama (https://github.com/shliama).
- */
 
 @SuppressWarnings("ConstantConditions")
 public class UCropActivity extends BaseActivity {
@@ -135,7 +126,7 @@ public class UCropActivity extends BaseActivity {
     private OverlayView mOverlayView;
     private ViewGroup mWrapperStateAspectRatio, mWrapperStateRotate, mWrapperStateScale;
     private ViewGroup mLayoutAspectRatio, mLayoutRotate, mLayoutScale;
-    private List<ViewGroup> mCropAspectRatioViews = new ArrayList<>();
+    private final List<ViewGroup> mCropAspectRatioViews = new ArrayList<>();
     private TextView mTextViewRotateAngle, mTextViewScalePercent;
     private View mBlockingView;
 
@@ -403,7 +394,7 @@ public class UCropActivity extends BaseActivity {
         }
     }
 
-    private TransformImageView.TransformImageListener mImageListener = new TransformImageView.TransformImageListener() {
+    private final TransformImageView.TransformImageListener mImageListener = new TransformImageView.TransformImageListener() {
         @Override
         public void onRotate(float currentAngle) {
             setAngleText(currentAngle);
@@ -451,12 +442,10 @@ public class UCropActivity extends BaseActivity {
      */
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void setStatusBarColor(@ColorInt int color) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            final Window window = getWindow();
-            if (window != null) {
-                window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-                window.setStatusBarColor(color);
-            }
+        final Window window = getWindow();
+        if (window != null) {
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(color);
         }
     }
 
@@ -497,16 +486,13 @@ public class UCropActivity extends BaseActivity {
         mCropAspectRatioViews.get(aspectRationSelectedByDefault).setSelected(true);
 
         for (ViewGroup cropAspectRatioView : mCropAspectRatioViews) {
-            cropAspectRatioView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mGestureCropImageView.setTargetAspectRatio(
-                            ((AspectRatioTextView) ((ViewGroup) v).getChildAt(0)).getAspectRatio(v.isSelected()));
-                    mGestureCropImageView.setImageToWrapCropBounds();
-                    if (!v.isSelected()) {
-                        for (ViewGroup cropAspectRatioView : mCropAspectRatioViews) {
-                            cropAspectRatioView.setSelected(cropAspectRatioView == v);
-                        }
+            cropAspectRatioView.setOnClickListener(v -> {
+                mGestureCropImageView.setTargetAspectRatio(
+                        ((AspectRatioTextView) ((ViewGroup) v).getChildAt(0)).getAspectRatio(v.isSelected()));
+                mGestureCropImageView.setImageToWrapCropBounds();
+                if (!v.isSelected()) {
+                    for (ViewGroup cropAspectRatioView1 : mCropAspectRatioViews) {
+                        cropAspectRatioView1.setSelected(cropAspectRatioView1 == v);
                     }
                 }
             });
@@ -536,18 +522,8 @@ public class UCropActivity extends BaseActivity {
         ((HorizontalProgressWheelView) findViewById(R.id.rotate_scroll_wheel)).setMiddleLineColor(mActiveControlsWidgetColor);
 
 
-        findViewById(R.id.wrapper_reset_rotate).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                resetRotation();
-            }
-        });
-        findViewById(R.id.wrapper_rotate_by_angle).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                rotateByAngle(90);
-            }
-        });
+        findViewById(R.id.wrapper_reset_rotate).setOnClickListener(v -> resetRotation());
+        findViewById(R.id.wrapper_rotate_by_angle).setOnClickListener(v -> rotateByAngle());
         setAngleTextColor(mActiveControlsWidgetColor);
     }
 
@@ -610,17 +586,14 @@ public class UCropActivity extends BaseActivity {
         mGestureCropImageView.setImageToWrapCropBounds();
     }
 
-    private void rotateByAngle(int angle) {
-        mGestureCropImageView.postRotate(angle);
+    private void rotateByAngle() {
+        mGestureCropImageView.postRotate(90);
         mGestureCropImageView.setImageToWrapCropBounds();
     }
 
-    private final View.OnClickListener mStateClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            if (!v.isSelected()) {
-                setWidgetState(v.getId());
-            }
+    private final View.OnClickListener mStateClickListener = v -> {
+        if (!v.isSelected()) {
+            setWidgetState(v.getId());
         }
     };
 
@@ -659,7 +632,7 @@ public class UCropActivity extends BaseActivity {
     }
 
     private void changeSelectedTab(int stateViewId) {
-        TransitionManager.beginDelayedTransition((ViewGroup) findViewById(R.id.ucrop_photobox), mControlsTransition);
+        TransitionManager.beginDelayedTransition(findViewById(R.id.ucrop_photobox), mControlsTransition);
 
         mWrapperStateScale.findViewById(R.id.text_view_scale).setVisibility(stateViewId == R.id.state_scale ? View.VISIBLE : View.GONE);
         mWrapperStateAspectRatio.findViewById(R.id.text_view_crop).setVisibility(stateViewId == R.id.state_aspect_ratio ? View.VISIBLE : View.GONE);
@@ -727,14 +700,12 @@ public class UCropActivity extends BaseActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case REQUEST_STORAGE_WRITE_ACCESS_PERMISSION:
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    saveCroppedImage();
-                }
-                break;
-            default:
-                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_STORAGE_WRITE_ACCESS_PERMISSION) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                saveCroppedImage();
+            }
+        } else {
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }
 
@@ -758,13 +729,14 @@ public class UCropActivity extends BaseActivity {
             }
         }
     }
+
     private void copyFileToDownloads(Uri croppedFileUri) throws Exception {
         String downloadsDirectoryPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath();
-        String filename = String.format("%d_%s", Calendar.getInstance().getTimeInMillis(), croppedFileUri.getLastPathSegment());
+        String filename = String.format(Locale.getDefault(), "%d_%s", Calendar.getInstance().getTimeInMillis(), croppedFileUri.getLastPathSegment());
 
         File saveFile = new File(downloadsDirectoryPath, filename);
 
-        FileInputStream inStream = new FileInputStream(new File(croppedFileUri.getPath()));
+        FileInputStream inStream = new FileInputStream(croppedFileUri.getPath());
         FileOutputStream outStream = new FileOutputStream(saveFile);
         FileChannel inChannel = inStream.getChannel();
         FileChannel outChannel = outStream.getChannel();
@@ -799,14 +771,10 @@ public class UCropActivity extends BaseActivity {
         NotificationCompat.Builder notificationBuilder;
         NotificationManager notificationManager = (NotificationManager) this
                 .getSystemService(Context.NOTIFICATION_SERVICE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            if (notificationManager != null) {
-                notificationManager.createNotificationChannel(createChannel());
-            }
-            notificationBuilder = new NotificationCompat.Builder(this, CHANNEL_ID);
-        } else {
-            notificationBuilder = new NotificationCompat.Builder(this);
+        if (notificationManager != null) {
+            notificationManager.createNotificationChannel(createChannel());
         }
+        notificationBuilder = new NotificationCompat.Builder(this, CHANNEL_ID);
 
         notificationBuilder
                 .setContentTitle(getString(R.string.app_name))

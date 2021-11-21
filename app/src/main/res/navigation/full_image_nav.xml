@@ -9,6 +9,9 @@
         android:name="com.gnine.galleryg2.fragments.ViewPagerFragment"
         android:label="fragment_view_pager"
         tools:layout="@layout/fragment_view_pager" >
+        <action
+            android:id="@+id/viewPagerFragmentToInformationFragment"
+            app:destination="@id/informationFragment" />
     </fragment>
     <fragment
         android:id="@+id/informationFragment"
