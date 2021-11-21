@@ -76,4 +76,7 @@ dependencies {
     implementation "androidx.cardview:cardview:1.0.0"
     //util
     implementation "com.squareup.okhttp3:okhttp:3.12.1"
+
+    //gson
+    implementation 'com.google.code.gson:gson:2.8.9'
 }

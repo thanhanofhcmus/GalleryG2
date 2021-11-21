@@ -5,11 +5,20 @@
     android:layout_height="match_parent"
     tools:context=".fragments.TrashFragment">
 
-    <TextView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:textSize="50sp"
-        android:text="@string/trash" />
+        android:layout_height="match_parent" >
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/trashFragmentRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <TextView
+            android:id="@+id/trashFragmentEmpty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/empty" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>
