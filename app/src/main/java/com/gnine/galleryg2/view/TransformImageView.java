@@ -9,16 +9,9 @@ import android.net.Uri;
 import android.util.AttributeSet;
 import android.util.Log;
 
-import com.gnine.galleryg2.R;
-import com.gnine.galleryg2.callback.IBitmapCropCallback;
 import com.gnine.galleryg2.callback.IBitmapLoadCallback;
-import com.gnine.galleryg2.callback.ICropBoundsChangeListener;
-import com.gnine.galleryg2.model.CropParameters;
-import com.gnine.galleryg2.model.ExifInfor;
-import com.gnine.galleryg2.model.ImageState;
-import com.gnine.galleryg2.task.BitmapCropTask;
+import com.gnine.galleryg2.model.ExifInformation;
 import com.gnine.galleryg2.util.BitmapLoadUtils;
-import com.gnine.galleryg2.util.CubicEasing;
 import com.gnine.galleryg2.util.FastBitmapDrawable;
 import com.gnine.galleryg2.util.RectUtils;
 import androidx.annotation.IntRange;
@@ -52,7 +45,7 @@ public class TransformImageView extends AppCompatImageView {
     private int mMaxBitmapSize = 0;
 
     private String mImageInputPath, mImageOutputPath;
-    private ExifInfor mExifInfo;
+    private ExifInformation exifInformation;
 
     /**
      * Interface for rotation and scale change notifying.
@@ -125,27 +118,26 @@ public class TransformImageView extends AppCompatImageView {
         return mImageOutputPath;
     }
 
-    public ExifInfor getExifInfor() {
-        return mExifInfo;
+    public ExifInformation getExifInformation() {
+        return exifInformation;
     }
 
     /**
      * This method takes an Uri as a parameter, then calls method to decode it into Bitmap with specified size.
      *
      * @param imageUri - image Uri
-     * @throws Exception - can throw exception if having problems with decoding Uri or OOM.
      */
-    public void setImageUri(@NonNull Uri imageUri, @Nullable Uri outputUri) throws Exception {
+    public void setImageUri(@NonNull Uri imageUri, @Nullable Uri outputUri) {
         int maxBitmapSize = getMaxBitmapSize();
 
         BitmapLoadUtils.decodeBitmapInBackground(getContext(), imageUri, outputUri, maxBitmapSize, maxBitmapSize,
                 new IBitmapLoadCallback() {
 
                     @Override
-                    public void onBitmapLoaded(@NonNull Bitmap bitmap, @NonNull ExifInfor exifInfo, @NonNull String imageInputPath, @Nullable String imageOutputPath) {
+                    public void onBitmapLoaded(@NonNull Bitmap bitmap, @NonNull ExifInformation exifInfo, @NonNull String imageInputPath, @Nullable String imageOutputPath) {
                         mImageInputPath = imageInputPath;
                         mImageOutputPath = imageOutputPath;
-                        mExifInfo = exifInfo;
+                        exifInformation = exifInfo;
 
                         mBitmapDecoded = true;
                         setImageBitmap(bitmap);

@@ -77,7 +77,7 @@ public class CropImageView extends TransformImageView{
         final CropParameters cropParameters = new CropParameters(
                 mMaxResultImageSizeX, mMaxResultImageSizeY,
                 compressFormat, compressQuality,
-                getImageInputPath(), getImageOutputPath(), getExifInfor());
+                getImageInputPath(), getImageOutputPath(), getExifInformation());
 
         new BitmapCropTask(getViewBitmap(), imageState, cropParameters, cropCallback)
                 .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
@@ -200,7 +200,7 @@ public class CropImageView extends TransformImageView{
     }
 
     /**
-     * This method scales image down for given value related given coords (x, y).
+     * This method scales image down for given value related given coordinates (x, y).
      */
     public void zoomOutImage(float scale, float centerX, float centerY) {
         if (scale >= getMinScale()) {
@@ -216,7 +216,7 @@ public class CropImageView extends TransformImageView{
     }
 
     /**
-     * This method scales image up for given value related to given coords (x, y).
+     * This method scales image up for given value related to given coordinates (x, y).
      */
     public void zoomInImage(float scale, float centerX, float centerY) {
         if (scale <= getMaxScale()) {
@@ -330,21 +330,21 @@ public class CropImageView extends TransformImageView{
         mTempMatrix.reset();
         mTempMatrix.setRotate(-getCurrentAngle());
 
-        float[] unrotatedImageCorners = Arrays.copyOf(mCurrentImageCorners, mCurrentImageCorners.length);
-        float[] unrotatedCropBoundsCorners = RectUtils.getCornersFromRect(mCropRect);
+        float[] unRotatedImageCorners = Arrays.copyOf(mCurrentImageCorners, mCurrentImageCorners.length);
+        float[] unRotatedCropBoundsCorners = RectUtils.getCornersFromRect(mCropRect);
 
-        mTempMatrix.mapPoints(unrotatedImageCorners);
-        mTempMatrix.mapPoints(unrotatedCropBoundsCorners);
+        mTempMatrix.mapPoints(unRotatedImageCorners);
+        mTempMatrix.mapPoints(unRotatedCropBoundsCorners);
 
-        RectF unrotatedImageRect = RectUtils.trapToRect(unrotatedImageCorners);
-        RectF unrotatedCropRect = RectUtils.trapToRect(unrotatedCropBoundsCorners);
+        RectF unRotatedImageRect = RectUtils.trapToRect(unRotatedImageCorners);
+        RectF unRotatedCropRect = RectUtils.trapToRect(unRotatedCropBoundsCorners);
 
-        float deltaLeft = unrotatedImageRect.left - unrotatedCropRect.left;
-        float deltaTop = unrotatedImageRect.top - unrotatedCropRect.top;
-        float deltaRight = unrotatedImageRect.right - unrotatedCropRect.right;
-        float deltaBottom = unrotatedImageRect.bottom - unrotatedCropRect.bottom;
+        float deltaLeft = unRotatedImageRect.left - unRotatedCropRect.left;
+        float deltaTop = unRotatedImageRect.top - unRotatedCropRect.top;
+        float deltaRight = unRotatedImageRect.right - unRotatedCropRect.right;
+        float deltaBottom = unRotatedImageRect.bottom - unRotatedCropRect.bottom;
 
-        float indents[] = new float[4];
+        float[] indents = new float[4];
         indents[0] = (deltaLeft > 0) ? deltaLeft : 0;
         indents[1] = (deltaTop > 0) ? deltaTop : 0;
         indents[2] = (deltaRight < 0) ? deltaRight : 0;
@@ -415,13 +415,13 @@ public class CropImageView extends TransformImageView{
         mTempMatrix.reset();
         mTempMatrix.setRotate(-getCurrentAngle());
 
-        float[] unrotatedImageCorners = Arrays.copyOf(imageCorners, imageCorners.length);
-        mTempMatrix.mapPoints(unrotatedImageCorners);
+        float[] unRotatedImageCorners = Arrays.copyOf(imageCorners, imageCorners.length);
+        mTempMatrix.mapPoints(unRotatedImageCorners);
 
-        float[] unrotatedCropBoundsCorners = RectUtils.getCornersFromRect(mCropRect);
-        mTempMatrix.mapPoints(unrotatedCropBoundsCorners);
+        float[] unRotatedCropBoundsCorners = RectUtils.getCornersFromRect(mCropRect);
+        mTempMatrix.mapPoints(unRotatedCropBoundsCorners);
 
-        return RectUtils.trapToRect(unrotatedImageCorners).contains(RectUtils.trapToRect(unrotatedCropBoundsCorners));
+        return RectUtils.trapToRect(unRotatedImageCorners).contains(RectUtils.trapToRect(unRotatedCropBoundsCorners));
     }
 
     /**
@@ -495,7 +495,6 @@ public class CropImageView extends TransformImageView{
      * This method extracts all needed values from the styled attributes.
      * Those are used to configure the view.
      */
-    @SuppressWarnings("deprecation")
     protected void processStyledAttributes(@NonNull TypedArray a) {
         float targetAspectRatioX = Math.abs(a.getFloat(R.styleable.gnine_CropView_gnine_aspect_ratio_x, DEFAULT_ASPECT_RATIO));
         float targetAspectRatioY = Math.abs(a.getFloat(R.styleable.gnine_CropView_gnine_aspect_ratio_y, DEFAULT_ASPECT_RATIO));

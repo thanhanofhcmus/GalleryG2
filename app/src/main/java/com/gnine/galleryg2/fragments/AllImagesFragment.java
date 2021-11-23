@@ -60,9 +60,13 @@ public class AllImagesFragment extends Fragment {
         this.folder = folder;
     }
 
-    public void setTypes(boolean types) { this.types = types; }
+    public void setTypes(boolean types) {
+        this.types = types;
+    }
 
-    public void setFolderPath(String folderPath) { this.folderPath = folderPath; }
+    public void setFolderPath(String folderPath) {
+        this.folderPath = folderPath;
+    }
 
     public void setImageDataList(ArrayList<ImageData> imageDataList) {
         this.imageDataList = imageDataList;
@@ -220,7 +224,7 @@ public class AllImagesFragment extends Fragment {
             numImagesChecked = 0;
             getActivity().invalidateOptionsMenu();
         } else if (item.getItemId() == R.id.menu_share) {
-            ArrayList<Uri> checkedUriList = imageDataList .stream()
+            ArrayList<Uri> checkedUriList = imageDataList.stream()
                     .filter(ImageData::isChecked)
                     .map(imageData -> FileProvider.getUriForFile(this.requireActivity(),
                             BuildConfig.APPLICATION_ID + "." + requireActivity().getLocalClassName() + ".provider", //(use your app signature + ".provider" )
@@ -249,7 +253,7 @@ public class AllImagesFragment extends Fragment {
     }
 
     private void AddToTrash() {
-        ArrayList<ImageData> selectedImages = imageDataList .stream()
+        ArrayList<ImageData> selectedImages = imageDataList.stream()
                 .filter(ImageData::isChecked)
                 .collect(Collectors.toCollection(ArrayList::new));
 
@@ -270,8 +274,8 @@ public class AllImagesFragment extends Fragment {
     }
 
     private String getRealPath(Uri contentUri) {
-        String[] projection = new String[]{ MediaStore.Images.Media.DATA };
-        Cursor cursor = requireActivity().getApplicationContext().getContentResolver().query(contentUri,  projection, null, null, null);
+        String[] projection = new String[]{MediaStore.Images.Media.DATA};
+        Cursor cursor = requireActivity().getApplicationContext().getContentResolver().query(contentUri, projection, null, null, null);
         String realPath = null;
         if (cursor.moveToFirst()) {
             int columnIndex = cursor.getColumnIndex(projection[0]);

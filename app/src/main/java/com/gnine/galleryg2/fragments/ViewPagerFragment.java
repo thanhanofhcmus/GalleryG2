@@ -43,7 +43,7 @@ public class ViewPagerFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
+                             Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_view_pager, container, false);
         assert getActivity() != null;
 
@@ -54,7 +54,9 @@ public class ViewPagerFragment extends Fragment {
         setHasOptionsMenu(true);
 
         ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-        if (actionBar != null) { actionBar.show(); }
+        if (actionBar != null) {
+            actionBar.show();
+        }
 
         FullImageActivity.setIsInViewpagerFragment(true);
 

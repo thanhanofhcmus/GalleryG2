@@ -64,7 +64,7 @@ public class TypesAdapter extends RecyclerView.Adapter<TypesAdapter.TypesViewHol
         holder.icon.setImageResource(typeData.resourceId);
         holder.title.setText(String.valueOf(typeData.title));
 
-       List<ImageData> typeDataList = typeData.list;
+        List<ImageData> typeDataList = typeData.list;
         String count = typeDataList != null ? String.valueOf(typeDataList.size()) : "0";
         holder.count.setText(count);
     }

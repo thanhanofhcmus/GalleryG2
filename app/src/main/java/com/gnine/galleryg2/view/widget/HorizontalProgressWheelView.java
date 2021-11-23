@@ -1,11 +1,9 @@
 package com.gnine.galleryg2.view.widget;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.os.Build;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -46,11 +44,6 @@ public class HorizontalProgressWheelView extends View {
     public HorizontalProgressWheelView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
-    }
-
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public HorizontalProgressWheelView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
     }
 
     public void setScrollingListener(ScrollingListener scrollingListener) {

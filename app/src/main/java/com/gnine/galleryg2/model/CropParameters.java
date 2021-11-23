@@ -3,22 +3,24 @@ package com.gnine.galleryg2.model;
 import android.graphics.Bitmap;
 
 public class CropParameters {
-    private int maxResultImageSizeX,maxResultImageSizeY;
-    private Bitmap.CompressFormat compressFormat;
-    private int compressQuality;
-    private String imageInputPath,imageOutputPath;
-    private ExifInfor exifInfor;
+    private final int maxResultImageSizeX;
+    private final int maxResultImageSizeY;
+    private final Bitmap.CompressFormat compressFormat;
+    private final int compressQuality;
+    private final String imageInputPath;
+    private final String imageOutputPath;
+    private final ExifInformation exifInformation;
 
-    public CropParameters(int maxResultImageSizeX,int maxResultImageSizeY,
+    public CropParameters(int maxResultImageSizeX, int maxResultImageSizeY,
                           Bitmap.CompressFormat compressFormat, int compressQuality,
-                          String imageInputPath,String imageOutputPath,ExifInfor exifInfor){
-        this.maxResultImageSizeX=maxResultImageSizeX;
-        this.maxResultImageSizeY=maxResultImageSizeY;
-        this.compressFormat=compressFormat;
-        this.compressQuality=compressQuality;
-        this.imageInputPath=imageInputPath;
-        this.imageOutputPath=imageOutputPath;
-        this.exifInfor=exifInfor;
+                          String imageInputPath, String imageOutputPath, ExifInformation exifInformation) {
+        this.maxResultImageSizeX = maxResultImageSizeX;
+        this.maxResultImageSizeY = maxResultImageSizeY;
+        this.compressFormat = compressFormat;
+        this.compressQuality = compressQuality;
+        this.imageInputPath = imageInputPath;
+        this.imageOutputPath = imageOutputPath;
+        this.exifInformation = exifInformation;
     }
 
     public int getMaxResultImageSizeX() {
@@ -45,7 +47,7 @@ public class CropParameters {
         return imageOutputPath;
     }
 
-    public ExifInfor getExifInfor() {
-        return exifInfor;
+    public ExifInformation getExifInfor() {
+        return exifInformation;
     }
 }

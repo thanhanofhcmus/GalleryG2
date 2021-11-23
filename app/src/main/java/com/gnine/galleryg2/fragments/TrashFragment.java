@@ -180,14 +180,8 @@ public class TrashFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
-    private ArrayList<TrashData> getSelectedImages() {
-        return trashList .stream()
-                .filter(TrashData::isChecked)
-                .collect(Collectors.toCollection(ArrayList::new));
-    }
-
     private void deleteToTrash() {
-        ArrayList<TrashData> selectedTrash = trashList .stream()
+        ArrayList<TrashData> selectedTrash = trashList.stream()
                 .filter(TrashData::isChecked)
                 .collect(Collectors.toCollection(ArrayList::new));
 
@@ -206,12 +200,11 @@ public class TrashFragment extends Fragment {
 
     private boolean deleteFile(String path) {
         File file = new File(path);
-        boolean success = file.delete();
-        return success;
+        return file.delete();
     }
 
     private void RestoreToTrash() {
-        ArrayList<TrashData> selectedTrash = trashList .stream()
+        ArrayList<TrashData> selectedTrash = trashList.stream()
                 .filter(TrashData::isChecked)
                 .collect(Collectors.toCollection(ArrayList::new));
 
@@ -229,7 +222,7 @@ public class TrashFragment extends Fragment {
         LocalDataManager.setObjectListData("TRASH_LIST", trashList);
     }
 
-    // Ham nay dell chay duoc, chua viet lai
+    // TODO: Fix this after fix slow file
     private boolean moveFile(String sourcePath, String targetPath) {
         File from = new File(sourcePath);
         File to = new File(targetPath);

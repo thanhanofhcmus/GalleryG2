@@ -6,8 +6,6 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
-import android.graphics.Region;
-import android.os.Build;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -56,28 +54,22 @@ public class OverlayView extends View {
     private boolean mShowCropFrame, mShowCropGrid;
     private boolean mCircleDimmedLayer;
     private int mDimmedColor;
-    private Path mCircularPath = new Path();
-    private Paint mDimmedStrokePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    private Paint mCropGridPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    private Paint mCropFramePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    private Paint mCropFrameCornersPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final Path mCircularPath = new Path();
+    private final Paint mDimmedStrokePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final Paint mCropGridPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final Paint mCropFramePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final Paint mCropFrameCornersPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     @FreestyleMode
     private int mFreestyleCropMode = DEFAULT_FREESTYLE_CROP_MODE;
     private float mPreviousTouchX = -1, mPreviousTouchY = -1;
     private int mCurrentTouchCornerIndex = -1;
-    private int mTouchPointThreshold;
-    private int mCropRectMinSize;
-    private int mCropRectCornerTouchAreaLineLength;
+    private final int mTouchPointThreshold = getResources().getDimensionPixelSize(R.dimen.gnine_default_crop_rect_corner_touch_threshold);
+    private final int mCropRectMinSize = getResources().getDimensionPixelSize(R.dimen.gnine_default_crop_rect_min_size);
+    private final int mCropRectCornerTouchAreaLineLength = getResources().getDimensionPixelSize(R.dimen.gnine_default_crop_rect_corner_touch_area_line_length);
 
     private IOverlayViewChangeListener mCallback;
 
     private boolean mShouldSetupCropBounds;
-
-    {
-        mTouchPointThreshold = getResources().getDimensionPixelSize(R.dimen.gnine_default_crop_rect_corner_touch_threshold);
-        mCropRectMinSize = getResources().getDimensionPixelSize(R.dimen.gnine_default_crop_rect_min_size);
-        mCropRectCornerTouchAreaLineLength = getResources().getDimensionPixelSize(R.dimen.gnine_default_crop_rect_corner_touch_area_line_length);
-    }
 
     public OverlayView(Context context) {
         this(context, null);
@@ -105,22 +97,6 @@ public class OverlayView extends View {
         return mCropViewRect;
     }
 
-    @Deprecated
-    /***
-     * Please use the new method {@link #getFreestyleCropMode() getFreestyleCropMode} method as we have more than 1 freestyle crop mode.
-     */
-    public boolean isFreestyleCropEnabled() {
-        return mFreestyleCropMode == FREESTYLE_CROP_MODE_ENABLE;
-    }
-
-    @Deprecated
-    /***
-     * Please use the new method {@link #setFreestyleCropMode setFreestyleCropMode} method as we have more than 1 freestyle crop mode.
-     */
-    public void setFreestyleCropEnabled(boolean freestyleCropEnabled) {
-        mFreestyleCropMode = freestyleCropEnabled ? FREESTYLE_CROP_MODE_ENABLE : FREESTYLE_CROP_MODE_DISABLE;
-    }
-
     @FreestyleMode
     public int getFreestyleCropMode() {
         return mFreestyleCropMode;
@@ -128,6 +104,11 @@ public class OverlayView extends View {
 
     public void setFreestyleCropMode(@FreestyleMode int mFreestyleCropMode) {
         this.mFreestyleCropMode = mFreestyleCropMode;
+        postInvalidate();
+    }
+
+    public void setFreestyleCropModeFromBoolean(boolean mFreestyleCropMode) {
+        this.mFreestyleCropMode = mFreestyleCropMode ? FREESTYLE_CROP_MODE_ENABLE : FREESTYLE_CROP_MODE_DISABLE;
         postInvalidate();
     }
 

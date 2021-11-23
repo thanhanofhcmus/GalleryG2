@@ -2,7 +2,6 @@ package com.gnine.galleryg2.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.FrameLayout;
@@ -10,8 +9,6 @@ import android.widget.FrameLayout;
 import androidx.annotation.NonNull;
 
 import com.gnine.galleryg2.R;
-import com.gnine.galleryg2.callback.ICropBoundsChangeListener;
-import com.gnine.galleryg2.callback.IOverlayViewChangeListener;
 
 public class CropView extends FrameLayout {
 
@@ -39,18 +36,8 @@ public class CropView extends FrameLayout {
     }
 
     private void setListenersToViews() {
-        mGestureCropImageView.setCropBoundsChangeListener(new ICropBoundsChangeListener() {
-            @Override
-            public void onCropAspectRatioChanged(float cropRatio) {
-                mViewOverlay.setTargetAspectRatio(cropRatio);
-            }
-        });
-        mViewOverlay.setOverlayViewChangeListener(new IOverlayViewChangeListener() {
-            @Override
-            public void onCropRectUpdated(RectF cropRect) {
-                mGestureCropImageView.setCropRect(cropRect);
-            }
-        });
+        mGestureCropImageView.setCropBoundsChangeListener(mViewOverlay::setTargetAspectRatio);
+        mViewOverlay.setOverlayViewChangeListener(cropRect -> mGestureCropImageView.setCropRect(cropRect));
     }
 
     @Override
