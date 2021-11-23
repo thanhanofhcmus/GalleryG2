@@ -42,7 +42,6 @@ import java.util.stream.Collectors;
 
 
 public class AllImagesFragment extends Fragment {
-
     private RecyclerView recyclerView;
     private ImageRecyclerViewAdapter imageAdapter;
     private int typeView;
@@ -108,7 +107,7 @@ public class AllImagesFragment extends Fragment {
             requireActivity().setTitle(String.valueOf(++numImagesChecked));
         };
         imageAdapter = new ImageRecyclerViewAdapter(imageDataList, onItemClick, onItemLongClick);
-        imageAdapter.setState(State.Normal);
+        imageAdapter.setState(ImageRecyclerViewAdapter.State.Normal);
         recyclerView.setAdapter(imageAdapter);
     }
 
@@ -248,6 +247,7 @@ public class AllImagesFragment extends Fragment {
 
         return super.onOptionsItemSelected(item);
     }
+
 
     private ArrayList<Uri> getSelectedImages() {
         return imageDataList .stream()
