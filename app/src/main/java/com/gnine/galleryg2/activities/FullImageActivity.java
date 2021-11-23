@@ -45,10 +45,7 @@ public class FullImageActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
-        findViewById(R.id.editBtn).setOnClickListener(v -> {
-            getData();
-            startCropActivity();
-        });
+
     }
 
     public static void setImageData(ImageData data) {
@@ -71,19 +68,7 @@ public class FullImageActivity extends AppCompatActivity {
         return currentImagePosition;
     }
 
-    private void getData() {
-        Bundle bundle = getIntent().getExtras();
-        imageDataList = bundle.getParcelableArrayList(MainActivity.IMAGE_LIST_KEY);
-    }
-
-    private void startCropActivity() {
-        ViewPager2 viewPager2 = findViewById(R.id.viewPagerImageSlider);
-        int position = viewPager2.getCurrentItem();
-        Uri uri = imageDataList.get(position).uri;
-        startCrop(uri);
-    }
-
-    private void startCrop(@NonNull Uri uri) {
+    public void startCrop(@NonNull Uri uri) {
         String destinationName = SAMPLE_CROP_IMAGE_NAME + ".jpg";
         UCrop uCrop = UCrop.of(uri, Uri.fromFile(new File(getCacheDir(), destinationName)));
         uCrop = uCrop.useSourceImageAspectRatio();

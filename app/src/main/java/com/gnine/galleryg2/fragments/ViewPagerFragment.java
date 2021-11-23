@@ -60,6 +60,10 @@ public class ViewPagerFragment extends Fragment {
 
         FullImageActivity.setIsInViewpagerFragment(true);
 
+        view.findViewById(R.id.editBtn).setOnClickListener(v -> {
+            ((FullImageActivity)requireActivity()).startCrop(imageDataList.get(viewPager2.getCurrentItem()).uri);
+        });
+
         return view;
     }
 
