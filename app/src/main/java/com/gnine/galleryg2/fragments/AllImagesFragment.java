@@ -248,14 +248,6 @@ public class AllImagesFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
-
-    private ArrayList<Uri> getSelectedImages() {
-        return imageDataList .stream()
-                .filter(ImageData::isChecked)
-                .map(imageData -> imageData.uri)
-                .collect(Collectors.toCollection(ArrayList::new));
-    }
-
     private void AddToTrash() {
         ArrayList<ImageData> selectedImages = imageDataList .stream()
                 .filter(ImageData::isChecked)
