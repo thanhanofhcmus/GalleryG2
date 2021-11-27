@@ -3,7 +3,6 @@ buildscript {
     repositories {
         google()
         mavenCentral()
-        maven { url 'https://jitpack.io' }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:7.0.3'
@@ -16,6 +15,12 @@ buildscript {
 allprojects {
     tasks.withType(JavaCompile) {
         options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+    }
+
+    repositories {
+        google()
+        mavenCentral()
+        maven { url 'https://jitpack.io' }
     }
 }
 
