@@ -3,12 +3,17 @@ package com.gnine.galleryg2.activities;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.ablanco.zoomy.TapListener;
+import com.ablanco.zoomy.Zoomy;
 import com.gnine.galleryg2.R;
 import com.gnine.galleryg2.data.ImageData;
 import com.gnine.galleryg2.tools.UCrop;
@@ -45,7 +50,6 @@ public class FullImageActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
-
     }
 
     public static void setImageData(ImageData data) {

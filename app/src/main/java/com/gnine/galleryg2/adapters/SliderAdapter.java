@@ -1,13 +1,18 @@
 package com.gnine.galleryg2.adapters;
 
+import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+
+import com.ablanco.zoomy.TapListener;
+import com.ablanco.zoomy.Zoomy;
 import com.bumptech.glide.Glide;
 import com.gnine.galleryg2.R;
 import com.gnine.galleryg2.data.ImageData;
@@ -25,12 +30,21 @@ public class SliderAdapter extends RecyclerView.Adapter<SliderAdapter.SliderView
     @NonNull
     @Override
     public SliderViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new SliderViewHolder(
-                LayoutInflater.from(parent.getContext()).inflate(
-                        R.layout.fragment_image_view,
-                        parent, false
-                )
-        );
+        LayoutInflater inflater= LayoutInflater.from(parent.getContext());
+        View view=inflater.inflate(R.layout.fragment_image_view,parent,false);
+        ImageView imageView=view.findViewById(R.id.imageSlide);
+        Zoomy.Builder builder=new Zoomy.Builder((Activity) view.getContext())
+                .target(imageView)
+                .animateZooming(false)
+                .enableImmersiveMode(false)
+                .tapListener(new TapListener() {
+                    @Override
+                    public void onTap(View v) {
+
+                    }
+                });
+        builder.register();
+        return new SliderViewHolder(view);
     }
 
     @Override
@@ -47,6 +61,7 @@ public class SliderAdapter extends RecyclerView.Adapter<SliderAdapter.SliderView
 
     public static class SliderViewHolder extends RecyclerView.ViewHolder {
         private final ImageView imageView;
+
 
         public SliderViewHolder(@NonNull View itemView) {
             super(itemView);
