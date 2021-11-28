@@ -28,7 +28,6 @@
             android:text="@string/name"/>
 
         <EditText
-            android:id="@+id/albumId"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:importantForAutofill="no"

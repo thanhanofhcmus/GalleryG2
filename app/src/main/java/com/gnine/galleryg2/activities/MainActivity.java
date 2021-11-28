@@ -1,6 +1,7 @@
 package com.gnine.galleryg2.activities;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
