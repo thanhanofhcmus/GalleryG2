@@ -1,16 +1,21 @@
 package com.gnine.galleryg2.adapters;
 
+import android.app.Activity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 
 import com.bumptech.glide.Glide;
 import com.gnine.galleryg2.R;
 import com.gnine.galleryg2.data.ImageData;
+import com.jsibbold.zoomage.ZoomageView;
 
 import java.util.ArrayList;
 
@@ -25,12 +30,10 @@ public class SliderAdapter extends RecyclerView.Adapter<SliderAdapter.SliderView
     @NonNull
     @Override
     public SliderViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new SliderViewHolder(
-                LayoutInflater.from(parent.getContext()).inflate(
-                        R.layout.fragment_image_view,
-                        parent, false
-                )
-        );
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+        View view = inflater.inflate(R.layout.fragment_image_view, parent, false);
+
+        return new SliderViewHolder(view);
     }
 
     @Override
@@ -46,11 +49,11 @@ public class SliderAdapter extends RecyclerView.Adapter<SliderAdapter.SliderView
     }
 
     public static class SliderViewHolder extends RecyclerView.ViewHolder {
-        private final ImageView imageView;
+        private final ZoomageView imageView;
 
         public SliderViewHolder(@NonNull View itemView) {
             super(itemView);
-            imageView = itemView.findViewById(R.id.imageSlide);
+            imageView = itemView.findViewById(R.id.myZoomageView);
         }
     }
 }
