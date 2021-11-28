@@ -20,6 +20,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.attribute.FileTime;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
@@ -55,7 +58,7 @@ public class ImageLoader {
             long dateAdded = cursor.getLong(dateAddedColumn);
             Uri contentUri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id);
 
-            imageDataList.add(new ImageData(contentUri, name, size, dateAdded));
+            imageDataList.add(new ImageData(contentUri, name, size, dateAdded * 1000L));
         }
 
         cursor.close();
@@ -113,6 +116,11 @@ public class ImageLoader {
                         fileTime != null ? fileTime.toMillis() : 0));
             }
         }
+        imagesList.sort((o1, o2) -> {
+            if (o1.getDateTime() == null || o2.getDateTime() == null)
+                return 0;
+            return o1.getDateTime().compareTo(o2.getDateTime());
+        });
         return imagesList;
     }
 
@@ -150,6 +158,11 @@ public class ImageLoader {
             list.addAll(Objects.requireNonNull(ImageLoader.retrieveFoldersHaveImage(Environment.getExternalStorageDirectory().getPath())));
         for (FolderData folder : list)
             res.addAll(getImagesFromFolder(folder.uri.getPath()));
+        res.sort((o1, o2) -> {
+            if (o1.getDateTime() == null || o2.getDateTime() == null)
+                return 0;
+            return o1.getDateTime().compareTo(o2.getDateTime());
+        });
         return res;
     }
 }

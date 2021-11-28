@@ -5,7 +5,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Locale;
 
 public class ImageData implements Parcelable {
@@ -32,8 +31,7 @@ public class ImageData implements Parcelable {
     }
 
     public String getDateTime() {
-        return new SimpleDateFormat("hh:mm dd/MM/yyyy", Locale.getDefault())
-                .format(new Date(dateAdded * 1000L));
+        return new SimpleDateFormat("hh:mm dd/MM/yyyy", Locale.getDefault()).format(dateAdded);
     }
 
     public boolean isChecked() {

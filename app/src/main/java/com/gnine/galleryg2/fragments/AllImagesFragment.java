@@ -16,6 +16,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -44,11 +45,13 @@ import java.util.stream.Collectors;
 public class AllImagesFragment extends Fragment {
     private RecyclerView recyclerView;
     private ImageRecyclerViewAdapter imageAdapter;
+    private TextView textView;
     private int typeView;
     private int numImagesChecked;
     private ArrayList<ImageData> imageDataList = null;
     private boolean folder = false;
     private boolean types = false;
+    private boolean albums = false;
     private String folderPath = null;
     private ArrayList<TrashData> trashList = null;
 
@@ -76,7 +79,8 @@ public class AllImagesFragment extends Fragment {
         if (folder) {
             this.imageDataList = ImageLoader.getImagesFromFolder(folderPath);
         } else {
-            this.imageDataList = (types) ? ImageLoader.getAllImagesFromDevice() : ImageLoader.loadImageFromSharedStorage(requireActivity());
+            //this.imageDataList = (types) ? ImageLoader.getAllImagesFromDevice() : ImageLoader.loadImageFromSharedStorage(requireActivity());
+            this.imageDataList = ImageLoader.getAllImagesFromDevice(); //if (!albums)
         }
         if ((folder || types) && this.imageDataList.size() == 0) {
             FragmentManager manager = requireActivity().getSupportFragmentManager();
@@ -86,6 +90,9 @@ public class AllImagesFragment extends Fragment {
             BottomNavigationView bnv = requireActivity().findViewById(R.id.bottomNavView);
             bnv.getMenu().getItem(1).setEnabled(true);
         }
+        //else {
+
+       //}
         BiConsumer<Integer, View> onItemClick = (position, view12) -> {
             if (imageAdapter.getState() == State.MultipleSelect) {
                 if (!imageDataList.get(position).isChecked()) {

@@ -31,6 +31,7 @@ import java.util.Objects;
 import java.util.function.BiConsumer;
 
 public class FoldersFragment extends Fragment {
+    //private static final String TAG = "FoldersFragment";
 
     static Fragment tempFragment;
 
@@ -38,10 +39,12 @@ public class FoldersFragment extends Fragment {
 
     List<FolderData> folderDataList;
     List<TypeData> typeDataList;
+    List<FolderData> albumsList = new ArrayList<>();
     FolderAdapter folderAdapter;
+    FolderAdapter albumAdapter;
     TypesAdapter typesAdapter;
     RecyclerView rcvFolder, rcvTypes, rcvAlbums;
-    GridLayoutManager gridLayoutManager;
+    GridLayoutManager gridLayoutManager, albumLayoutManager;
 
     public FoldersFragment() {
         // Required empty public constructor
@@ -86,6 +89,13 @@ public class FoldersFragment extends Fragment {
         folderAdapter.setData(folderDataList);
         rcvFolder.setAdapter(folderAdapter);
 
+        albumLayoutManager = new GridLayoutManager(requireActivity(),
+                albumsList.size() > 4 ? 2 : 1, RecyclerView.HORIZONTAL, false);
+        rcvAlbums.setLayoutManager(albumLayoutManager);
+        albumAdapter = new FolderAdapter(albumsList, onFolderClick);
+        albumAdapter.setData(albumsList);
+        rcvAlbums.setAdapter(albumAdapter);
+
         typesAdapter = new TypesAdapter(typeDataList, onTypeClick);
         typesAdapter.setData(typeDataList);
         rcvTypes.setAdapter(typesAdapter);
@@ -121,6 +131,11 @@ public class FoldersFragment extends Fragment {
         rcvFolder.setFocusable(false);
         rcvFolder.setNestedScrollingEnabled(false);
 
+        //Albums
+
+        rcvAlbums.setFocusable(false);
+        rcvAlbums.setNestedScrollingEnabled(false);
+
         //TypeData
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.getContext());
@@ -130,8 +145,10 @@ public class FoldersFragment extends Fragment {
 
         ImageButton addingBtn = view.findViewById(R.id.addingBtn);
         addingBtn.setOnClickListener(view1 -> {
-            AlbumDialog ad = new AlbumDialog(requireActivity());
-            ad.show();
+            AlbumDialog ad = new AlbumDialog();
+            this.getParentFragmentManager().setFragmentResultListener("result", FoldersFragment.this,
+                    (requestKey, result) -> albumsList.add(new FolderData(R.drawable.ic_folder, null, result.getString("newAlbum"), null)));
+            ad.show(getParentFragmentManager(), "AlbumDialog");
         });
 
         if (!checkBackPressed && tempFragment != null) {
