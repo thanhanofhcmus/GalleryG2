@@ -7,16 +7,57 @@
     android:paddingLeft="30sp"
     android:paddingRight="30sp"
     android:paddingBottom="15sp">
-    
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/create_new_album"
+        android:text="@string/import_to_existing_new_album"
         android:textStyle="bold"
         android:gravity="center_horizontal"
         android:layout_marginLeft="20sp"
         android:layout_marginRight="20sp"/>
-    
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/option"
+            android:gravity="end"
+            android:ems="4"
+            android:paddingVertical="10sp"/>
+
+        <Spinner
+            android:id="@+id/optionSpinner"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/existing_albums"
+            android:gravity="end"
+            android:ems="4"/>
+
+        <Spinner
+            android:id="@+id/existingAlbumsSpinner"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+
+    </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -26,18 +67,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/name"
-            android:ems="4"
-            android:gravity="end"/>
-
+            android:gravity="end"
+            android:ems="4"/>
 
         <EditText
             android:id="@+id/albumId"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:importantForAutofill="no"
             android:hint="@string/new_album"
-            android:inputType="text"
-            android:layout_weight="1"/>
+            android:inputType="text"/>
 
     </LinearLayout>
 
@@ -49,7 +88,7 @@
             android:id="@+id/confirmBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/create"
+            android:text="@string/importImages"
             android:layout_weight="1"
             android:layout_marginRight="5sp"
             android:layout_marginLeft="5sp"
