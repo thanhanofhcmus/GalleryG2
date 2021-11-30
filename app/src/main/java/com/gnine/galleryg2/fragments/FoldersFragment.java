@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.gnine.galleryg2.AlbumDialog;
 import com.gnine.galleryg2.R;
 import com.gnine.galleryg2.adapters.FolderAdapter;
 import com.gnine.galleryg2.adapters.TypesAdapter;
@@ -192,5 +191,9 @@ public class FoldersFragment extends Fragment {
         if (ImageLoader.retrieveFoldersHaveImage(Environment.getExternalStorageDirectory().getPath()) != null)
             list.addAll(Objects.requireNonNull(ImageLoader.retrieveFoldersHaveImage(Environment.getExternalStorageDirectory().getPath())));
         return list;
+    }
+
+    private List<FolderData> getAlbumsList() {
+        return null;
     }
 }

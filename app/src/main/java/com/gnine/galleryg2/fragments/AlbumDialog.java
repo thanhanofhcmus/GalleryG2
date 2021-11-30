@@ -1,4 +1,4 @@
-package com.gnine.galleryg2;
+package com.gnine.galleryg2.fragments;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -13,13 +13,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+import com.gnine.galleryg2.R;
+
 import java.util.Objects;
 
 public class AlbumDialog extends DialogFragment {
-    private static final String TAG = "AlbumDialog";
+    //private static final String TAG = "AlbumDialog";
 
     private EditText input;
-    private Button createBtn, cancelBtn;
 
     public AlbumDialog() {}
 
@@ -34,8 +35,8 @@ public class AlbumDialog extends DialogFragment {
         super.onViewCreated(view, savedInstanceState);
 
         input = view.findViewById(R.id.albumId);
-        createBtn = view.findViewById(R.id.confirmBtn);
-        cancelBtn = view.findViewById(R.id.cancelBtn);
+        Button createBtn = view.findViewById(R.id.confirmBtn);
+        Button cancelBtn = view.findViewById(R.id.cancelBtn);
 
         createBtn.setOnClickListener(view1 -> {
             if (!input.getText().toString().equals("")) {
@@ -46,9 +47,7 @@ public class AlbumDialog extends DialogFragment {
 
             Objects.requireNonNull(getDialog()).dismiss();
         });
-        cancelBtn.setOnClickListener(view1 -> {
-            Objects.requireNonNull(getDialog()).dismiss();
-        });
+        cancelBtn.setOnClickListener(view1 -> Objects.requireNonNull(getDialog()).dismiss());
     }
 
     @NonNull

@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -81,6 +82,13 @@ public class AllImagesFragment extends Fragment {
         } else {
             //this.imageDataList = (types) ? ImageLoader.getAllImagesFromDevice() : ImageLoader.loadImageFromSharedStorage(requireActivity());
             this.imageDataList = ImageLoader.getAllImagesFromDevice(); //if (!albums)
+        }
+        if (this.imageDataList.size() > 0) {
+            textView.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+        } else {
+            textView.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.GONE);
         }
         if ((folder || types) && this.imageDataList.size() == 0) {
             FragmentManager manager = requireActivity().getSupportFragmentManager();
@@ -176,6 +184,8 @@ public class AllImagesFragment extends Fragment {
         typeView = 4;
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), typeView));
 
+        textView = view.findViewById(R.id.allImagesFragmentEmpty);
+
         update();
     }
 
@@ -195,15 +205,17 @@ public class AllImagesFragment extends Fragment {
             menu.getItem(0).setVisible(true);
             menu.getItem(1).setVisible(true);
             menu.getItem(2).setVisible(true);
-            menu.getItem(3).setVisible(false);
+            menu.getItem(3).setVisible(true);
             menu.getItem(4).setVisible(false);
+            menu.getItem(5).setVisible(false);
             activity.setTitle(String.valueOf(numImagesChecked));
         } else {
             menu.getItem(0).setVisible(false);
             menu.getItem(1).setVisible(false);
             menu.getItem(2).setVisible(false);
-            menu.getItem(3).setVisible(true);
+            menu.getItem(3).setVisible(false);
             menu.getItem(4).setVisible(true);
+            menu.getItem(5).setVisible(true);
             activity.setTitle("GalleryG2");
         }
 
@@ -254,6 +266,9 @@ public class AllImagesFragment extends Fragment {
             requireActivity().invalidateOptionsMenu();
             numImagesChecked = imageDataList.size();
             requireActivity().setTitle(String.valueOf(numImagesChecked));
+        } else if (item.getItemId() == R.id.importAlbums) {
+            ImportDialog importDialog = new ImportDialog();
+            importDialog.show(getParentFragmentManager(), "ImportDialog");
         }
 
         return super.onOptionsItemSelected(item);
