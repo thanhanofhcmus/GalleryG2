@@ -3,11 +3,15 @@ package com.gnine.galleryg2.tools;
 import android.content.Context;
 
 import com.gnine.galleryg2.MySharedPreferences;
+import com.gnine.galleryg2.R;
 import com.gnine.galleryg2.data.FolderData;
 import com.gnine.galleryg2.data.ImageData;
 import com.gnine.galleryg2.data.TrashData;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class LocalDataManager {
     private static final String PREF_FIRST_INSTALL = "PREF_FIRST_INSTALL";
@@ -54,19 +58,85 @@ public class LocalDataManager {
     }
 
     //albums
-    public static void setAlbumsNames(ArrayList<String> names) {
-
+    public static void setAlbumsNames(ArrayList<String> albumsList) {
+        StringBuilder saveRes = new StringBuilder();
+        for (int i = 0; i < albumsList.size(); i++) {
+            if (i != albumsList.size() - 1)
+                saveRes.append(albumsList.get(i)).append(" //|//|// ");
+            else
+                saveRes.append(albumsList.get(i));
+        }
+        LocalDataManager.getInstance().mySharedPreferences.putStringValue("ALBUMS",saveRes.toString());
     }
 
-    public static void setAlbumsData(String key, ArrayList<ImageData> dataList) {
+    public static void importImageToExistingOrNewAlbum(String title, ArrayList<String> imagesPath) {
+        ArrayList<String> currentData = getSingleAlbumData(title).stream()
+                .map(imageData -> imageData.uri.getPath())
+                .collect(Collectors.toCollection(ArrayList::new));
+        StringBuilder saveData = new StringBuilder();
+        if (currentData.size() == 0) {
+            for (int i = 0; i < imagesPath.size(); i++) {
+                if (i != imagesPath.size() - 1)
+                    saveData.append(imagesPath.get(i)).append(" $ ");
+                else
+                    saveData.append(imagesPath.get(i));
+            }
+        } else {
+            for (String item : imagesPath) {
+                if (!currentData.contains(item)) {
+                    currentData.add(item);
+                }
+            }
+            for (int i = 0; i < currentData.size(); i++) {
+                if (i != currentData.size() - 1)
+                    saveData.append(currentData.get(i)).append(" $ ");
+                else
+                    saveData.append(currentData.get(i));
+            }
+        }
+        LocalDataManager.getInstance().mySharedPreferences.putStringValue("G2ALBUMS"+title,saveData.toString());
+    }
 
+    public static void setAlbumsData(List<FolderData> albumsList) {
+        ArrayList<String> albumsNames = albumsList.stream()
+                .map(folderData -> folderData.title)
+                .collect(Collectors.toCollection(ArrayList::new));
+        setAlbumsNames(albumsNames);
+        for (int i = 0; i < albumsList.size(); i++) {
+            StringBuilder saveData = new StringBuilder();
+            for (int j = 0; j < albumsList.get(i).imageList.size(); j++) {
+                if (j != albumsList.get(i).imageList.size() - 1)
+                    saveData.append(albumsList.get(i).imageList.get(j).uri.getPath()).append(" $ ");
+                else
+                    saveData.append(albumsList.get(i).imageList.get(j).uri.getPath());
+            }
+            LocalDataManager.getInstance().mySharedPreferences.putStringValue("G2ALBUMS"+albumsList.get(i).title, saveData.toString());
+        }
     }
 
     public static ArrayList<String> getAlbumsNames() {
-        return null;
+        String albumsNamesString = LocalDataManager.getInstance().mySharedPreferences.getStringValue("ALBUMS");
+        if (albumsNamesString != null && !albumsNamesString.equals(""))
+            return new ArrayList<>(Arrays.asList(albumsNamesString.split(" //\\|//\\|// ")));
+        return new ArrayList<>();
     }
 
-    public static ArrayList<FolderData> getAllAlbums(ArrayList<String> names) {
-        return null;
+    public static List<FolderData> getAllAlbumsData() {
+        List<FolderData> myAlbums = new ArrayList<>();
+        ArrayList<String> albumsNamesKey = getAlbumsNames();
+        for (String title : albumsNamesKey)
+            myAlbums.add(new FolderData(R.drawable.ic_folder, null, title, getSingleAlbumData(title)));
+        return myAlbums;
+    }
+
+    public static ArrayList<ImageData> getSingleAlbumData(String title) {
+        if (LocalDataManager.getInstance().mySharedPreferences.getStringValue("G2ALBUMS" + title) != null && !LocalDataManager.getInstance().mySharedPreferences.getStringValue("G2ALBUMS" + title).equals(""))
+            return ImageLoader.getImageDataFromPath(new ArrayList<>(Arrays.asList(LocalDataManager.getInstance().mySharedPreferences.getStringValue("G2ALBUMS" + title).split(" \\$ "))));
+        return new ArrayList<>();
+    }
+
+    public static ArrayList<ImageData> getFavAlbum() {
+        //G2ALBUMSFAVORITES
+        return new ArrayList<>();
     }
 }

@@ -3,12 +3,12 @@ package com.gnine.galleryg2.fragments;
 import static com.gnine.galleryg2.adapters.ImageRecyclerViewAdapter.*;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -64,6 +64,8 @@ public class AllImagesFragment extends Fragment {
         this.folder = folder;
     }
 
+    public void setAlbums(boolean albums) { this.albums = albums; }
+
     public void setTypes(boolean types) {
         this.types = types;
     }
@@ -80,8 +82,7 @@ public class AllImagesFragment extends Fragment {
         if (folder) {
             this.imageDataList = ImageLoader.getImagesFromFolder(folderPath);
         } else {
-            //this.imageDataList = (types) ? ImageLoader.getAllImagesFromDevice() : ImageLoader.loadImageFromSharedStorage(requireActivity());
-            this.imageDataList = ImageLoader.getAllImagesFromDevice(); //if (!albums)
+            this.imageDataList = (albums) ? LocalDataManager.getSingleAlbumData(folderPath) : ImageLoader.getAllImagesFromDevice();
         }
         if (this.imageDataList.size() > 0) {
             textView.setVisibility(View.GONE);
@@ -90,7 +91,7 @@ public class AllImagesFragment extends Fragment {
             textView.setVisibility(View.VISIBLE);
             recyclerView.setVisibility(View.GONE);
         }
-        if ((folder || types) && this.imageDataList.size() == 0) {
+        if (folder && !(new File(folderPath).exists())) {
             FragmentManager manager = requireActivity().getSupportFragmentManager();
             manager.popBackStack();
             FoldersFragment.checkBackPressed = true;
@@ -98,9 +99,6 @@ public class AllImagesFragment extends Fragment {
             BottomNavigationView bnv = requireActivity().findViewById(R.id.bottomNavView);
             bnv.getMenu().getItem(1).setEnabled(true);
         }
-        //else {
-
-       //}
         BiConsumer<Integer, View> onItemClick = (position, view12) -> {
             if (imageAdapter.getState() == State.MultipleSelect) {
                 if (!imageDataList.get(position).isChecked()) {
@@ -159,7 +157,7 @@ public class AllImagesFragment extends Fragment {
 
         trashList = LocalDataManager.getObjectListData("TRASH_LIST");
 
-        if (folder || types) {
+        if (folder || types || albums) {
             getView().setFocusableInTouchMode(true);
             getView().requestFocus();
             getView().setOnKeyListener((view13, i, keyEvent) -> {
@@ -267,8 +265,23 @@ public class AllImagesFragment extends Fragment {
             numImagesChecked = imageDataList.size();
             requireActivity().setTitle(String.valueOf(numImagesChecked));
         } else if (item.getItemId() == R.id.importAlbums) {
-            ImportDialog importDialog = new ImportDialog();
-            importDialog.show(getParentFragmentManager(), "ImportDialog");
+            ArrayList<String> selectedImages = imageDataList.stream()
+                    .filter(ImageData::isChecked)
+                    .map(imageData -> imageData.uri.getPath())
+                    .collect(Collectors.toCollection(ArrayList::new));
+            if (selectedImages.size() == 0) {
+                AlertDialog ad = new AlertDialog.Builder(getContext())
+                                                .setTitle("Please select image(s) to import!!!")
+                                                .setPositiveButton(android.R.string.yes, null)
+                                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                                .create();
+                ad.show();
+            }
+            else {
+                ImportDialog importDialog = new ImportDialog();
+                importDialog.setData(selectedImages);
+                importDialog.show(getParentFragmentManager(), "ImportDialog");
+            }
         }
 
         return super.onOptionsItemSelected(item);

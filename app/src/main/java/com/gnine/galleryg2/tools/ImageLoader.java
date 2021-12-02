@@ -162,4 +162,25 @@ public class ImageLoader {
         });
         return res;
     }
+
+    public static ArrayList<ImageData> getImageDataFromPath(ArrayList<String> pathList) {
+        ArrayList<ImageData> res = new ArrayList<>();
+        for (String itemPath : pathList) {
+            File temp = new File(itemPath);
+            if (temp.exists()) {
+                FileTime ft = null;
+                try {
+                    ft = (FileTime) Files.getAttribute(temp.toPath(), "creationTime");
+                } catch (IOException ignored) {
+                }
+                res.add(new ImageData(Uri.fromFile(temp), temp.getName(), (int)temp.length(), ft != null ? ft.toMillis() : 0));
+            }
+        }
+        res.sort((o1, o2) -> {
+            if (o1.getDateTime() == null || o2.getDateTime() == null)
+                return 0;
+            return o1.getDateTime().compareTo(o2.getDateTime());
+        });
+        return res;
+    }
 }
