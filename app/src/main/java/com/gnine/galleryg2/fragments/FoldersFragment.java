@@ -22,12 +22,14 @@ import com.gnine.galleryg2.adapters.TypesAdapter;
 import com.gnine.galleryg2.data.FolderData;
 import com.gnine.galleryg2.data.TypeData;
 import com.gnine.galleryg2.tools.ImageLoader;
+import com.gnine.galleryg2.tools.LocalDataManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.BiConsumer;
+import java.util.stream.Collectors;
 
 public class FoldersFragment extends Fragment {
     //private static final String TAG = "FoldersFragment";
@@ -38,7 +40,7 @@ public class FoldersFragment extends Fragment {
 
     List<FolderData> folderDataList;
     List<TypeData> typeDataList;
-    List<FolderData> albumsList = new ArrayList<>();
+    List<FolderData> albumsList;
     FolderAdapter folderAdapter;
     FolderAdapter albumAdapter;
     TypesAdapter typesAdapter;
@@ -52,6 +54,7 @@ public class FoldersFragment extends Fragment {
     void update() {
         folderDataList = getListFolders();
         typeDataList = getListTypes();
+        albumsList = getAlbumsList();
         BiConsumer<Integer, View> onFolderClick = (position, view1) -> {
             checkBackPressed = false;
             FragmentTransaction ft = getChildFragmentManager().beginTransaction();
@@ -59,6 +62,20 @@ public class FoldersFragment extends Fragment {
             ((AllImagesFragment) tempFragment).setFolder(true);
             ((AllImagesFragment) tempFragment).setFolderPath(getListFolders().get(position).uri.getPath());
             ((AllImagesFragment) tempFragment).setImageDataList(getListFolders().get(position).imageList);
+            BottomNavigationView bnv = requireActivity().findViewById(R.id.bottomNavView);
+            bnv.getMenu().getItem(1).setEnabled(false);
+            ft.replace(R.id.fragmentFolders, tempFragment);
+            ft.addToBackStack(null);
+            ft.commit();
+        };
+
+        BiConsumer<Integer, View> onAlbumClick = (position, view1) -> {
+            checkBackPressed = false;
+            FragmentTransaction ft = getChildFragmentManager().beginTransaction();
+            tempFragment = new AllImagesFragment();
+            ((AllImagesFragment) tempFragment).setAlbums(true);
+            ((AllImagesFragment) tempFragment).setFolderPath(getAlbumsList().get(position).title);
+            ((AllImagesFragment) tempFragment).setImageDataList(getAlbumsList().get(position).imageList);
             BottomNavigationView bnv = requireActivity().findViewById(R.id.bottomNavView);
             bnv.getMenu().getItem(1).setEnabled(false);
             ft.replace(R.id.fragmentFolders, tempFragment);
@@ -91,7 +108,7 @@ public class FoldersFragment extends Fragment {
         albumLayoutManager = new GridLayoutManager(requireActivity(),
                 albumsList.size() > 4 ? 2 : 1, RecyclerView.HORIZONTAL, false);
         rcvAlbums.setLayoutManager(albumLayoutManager);
-        albumAdapter = new FolderAdapter(albumsList, onFolderClick);
+        albumAdapter = new FolderAdapter(albumsList, onAlbumClick);
         albumAdapter.setData(albumsList);
         rcvAlbums.setAdapter(albumAdapter);
 
@@ -145,8 +162,7 @@ public class FoldersFragment extends Fragment {
         ImageButton addingBtn = view.findViewById(R.id.addingBtn);
         addingBtn.setOnClickListener(view1 -> {
             AlbumDialog ad = new AlbumDialog();
-            this.getParentFragmentManager().setFragmentResultListener("result", FoldersFragment.this,
-                    (requestKey, result) -> albumsList.add(new FolderData(R.drawable.ic_folder, null, result.getString("newAlbum"), null)));
+            ad.setOnDismissListener(dialogInterface -> update());
             ad.show(getParentFragmentManager(), "AlbumDialog");
         });
 
@@ -169,11 +185,6 @@ public class FoldersFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_folders, container, false);
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
-
     private List<TypeData> getListTypes() {
         List<TypeData> list = new ArrayList<>();
         list.add(new TypeData(R.drawable.ic_video, "Videos", null));
@@ -194,6 +205,9 @@ public class FoldersFragment extends Fragment {
     }
 
     private List<FolderData> getAlbumsList() {
-        return null;
+        ArrayList<FolderData> list = new ArrayList<>();
+        list.add(new FolderData(R.drawable.ic_folder, null, "Favorites", LocalDataManager.getFavAlbum()));
+        list.addAll(LocalDataManager.getAllAlbumsData());
+        return list;
     }
 }
