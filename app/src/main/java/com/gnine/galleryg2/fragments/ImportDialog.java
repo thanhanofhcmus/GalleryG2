@@ -102,17 +102,27 @@ public class ImportDialog extends DialogFragment {
                             .create();
                     ad.show();
                 } else {
-                    ArrayList<String> currentAlbums = LocalDataManager.getAlbumsNames();
-                    currentAlbums.add(input.getText().toString());
-                    LocalDataManager.setAlbumsNames(currentAlbums);
-                    LocalDataManager.importImageToExistingOrNewAlbum(input.getText().toString(), imagesPath);
-                    AlertDialog ad = new AlertDialog.Builder(getContext())
-                            .setTitle("Import images to album successfully!!!")
-                            .setPositiveButton(android.R.string.yes, null)
-                            .setIcon(android.R.drawable.ic_dialog_info)
-                            .create();
-                    ad.show();
-                    Objects.requireNonNull(getDialog()).dismiss();
+                    String newAlbum = input.getText().toString();
+                    if (LocalDataManager.getAlbumsNames().contains(newAlbum) || newAlbum.equalsIgnoreCase("FAVORITES")) {
+                        AlertDialog ad = new AlertDialog.Builder(getContext())
+                                .setTitle("This album already exists!!!")
+                                .setPositiveButton(android.R.string.yes, null)
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .create();
+                        ad.show();
+                    } else {
+                        ArrayList<String> currentAlbums = LocalDataManager.getAlbumsNames();
+                        currentAlbums.add(input.getText().toString());
+                        LocalDataManager.setAlbumsNames(currentAlbums);
+                        LocalDataManager.importImageToExistingOrNewAlbum(input.getText().toString(), imagesPath);
+                        AlertDialog ad = new AlertDialog.Builder(getContext())
+                                .setTitle("Import images to album successfully!!!")
+                                .setPositiveButton(android.R.string.yes, null)
+                                .setIcon(android.R.drawable.ic_dialog_info)
+                                .create();
+                        ad.show();
+                        Objects.requireNonNull(getDialog()).dismiss();
+                    }
                 }
             }
         });
