@@ -48,7 +48,8 @@
             android:layout_height="wrap_content"
             android:text="@string/existing_albums"
             android:gravity="end"
-            android:ems="4"/>
+            android:ems="4"
+            android:paddingVertical="10sp"/>
 
         <Spinner
             android:id="@+id/existingAlbumsSpinner"
@@ -68,7 +69,8 @@
             android:layout_height="wrap_content"
             android:text="@string/name"
             android:gravity="end"
-            android:ems="4"/>
+            android:ems="4"
+            android:paddingVertical="10sp"/>
 
         <EditText
             android:id="@+id/albumId"
