@@ -16,7 +16,7 @@ public class InformationFragment extends PreferenceFragmentCompat {
         ImageData imageData = FullImageActivity.getImageData();
         findPreference("Name").setSummary(imageData.name);
         findPreference("Path").setSummary(imageData.uri.getPath());
-        findPreference("Size").setSummary(String.valueOf(imageData.size));
+        findPreference("Size").setSummary(imageData.size + " bytes");
         findPreference("Date").setSummary(imageData.getDateTime());
 
         FullImageActivity.setIsInViewpagerFragment(false);

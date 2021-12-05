@@ -4,7 +4,6 @@ import static com.gnine.galleryg2.adapters.ImageRecyclerViewAdapter.*;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -21,13 +20,12 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.gnine.galleryg2.BuildConfig;
+import com.gnine.galleryg2.tools.ImageSharer;
 import com.gnine.galleryg2.tools.LocalDataManager;
 import com.gnine.galleryg2.activities.MainActivity;
 import com.gnine.galleryg2.data.ImageData;
@@ -64,7 +62,9 @@ public class AllImagesFragment extends Fragment {
         this.folder = folder;
     }
 
-    public void setAlbums(boolean albums) { this.albums = albums; }
+    public void setAlbums(boolean albums) {
+        this.albums = albums;
+    }
 
     public void setTypes(boolean types) {
         this.types = types;
@@ -241,43 +241,31 @@ public class AllImagesFragment extends Fragment {
             numImagesChecked = 0;
             getActivity().invalidateOptionsMenu();
         } else if (item.getItemId() == R.id.menu_share) {
-            ArrayList<Uri> checkedUriList = imageDataList.stream()
-                    .filter(ImageData::isChecked)
-                    .map(imageData -> FileProvider.getUriForFile(this.requireActivity(),
-                            BuildConfig.APPLICATION_ID + "." + requireActivity().getLocalClassName() + ".provider", //(use your app signature + ".provider" )
-                            new File(imageData.uri.getPath())))
-                    .collect(Collectors.toCollection(ArrayList::new));
-            Intent intent = new Intent(Intent.ACTION_SEND_MULTIPLE);
-            intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, checkedUriList);
-            intent.setType("image/*");
-            startActivity(Intent.createChooser(intent, null));
+            ImageSharer.shareCheckedInList(requireActivity(), imageDataList);
         } else if (item.getItemId() == R.id.delete_images) {
             AddToTrash();
             update();
             requireActivity().invalidateOptionsMenu();
         } else if (item.getItemId() == R.id.select_all) {
-            for (int i = 0; i < imageDataList.size(); i++) {
-                imageDataList.get(i).setChecked(true);
-            }
+            imageDataList.forEach(imageData -> imageData.setChecked(true));
             imageAdapter.setState(State.MultipleSelect);
             imageAdapter.notifyItemRangeChanged(0, imageAdapter.getItemCount());
-            requireActivity().invalidateOptionsMenu();
             numImagesChecked = imageDataList.size();
+            requireActivity().invalidateOptionsMenu();
             requireActivity().setTitle(String.valueOf(numImagesChecked));
         } else if (item.getItemId() == R.id.importAlbums) {
             ArrayList<String> selectedImages = imageDataList.stream()
                     .filter(ImageData::isChecked)
                     .map(imageData -> imageData.uri.getPath())
                     .collect(Collectors.toCollection(ArrayList::new));
-            if (selectedImages.size() == 0) {
-                AlertDialog ad = new AlertDialog.Builder(getContext())
-                                                .setTitle("Please select image(s) to import!!!")
-                                                .setPositiveButton(android.R.string.yes, null)
-                                                .setIcon(android.R.drawable.ic_dialog_alert)
-                                                .create();
-                ad.show();
-            }
-            else {
+            if (selectedImages.isEmpty()) {
+                new AlertDialog.Builder(getContext())
+                        .setTitle("Please select image(s) to import")
+                        .setPositiveButton(android.R.string.yes, null)
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .create()
+                        .show();
+            } else {
                 ImportDialog importDialog = new ImportDialog();
                 importDialog.setData(selectedImages);
                 importDialog.show(getParentFragmentManager(), "ImportDialog");
