@@ -1,6 +1,7 @@
 package com.gnine.galleryg2.fragments;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -26,14 +27,17 @@ import com.gnine.galleryg2.activities.MainActivity;
 import com.gnine.galleryg2.R;
 import com.gnine.galleryg2.adapters.SliderAdapter;
 import com.gnine.galleryg2.data.ImageData;
+import com.gnine.galleryg2.tools.LocalDataManager;
 
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 
 public class ViewPagerFragment extends Fragment {
 
     private ArrayList<ImageData> imageDataList;
+    private ArrayList<Uri> favImages;
     private int position;
     private ViewPager2 viewPager2;
 
@@ -49,6 +53,9 @@ public class ViewPagerFragment extends Fragment {
 
         Bundle bundle = requireActivity().getIntent().getExtras();
         imageDataList = bundle.getParcelableArrayList(MainActivity.IMAGE_LIST_KEY);
+        favImages = LocalDataManager.getFavAlbum().stream()
+                .map(imageData -> imageData.uri)
+                .collect(Collectors.toCollection(ArrayList::new));
         position = FullImageActivity.getCurrentImagePosition();
 
         setHasOptionsMenu(true);
@@ -82,12 +89,31 @@ public class ViewPagerFragment extends Fragment {
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.full_activity_top_menu, menu);
+
+        MenuItem favItem = menu.findItem(R.id.action_favorite);
+        if (favImages.contains(imageDataList.get(viewPager2.getCurrentItem()).uri)) {
+            favItem.setIcon(R.drawable.ic_fill_favorite);
+        } else {
+            favItem.setIcon(R.drawable.ic_favorite);
+        }
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.action_favorite) {
             Toast.makeText(getContext(), "like", Toast.LENGTH_SHORT).show();
+            System.out.println(imageDataList.get(viewPager2.getCurrentItem()).uri);
+            if (favImages.contains(imageDataList.get(viewPager2.getCurrentItem()).uri)) {//like -> unlike
+                item.setIcon(R.drawable.ic_favorite);
+                LocalDataManager.removeImageFromFav(imageDataList.get(viewPager2.getCurrentItem()).uri.getPath());
+            } else {//unlike -> like
+                item.setIcon(R.drawable.ic_fill_favorite);
+                LocalDataManager.importImageIntoFav(imageDataList.get(viewPager2.getCurrentItem()).uri.getPath());
+            }
+            favImages = LocalDataManager.getFavAlbum().stream()
+                    .map(imageData -> imageData.uri)
+                    .collect(Collectors.toCollection(ArrayList::new));
+            System.out.println(favImages);
         } else if (item.getItemId() == R.id.action_information) {
             int position = viewPager2.getCurrentItem();
             FullImageActivity.setCurrentImagePosition(position);

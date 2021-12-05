@@ -17,6 +17,7 @@ import androidx.fragment.app.DialogFragment;
 
 import com.gnine.galleryg2.R;
 import com.gnine.galleryg2.tools.LocalDataManager;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -58,12 +59,11 @@ public class AlbumDialog extends DialogFragment {
             if (!input.getText().toString().equals("")) {
                 String newAlbum = input.getText().toString();
                 if (LocalDataManager.getAlbumsNames().contains(newAlbum) || newAlbum.equalsIgnoreCase("FAVORITES")) {
-                    AlertDialog ad = new AlertDialog.Builder(getContext())
-                            .setTitle("This album already exists!!!")
-                            .setPositiveButton(android.R.string.yes, null)
-                            .setIcon(android.R.drawable.ic_dialog_alert)
-                            .create();
-                    ad.show();
+                    new MaterialAlertDialogBuilder(requireContext())
+                            .setTitle("Error")
+                            .setMessage("This album already exists!")
+                            .setPositiveButton("GOT IT", null)
+                            .show();
                 } else {
                     ArrayList<String> currentData = LocalDataManager.getAlbumsNames();
                     System.out.println(currentData);

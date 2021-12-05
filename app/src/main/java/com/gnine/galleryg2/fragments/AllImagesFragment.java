@@ -3,7 +3,6 @@ package com.gnine.galleryg2.fragments;
 import static com.gnine.galleryg2.adapters.ImageRecyclerViewAdapter.*;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -34,6 +33,7 @@ import com.gnine.galleryg2.R;
 import com.gnine.galleryg2.data.TrashData;
 import com.gnine.galleryg2.tools.ImageLoader;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -142,6 +142,12 @@ public class AllImagesFragment extends Fragment {
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        requireActivity().setTitle("GalleryG2");
+    }
+
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -214,7 +220,13 @@ public class AllImagesFragment extends Fragment {
             menu.getItem(3).setVisible(false);
             menu.getItem(4).setVisible(true);
             menu.getItem(5).setVisible(true);
-            activity.setTitle("GalleryG2");
+            if (folder || albums) {
+                activity.setTitle(folderPath);
+            } else if (types) {
+                activity.setTitle("Images");
+            } else {
+                activity.setTitle("GalleryG2");
+            }
         }
 
         super.onCreateOptionsMenu(menu, inflater);
@@ -259,11 +271,10 @@ public class AllImagesFragment extends Fragment {
                     .map(imageData -> imageData.uri.getPath())
                     .collect(Collectors.toCollection(ArrayList::new));
             if (selectedImages.isEmpty()) {
-                new AlertDialog.Builder(getContext())
-                        .setTitle("Please select image(s) to import")
-                        .setPositiveButton(android.R.string.yes, null)
-                        .setIcon(android.R.drawable.ic_dialog_alert)
-                        .create()
+                new MaterialAlertDialogBuilder(requireContext())
+                        .setTitle("Error")
+                        .setMessage("Please select image(s) to import!")
+                        .setPositiveButton("GOT IT", null)
                         .show();
             } else {
                 ImportDialog importDialog = new ImportDialog();

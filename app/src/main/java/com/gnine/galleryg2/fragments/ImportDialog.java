@@ -17,6 +17,7 @@ import androidx.fragment.app.DialogFragment;
 
 import com.gnine.galleryg2.R;
 import com.gnine.galleryg2.tools.LocalDataManager;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -55,7 +56,7 @@ public class ImportDialog extends DialogFragment {
         option.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if (adapterView.getItemAtPosition(i).equals("Import Into Existing Album")) {
+                if (adapterView.getItemAtPosition(i).equals("Existing Album")) {
                     existingAlbums.setEnabled(true);
                     input.setEnabled(false);
                 } else {
@@ -75,7 +76,7 @@ public class ImportDialog extends DialogFragment {
         existingAlbums.setAdapter(albumsAdapter);
 
         importBtn.setOnClickListener(view1 -> {
-            if (option.getSelectedItem().toString().equals("Import Into Existing Album")) {//EXISTING ALBUMS
+            if (option.getSelectedItem().toString().equals("Existing Album")) {//EXISTING ALBUMS
                 if (existingAlbums != null && existingAlbums.getSelectedItem() != null) {
                     LocalDataManager.importImageToExistingOrNewAlbum(existingAlbums.getSelectedItem().toString(), imagesPath);
                     AlertDialog ad = new AlertDialog.Builder(getContext())
@@ -86,30 +87,27 @@ public class ImportDialog extends DialogFragment {
                     ad.show();
                     Objects.requireNonNull(getDialog()).dismiss();
                 } else {
-                    AlertDialog ad = new AlertDialog.Builder(getContext())
-                            .setTitle("No album exists!!!")
-                            .setPositiveButton(android.R.string.yes, null)
-                            .setIcon(android.R.drawable.ic_dialog_alert)
-                            .create();
-                    ad.show();
+                    new MaterialAlertDialogBuilder(requireContext())
+                            .setTitle("Error")
+                            .setMessage("No album exists!")
+                            .setPositiveButton("GOT IT", null)
+                            .show();
                 }
             } else {//NEW ALBUMS
                 if (input.getText().toString().equals("")) {
-                    AlertDialog ad = new AlertDialog.Builder(getContext())
-                            .setTitle("Please type the name of the new album!!!")
-                            .setPositiveButton(android.R.string.yes, null)
-                            .setIcon(android.R.drawable.ic_dialog_alert)
-                            .create();
-                    ad.show();
+                    new MaterialAlertDialogBuilder(requireContext())
+                            .setTitle("Error")
+                            .setMessage("The name of the new album cannot be empty!")
+                            .setPositiveButton("GOT IT", null)
+                            .show();
                 } else {
                     String newAlbum = input.getText().toString();
                     if (LocalDataManager.getAlbumsNames().contains(newAlbum) || newAlbum.equalsIgnoreCase("FAVORITES")) {
-                        AlertDialog ad = new AlertDialog.Builder(getContext())
-                                .setTitle("This album already exists!!!")
-                                .setPositiveButton(android.R.string.yes, null)
-                                .setIcon(android.R.drawable.ic_dialog_alert)
-                                .create();
-                        ad.show();
+                        new MaterialAlertDialogBuilder(requireContext())
+                                .setTitle("Error")
+                                .setMessage("This album already exists!")
+                                .setPositiveButton("GOT IT", null)
+                                .show();
                     } else {
                         ArrayList<String> currentAlbums = LocalDataManager.getAlbumsNames();
                         currentAlbums.add(input.getText().toString());

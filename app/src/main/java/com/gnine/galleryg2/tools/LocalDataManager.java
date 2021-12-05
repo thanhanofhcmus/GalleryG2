@@ -137,6 +137,29 @@ public class LocalDataManager {
 
     public static ArrayList<ImageData> getFavAlbum() {
         //G2ALBUMSFAVORITES
+        if (LocalDataManager.getInstance().mySharedPreferences.getStringValue("G2ALBUMSFavorites") != null && !LocalDataManager.getInstance().mySharedPreferences.getStringValue("G2ALBUMSFavorites").equals(""))
+            return ImageLoader.getImageDataFromPath(new ArrayList<>(Arrays.asList(LocalDataManager.getInstance().mySharedPreferences.getStringValue("G2ALBUMSFavorites").split(" \\$ "))));
         return new ArrayList<>();
+    }
+
+    public static void importImageIntoFav(String imagePath) {
+        ArrayList<String> importList = new ArrayList<>();
+        importList.add(imagePath);
+        importImageToExistingOrNewAlbum("Favorites", importList);
+    }
+
+    public static void removeImageFromFav(String imagePath) {
+        ArrayList<String> currentData = getFavAlbum().stream()
+                .map(imageData -> imageData.uri.getPath())
+                .collect(Collectors.toCollection(ArrayList::new));
+        currentData.remove(imagePath);
+        StringBuilder saveData = new StringBuilder();
+        for (int i = 0; i < currentData.size(); i++) {
+            if (i != currentData.size() - 1)
+                saveData.append(currentData.get(i)).append(" $ ");
+            else
+                saveData.append(currentData.get(i));
+        }
+        LocalDataManager.getInstance().mySharedPreferences.putStringValue("G2ALBUMSFavorites", saveData.toString());
     }
 }
