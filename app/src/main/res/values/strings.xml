@@ -21,12 +21,12 @@
     <string name="delete">Delete</string>
     <string name="import_to_existing_new_album">Import To Existing/New Album</string>
     <string name="importImages">Import</string>
-    <string name="option">Option:</string>
+    <string name="option">Import to:</string>
     <string name="existing_albums">Albums:</string>
     
     <string-array name="optionList">
-        <item>Import Into Existing Album</item>
-        <item>Import Into New Album</item>
+        <item>Existing Album</item>
+        <item>New Album</item>
     </string-array>
     <!-- Preference Titles -->
 

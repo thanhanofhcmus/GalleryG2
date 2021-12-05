@@ -39,6 +39,8 @@ public class FullImageActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
+
+        setTitle("GalleryG2");
     }
 
     public static void setImageData(ImageData data) {

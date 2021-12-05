@@ -27,6 +27,18 @@
             </meta-data>
         </provider>
 
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.gnine.galleryg2.activities.FullImageActivity.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <!-- ressource file to create -->
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths">
+            </meta-data>
+        </provider>
+
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="fullSensor"
