@@ -67,9 +67,7 @@ public class ViewPagerFragment extends Fragment {
 
         FullImageActivity.setIsInViewpagerFragment(true);
 
-        view.findViewById(R.id.editBtn).setOnClickListener(v -> {
-            ((FullImageActivity)requireActivity()).startCrop(imageDataList.get(viewPager2.getCurrentItem()).uri);
-        });
+        view.findViewById(R.id.editBtn).setOnClickListener(v -> ((FullImageActivity)requireActivity()).startCrop(imageDataList.get(viewPager2.getCurrentItem()).uri));
 
         return view;
     }
@@ -89,13 +87,39 @@ public class ViewPagerFragment extends Fragment {
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.full_activity_top_menu, menu);
+    }
 
+    @Override
+    public void onPrepareOptionsMenu(@NonNull Menu menu) {
+        super.onPrepareOptionsMenu(menu);
         MenuItem favItem = menu.findItem(R.id.action_favorite);
         if (favImages.contains(imageDataList.get(viewPager2.getCurrentItem()).uri)) {
             favItem.setIcon(R.drawable.ic_fill_favorite);
         } else {
             favItem.setIcon(R.drawable.ic_favorite);
         }
+        viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                super.onPageScrolled(position, positionOffset, positionOffsetPixels);
+                if (favImages.contains(imageDataList.get(position).uri)) {
+                    favItem.setIcon(R.drawable.ic_fill_favorite);
+                } else {
+                    favItem.setIcon(R.drawable.ic_favorite);
+                }
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+            }
+
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+                super.onPageScrollStateChanged(state);
+            }
+        });
     }
 
     @Override
