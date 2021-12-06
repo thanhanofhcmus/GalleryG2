@@ -45,6 +45,8 @@ public class SliderAdapter extends RecyclerView.Adapter<SliderAdapter.SliderView
         return imageDataList.size();
     }
 
+
+
     public static class SliderViewHolder extends RecyclerView.ViewHolder {
         private final ZoomageView imageView;
 
