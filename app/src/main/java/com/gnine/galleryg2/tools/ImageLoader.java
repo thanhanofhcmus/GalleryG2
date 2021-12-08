@@ -123,27 +123,29 @@ public class ImageLoader {
 
     public static List<FolderData> retrieveFoldersHaveImage(String directoryPath) {
         List<FolderData> foldersList = new ArrayList<>();
-        File[] files = new File(directoryPath).listFiles(new MyFilter());
-        if (files != null) {
-            for (File file : files) {
-                // Add the directories containing images or sub-directories
-                if (file.isDirectory()) {
-                    if (file.listFiles(new ImageAndVideoFileFilter()) != null) { //contains images
-                        if (Objects.requireNonNull(file.listFiles(new ImageAndVideoFileFilter())).length > 0) {
-                            foldersList.add(new FolderData(R.drawable.ic_folder,
-                                    Uri.fromFile(file),
-                                    file.getPath(),
-                                    getImagesFromFolder(file.getPath())));
+        File folderName = new File(directoryPath);
+        if (!folderName.getName().equals(".nomedia") && !folderName.getName().equals(".thumbnails")) {
+            File[] files = new File(directoryPath).listFiles(new MyFilter());
+            if (files != null) {
+                for (File file : files) {
+                    // Add the directories containing images or sub-directories
+                    if (file.isDirectory() && !file.getName().equals(".nomedia") && !file.getName().equals(".thumbnails")) {
+                        if (file.listFiles(new ImageAndVideoFileFilter()) != null) { //contains images
+                            if (Objects.requireNonNull(file.listFiles(new ImageAndVideoFileFilter())).length > 0) {
+                                foldersList.add(new FolderData(R.drawable.ic_folder,
+                                        Uri.fromFile(file),
+                                        file.getPath(),
+                                        getImagesFromFolder(file.getPath())));
+                            }
                         }
-                    }
-                    if (file.listFiles(new SubDirFilter()) != null) {
-                        foldersList.addAll(Objects.requireNonNull(retrieveFoldersHaveImage(file.getPath())));
+                        if (file.listFiles(new SubDirFilter()) != null) {
+                            foldersList.addAll(Objects.requireNonNull(retrieveFoldersHaveImage(file.getPath())));
+                        }
                     }
                 }
             }
-            return foldersList;
         }
-        return null;
+        return foldersList;
     }
 
     public static ArrayList<ImageData> getAllImagesFromDevice() {
