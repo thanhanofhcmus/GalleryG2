@@ -1,6 +1,5 @@
 package com.gnine.galleryg2.fragments;
 
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -27,10 +26,10 @@ import com.gnine.galleryg2.activities.MainActivity;
 import com.gnine.galleryg2.R;
 import com.gnine.galleryg2.adapters.SliderAdapter;
 import com.gnine.galleryg2.data.ImageData;
+import com.gnine.galleryg2.tools.ImageSharer;
 import com.gnine.galleryg2.tools.LocalDataManager;
 
 import java.util.ArrayList;
-import java.util.Locale;
 import java.util.stream.Collectors;
 
 
@@ -144,24 +143,7 @@ public class ViewPagerFragment extends Fragment {
             FullImageActivity.setImageData(imageDataList.get(position));
             Navigation.findNavController(requireView()).navigate(R.id.viewPagerFragmentToInformationFragment);
         } else if (item.getItemId() == R.id.action_share) {
-            int currentPos = viewPager2.getCurrentItem();
-            ImageData imageData = imageDataList.get(currentPos);
-            Intent intent = new Intent(Intent.ACTION_SEND);
-            intent.putExtra(Intent.EXTRA_STREAM, imageData.uri);
-
-            String imageName = imageData.name.toLowerCase(Locale.ROOT);
-
-            if (imageName.endsWith(".jpeg") || imageName.endsWith("jpg")) {
-                intent.setType("image/jpeg");
-            } else if (imageName.endsWith(".png")) {
-                intent.setType("image/png");
-            } else if (imageName.endsWith(".gif")) {
-                intent.setType("image/gif");
-            } else {
-                intent.setType("image/webp");
-            }
-
-            startActivity(Intent.createChooser(intent, null));
+            ImageSharer.share(requireActivity(), imageDataList.get(viewPager2.getCurrentItem()));
         }
         return super.onOptionsItemSelected(item);
     }

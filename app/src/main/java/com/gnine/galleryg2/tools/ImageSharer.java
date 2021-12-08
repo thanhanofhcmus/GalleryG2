@@ -15,8 +15,7 @@ import java.util.Locale;
 import java.util.stream.Collectors;
 
 public class ImageSharer {
-    public static void share(FragmentActivity activity, ImageData imageData) {
-
+    public static void share(final FragmentActivity activity, final ImageData imageData) {
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.putExtra(Intent.EXTRA_STREAM, getUriForFile(activity, imageData.uri));
 
