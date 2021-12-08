@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.viewpager2.widget.ViewPager2;
 
+import android.os.Environment;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -26,9 +27,12 @@ import com.gnine.galleryg2.activities.MainActivity;
 import com.gnine.galleryg2.R;
 import com.gnine.galleryg2.adapters.SliderAdapter;
 import com.gnine.galleryg2.data.ImageData;
+import com.gnine.galleryg2.data.TrashData;
+import com.gnine.galleryg2.tools.ContentHelper;
 import com.gnine.galleryg2.tools.ImageSharer;
 import com.gnine.galleryg2.tools.LocalDataManager;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
@@ -39,6 +43,7 @@ public class ViewPagerFragment extends Fragment {
     private ArrayList<Uri> favImages;
     private int position;
     private ViewPager2 viewPager2;
+    private ArrayList<TrashData> trashList = null;
 
     public ViewPagerFragment() {
         // Required empty public constructor
@@ -66,7 +71,25 @@ public class ViewPagerFragment extends Fragment {
 
         FullImageActivity.setIsInViewpagerFragment(true);
 
+        trashList = LocalDataManager.getObjectListData("TRASH_LIST");
+
         view.findViewById(R.id.editBtn).setOnClickListener(v -> ((FullImageActivity)requireActivity()).startCrop(imageDataList.get(viewPager2.getCurrentItem()).uri));
+        view.findViewById(R.id.delBtn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                File file = new File(Environment.getExternalStorageDirectory() + "/" + ".nomedia");
+                String sourcePath = imageDataList.get(viewPager2.getCurrentItem()).uri.getPath();
+                if (ContentHelper.moveFile(sourcePath, file.getPath())) {
+                    //int tmp = (position == imageDataList.size()) ? position - 1 : position;
+                    imageDataList.remove(imageDataList.get(viewPager2.getCurrentItem()));
+                    viewPager2.setAdapter(new SliderAdapter(imageDataList));
+                    new Handler().postDelayed(() -> viewPager2.setCurrentItem(position, false), 100);
+                    trashList.add(new TrashData(file.getPath(), sourcePath, 0));
+                    LocalDataManager.setObjectListData("TRASH_LIST", trashList);
+                }
+            }
+        });
+
 
         return view;
     }
