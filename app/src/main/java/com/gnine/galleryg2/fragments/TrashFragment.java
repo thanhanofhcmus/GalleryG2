@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.gnine.galleryg2.tools.ContentHelper;
 import com.gnine.galleryg2.tools.LocalDataManager;
 import com.gnine.galleryg2.R;
 import com.gnine.galleryg2.adapters.TrashAdapter;
@@ -24,6 +26,13 @@ import com.gnine.galleryg2.data.TrashData;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
@@ -193,7 +202,6 @@ public class TrashFragment extends Fragment {
             if (deleteFile(file.getPath())) {
                 trashList.remove(selectedTrash.get(i));
             }
-            trashList.remove(selectedTrash.get(i));
         }
         LocalDataManager.setObjectListData("TRASH_LIST", trashList);
     }
@@ -214,20 +222,10 @@ public class TrashFragment extends Fragment {
             String targetPath = selectedTrash.get(i).oldPath.substring(0, index);
             File file = new File(selectedTrash.get(i).trashPath + "/" + name);
 
-            if (moveFile(file.getPath(), targetPath)) {
+            if (ContentHelper.moveFile(file.getPath(), targetPath)) {
                 trashList.remove(selectedTrash.get(i));
             }
-            trashList.remove(selectedTrash.get(i));
         }
         LocalDataManager.setObjectListData("TRASH_LIST", trashList);
-    }
-
-    // TODO: Fix this after fix slow file
-    private boolean moveFile(String sourcePath, String targetPath) {
-        File from = new File(sourcePath);
-        File to = new File(targetPath);
-        File target = new File(to, from.getName());
-
-        return from.renameTo(target);
     }
 }

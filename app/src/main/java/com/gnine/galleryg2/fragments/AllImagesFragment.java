@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -24,6 +25,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.gnine.galleryg2.tools.ContentHelper;
 import com.gnine.galleryg2.tools.ImageSharer;
 import com.gnine.galleryg2.tools.LocalDataManager;
 import com.gnine.galleryg2.activities.MainActivity;
@@ -36,6 +38,13 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
@@ -295,37 +304,14 @@ public class AllImagesFragment extends Fragment {
 
         if ((file.exists() && file.isDirectory()) || file.mkdir()) {
             for (int i = 0; i < selectedImages.size(); i++) {
-                String sourcePath = getRealPath(selectedImages.get(i).uri);
-                if (moveFile(sourcePath, file.getPath())) {
-                    // add to arraylist trash and remove from imageDataList
+                String sourcePath = selectedImages.get(i).uri.getPath();
+                if (ContentHelper.moveFile(sourcePath, file.getPath())) {
                     imageDataList.remove(selectedImages.get(i));
                     trashList.add(new TrashData(file.getPath(), sourcePath, 0));
                 }
-                trashList.add(new TrashData(file.getPath(), sourcePath, 0));
             }
         }
         LocalDataManager.setObjectListData("TRASH_LIST", trashList);
-    }
-
-    private String getRealPath(Uri contentUri) {
-        String[] projection = new String[]{MediaStore.Images.Media.DATA};
-        Cursor cursor = requireActivity().getApplicationContext().getContentResolver().query(contentUri, projection, null, null, null);
-        String realPath = null;
-        if (cursor.moveToFirst()) {
-            int columnIndex = cursor.getColumnIndex(projection[0]);
-            realPath = cursor.getString(columnIndex);
-        }
-        cursor.close();
-        return realPath;
-    }
-
-    // TODO: fix this after fix file permission
-    private boolean moveFile(String sourcePath, String targetPath) {
-        File from = new File(sourcePath);
-        File to = new File(targetPath);
-        File target = new File(to, from.getName());
-
-        return from.renameTo(target);
     }
 
     private void sendImageListAndPositionToMain(int position) {
