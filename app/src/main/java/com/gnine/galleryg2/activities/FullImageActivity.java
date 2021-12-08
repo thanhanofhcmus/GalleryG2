@@ -2,7 +2,7 @@ package com.gnine.galleryg2.activities;
 
 import android.net.Uri;
 import android.os.Bundle;
-import android.widget.Toast;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -64,11 +64,11 @@ public class FullImageActivity extends AppCompatActivity {
     }
 
     public void startCrop(@NonNull Uri uri) {
-        String destinationName = SAMPLE_CROP_IMAGE_NAME + ".jpg";
-        File file = new File(getCacheDir(), destinationName);
-        Toast.makeText(this, uri.getPath(), Toast.LENGTH_LONG).show();
+        String sourceName = uri.toString();
+        int dotPos = sourceName.lastIndexOf('.');
+        String desc = sourceName.substring(0, dotPos) + "_copy" + sourceName.substring(dotPos);
 
-        UCrop.of(uri, Uri.fromFile(file))
+        UCrop.of(uri, Uri.parse(desc))
                 .withAspectRatio(16, 9)
                 .withMaxResultSize(1000, 1000)
                 .start(this);

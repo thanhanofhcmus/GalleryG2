@@ -1,7 +1,6 @@
 package com.gnine.galleryg2.activities;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -29,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static final String IMAGE_LIST_KEY = "IMAGE_LIST_KEY";
     public static final String IMAGE_POSITION_KEY = "IMAGE_POSITION_KEY";
-    private static final int READ_EXTERNAL_STORAGE_REQUEST_CODE = 111;
+    private static final int STORAGE_REQUEST_CODE = 111;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -45,8 +44,8 @@ public class MainActivity extends AppCompatActivity {
                 != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(
                     this,
-                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                    READ_EXTERNAL_STORAGE_REQUEST_CODE);
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    STORAGE_REQUEST_CODE);
         } else {
             setupBottomNavigation();
         }
@@ -56,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == READ_EXTERNAL_STORAGE_REQUEST_CODE
+        if (requestCode == STORAGE_REQUEST_CODE
                 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             setupBottomNavigation();
         }
