@@ -24,15 +24,9 @@ import com.gnine.galleryg2.R;
 import com.gnine.galleryg2.adapters.TrashAdapter;
 import com.gnine.galleryg2.data.TrashData;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
@@ -204,6 +198,11 @@ public class TrashFragment extends Fragment {
             }
         }
         LocalDataManager.setObjectListData("TRASH_LIST", trashList);
+        new MaterialAlertDialogBuilder(requireContext())
+                .setTitle("Images are permanently deleted")
+                .setPositiveButton("Cancel", ((dialog, which) -> { }))
+                .show();
+
     }
 
     private boolean deleteFile(String path) {
@@ -227,5 +226,9 @@ public class TrashFragment extends Fragment {
             }
         }
         LocalDataManager.setObjectListData("TRASH_LIST", trashList);
+        new MaterialAlertDialogBuilder(requireContext())
+                .setTitle("Images are restored")
+                .setPositiveButton("Cancel", ((dialog, which) -> { }))
+                .show();
     }
 }

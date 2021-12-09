@@ -32,6 +32,7 @@ import com.gnine.galleryg2.data.TrashData;
 import com.gnine.galleryg2.tools.ImageLoader;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -323,6 +324,10 @@ public class AllImagesFragment extends Fragment {
             }
         }
         LocalDataManager.setObjectListData("TRASH_LIST", trashList);
+        new MaterialAlertDialogBuilder(requireContext())
+                .setTitle("Images are moved to trash")
+                .setPositiveButton("Cancel", ((dialog, which) -> { }))
+                .show();
     }
 
     private void sendImageListAndPositionToMain(int position) {

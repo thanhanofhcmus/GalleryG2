@@ -20,8 +20,6 @@ public class FullImageActivity extends AppCompatActivity {
     private static boolean isInViewpagerFragment;
     private static int currentImagePosition = 0;
 
-    private static final String SAMPLE_CROP_IMAGE_NAME = "SampleCropImage";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

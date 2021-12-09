@@ -19,7 +19,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 
 import com.gnine.galleryg2.activities.FullImageActivity;
@@ -31,6 +30,7 @@ import com.gnine.galleryg2.data.TrashData;
 import com.gnine.galleryg2.tools.ContentHelper;
 import com.gnine.galleryg2.tools.ImageSharer;
 import com.gnine.galleryg2.tools.LocalDataManager;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -91,6 +91,10 @@ public class ViewPagerFragment extends Fragment {
                     imageDataList.remove(imageDataList.get(viewPager2.getCurrentItem()));
                     trashList.add(new TrashData(file.getPath(), sourcePath, 0));
                     LocalDataManager.setObjectListData("TRASH_LIST", trashList);
+                    new MaterialAlertDialogBuilder(requireContext())
+                            .setTitle("Image is moved to trash")
+                            .setPositiveButton("Cancel", ((dialog, which) -> { }))
+                            .show();
                 }
             }
             viewPager2.setAdapter(new SliderAdapter(imageDataList));
@@ -153,7 +157,6 @@ public class ViewPagerFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.action_favorite) {
-            Toast.makeText(getContext(), "like", Toast.LENGTH_SHORT).show();
             System.out.println(imageDataList.get(viewPager2.getCurrentItem()).uri);
             if (favImages.contains(imageDataList.get(viewPager2.getCurrentItem()).uri)) {//like -> unlike
                 item.setIcon(R.drawable.ic_favorite);
