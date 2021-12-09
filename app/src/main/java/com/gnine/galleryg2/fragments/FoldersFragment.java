@@ -88,6 +88,7 @@ public class FoldersFragment extends Fragment {
                 FragmentTransaction ft = getChildFragmentManager().beginTransaction();
                 tempFragment = new AllImagesFragment();
                 ((AllImagesFragment) tempFragment).setTypes(true);
+                ((AllImagesFragment) tempFragment).setTypesTitle(getListTypes().get(position).title);
                 ((AllImagesFragment) tempFragment).setImageDataList(getListTypes().get(position).list);
                 BottomNavigationView bnv = requireActivity().findViewById(R.id.bottomNavView);
                 bnv.getMenu().getItem(1).setEnabled(false);

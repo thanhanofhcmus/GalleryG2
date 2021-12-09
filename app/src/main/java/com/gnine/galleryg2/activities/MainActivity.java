@@ -28,6 +28,8 @@ public class MainActivity extends AppCompatActivity {
 
     public static final String IMAGE_LIST_KEY = "IMAGE_LIST_KEY";
     public static final String IMAGE_POSITION_KEY = "IMAGE_POSITION_KEY";
+    public static final String IS_ALBUM = "IS_ALBUM";
+    public static final String ALBUM_TITLE = "ALBUM_TITLE";
     private static final int STORAGE_REQUEST_CODE = 111;
 
     @Override
@@ -74,10 +76,12 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
     }
 
-    public void invokeFullImageActivity(ArrayList<ImageData> imageDataList, int position) {
+    public void invokeFullImageActivity(ArrayList<ImageData> imageDataList, int position, boolean isAlbum, String albumTitle) {
         Intent intent = new Intent(MainActivity.this, FullImageActivity.class);
         intent.putExtra(IMAGE_LIST_KEY, imageDataList);
         intent.putExtra(IMAGE_POSITION_KEY, position);
+        intent.putExtra(IS_ALBUM, isAlbum);
+        intent.putExtra(ALBUM_TITLE, albumTitle);
 
         startActivity(intent);
     }

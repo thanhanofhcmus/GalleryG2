@@ -3,12 +3,8 @@ package com.gnine.galleryg2.fragments;
 import static com.gnine.galleryg2.adapters.ImageRecyclerViewAdapter.*;
 
 import android.app.Activity;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.MediaStore;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -38,13 +34,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
@@ -61,6 +50,7 @@ public class AllImagesFragment extends Fragment {
     private boolean types = false;
     private boolean albums = false;
     private String folderPath = null;
+    private String typesTitle = null;
     private ArrayList<TrashData> trashList = null;
 
     public AllImagesFragment() {
@@ -77,6 +67,10 @@ public class AllImagesFragment extends Fragment {
 
     public void setTypes(boolean types) {
         this.types = types;
+    }
+
+    public void setTypesTitle(String typesTitle) {
+        this.typesTitle = typesTitle;
     }
 
     public void setFolderPath(String folderPath) {
@@ -216,7 +210,10 @@ public class AllImagesFragment extends Fragment {
 
         if (imageAdapter.getState() == State.MultipleSelect) {
             menu.getItem(0).setVisible(true);
-            menu.getItem(1).setVisible(true);
+            if (albums)
+                menu.getItem(1).setVisible(!folderPath.equals("Favorites"));
+            else
+                menu.getItem(1).setVisible(true);
             menu.getItem(2).setVisible(true);
             menu.getItem(3).setVisible(true);
             menu.getItem(4).setVisible(false);
@@ -232,7 +229,7 @@ public class AllImagesFragment extends Fragment {
             if (folder || albums) {
                 activity.setTitle(folderPath);
             } else if (types) {
-                activity.setTitle("Images");
+                activity.setTitle(typesTitle);
             } else {
                 activity.setTitle("GalleryG2");
             }
@@ -264,7 +261,21 @@ public class AllImagesFragment extends Fragment {
         } else if (item.getItemId() == R.id.menu_share) {
             ImageSharer.shareCheckedInList(requireActivity(), imageDataList);
         } else if (item.getItemId() == R.id.delete_images) {
-            AddToTrash();
+            if (albums) {
+                ArrayList<String> selectedImages = imageDataList.stream()
+                        .filter(ImageData::isChecked)
+                        .map(imageData -> imageData.uri.getPath())
+                        .collect(Collectors.toCollection(ArrayList::new));
+                if (selectedImages.isEmpty()) {
+                    new MaterialAlertDialogBuilder(requireContext())
+                            .setTitle("Error")
+                            .setMessage("Please select image(s) to remove from album!")
+                            .setPositiveButton("GOT IT", null)
+                            .show();
+                } else
+                    LocalDataManager.removeImagesFromAlbum(folderPath, selectedImages);
+            } else
+                AddToTrash();
             update();
             requireActivity().invalidateOptionsMenu();
         } else if (item.getItemId() == R.id.select_all) {
@@ -317,6 +328,7 @@ public class AllImagesFragment extends Fragment {
     private void sendImageListAndPositionToMain(int position) {
         MainActivity mainActivity = (MainActivity) getActivity();
         assert mainActivity != null;
-        mainActivity.invokeFullImageActivity(imageDataList, position);
+
+        mainActivity.invokeFullImageActivity(imageDataList, position, albums, folderPath);
     }
 }
