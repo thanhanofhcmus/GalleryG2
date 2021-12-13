@@ -9,6 +9,11 @@
         app:showAsAction="ifRoom" />
 
     <item
+        android:id="@+id/menu_camera"
+        android:title="Camera"
+        app:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/delete_images"
         android:title="@string/delete"
         android:icon="@drawable/ic_delete"
@@ -24,6 +29,12 @@
         android:id="@+id/menu_share"
         android:title=""
         android:icon="@drawable/ic_share"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/menu_chang_view"
+        android:title=""
+        android:icon="@drawable/ic_grid_4"
         app:showAsAction="always" />
 
     <item

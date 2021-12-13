@@ -3,15 +3,12 @@ package com.gnine.galleryg2.activities;
 import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
@@ -20,6 +17,7 @@ import androidx.preference.PreferenceManager;
 import com.gnine.galleryg2.R;
 import com.gnine.galleryg2.data.ImageData;
 import com.gnine.galleryg2.tools.LocalDataManager;
+import com.gnine.galleryg2.tools.PermissionChecker;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
@@ -30,7 +28,6 @@ public class MainActivity extends AppCompatActivity {
     public static final String IMAGE_POSITION_KEY = "IMAGE_POSITION_KEY";
     public static final String IS_ALBUM = "IS_ALBUM";
     public static final String ALBUM_TITLE = "ALBUM_TITLE";
-    private static final int STORAGE_REQUEST_CODE = 111;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -42,23 +39,11 @@ public class MainActivity extends AppCompatActivity {
 
         LocalDataManager.init(getApplicationContext());
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(
-                    this,
-                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                    STORAGE_REQUEST_CODE);
-        } else {
-            setupBottomNavigation();
-        }
-    }
+        final String permission = Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == STORAGE_REQUEST_CODE
-                && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+        if (! PermissionChecker.checkPermission(this, permission)) {
+            PermissionChecker.requestPermission(this, permission, granted -> { if (granted) { setupBottomNavigation(); } });
+        } else {
             setupBottomNavigation();
         }
     }

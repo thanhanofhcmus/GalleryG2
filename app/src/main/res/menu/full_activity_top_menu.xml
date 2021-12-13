@@ -8,9 +8,9 @@
         android:title="Favorite"
         app:showAsAction="ifRoom"/>
     <item
-        android:id="@+id/action_share"
-        android:icon="@drawable/ic_share"
-        android:title="Share"
+        android:id="@+id/action_camera"
+        android:icon="@drawable/ic_camera"
+        android:title="Open Camera"
         app:showAsAction="ifRoom"/>
     <item
         android:title="Information"
