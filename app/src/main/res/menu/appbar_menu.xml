@@ -7,8 +7,6 @@
         android:title=""
         android:icon="@drawable/ic_clear"
         app:showAsAction="ifRoom" />
-
-    <item
         android:id="@+id/menu_camera"
         android:title="Camera"
         app:showAsAction="ifRoom" />
@@ -38,13 +36,11 @@
         app:showAsAction="always" />
 
     <item
-        android:id="@+id/menu_chang_view"
-        android:title=""
-        android:icon="@drawable/ic_grid_4"
-        app:showAsAction="always" />
-
-    <item
         android:id="@+id/select_all"
         android:title="@string/select_all" />
+
+    <item
+        android:id="@+id/menu_camera"
+        android:title="Open Camera" />
 
 </menu>
