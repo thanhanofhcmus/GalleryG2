@@ -3,8 +3,10 @@ package com.gnine.galleryg2.fragments;
 import static com.gnine.galleryg2.adapters.ImageRecyclerViewAdapter.*;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -14,6 +16,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -53,6 +57,8 @@ public class AllImagesFragment extends Fragment {
     private String folderPath = null;
     private String typesTitle = null;
     private ArrayList<TrashData> trashList = null;
+
+    private ActivityResultLauncher<String> cameraRequestLauncher;
 
     public AllImagesFragment() {
         // Required empty public constructor
@@ -136,6 +142,11 @@ public class AllImagesFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+
+        cameraRequestLauncher = registerForActivityResult(
+                new ActivityResultContracts.RequestPermission(),
+                granted -> { if (granted) { startActivity(new Intent(MediaStore.ACTION_IMAGE_CAPTURE)); }}
+        );
     }
 
     @Override
@@ -302,6 +313,8 @@ public class AllImagesFragment extends Fragment {
                 importDialog.setData(selectedImages);
                 importDialog.show(getParentFragmentManager(), "ImportDialog");
             }
+        } else if (item.getItemId() == R.id.menu_camera) {
+            startActivity(new Intent(MediaStore.ACTION_IMAGE_CAPTURE));
         }
 
         return super.onOptionsItemSelected(item);

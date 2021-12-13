@@ -2,7 +2,6 @@ package com.gnine.galleryg2.activities;
 
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,8 +10,6 @@ import androidx.appcompat.widget.Toolbar;
 import com.gnine.galleryg2.R;
 import com.gnine.galleryg2.data.ImageData;
 import com.yalantis.ucrop.UCrop;
-
-import java.io.File;
 
 public class FullImageActivity extends AppCompatActivity {
 

@@ -1,8 +1,12 @@
 package com.gnine.galleryg2.fragments;
 
+import android.Manifest;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
@@ -13,6 +17,8 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import android.os.Environment;
 import android.os.Handler;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -30,6 +36,7 @@ import com.gnine.galleryg2.data.TrashData;
 import com.gnine.galleryg2.tools.ContentHelper;
 import com.gnine.galleryg2.tools.ImageSharer;
 import com.gnine.galleryg2.tools.LocalDataManager;
+import com.gnine.galleryg2.tools.PermissionChecker;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.io.File;
@@ -46,6 +53,8 @@ public class ViewPagerFragment extends Fragment {
     private String albumTitle;
     private ViewPager2 viewPager2;
     private ArrayList<TrashData> trashList = null;
+
+    private ActivityResultLauncher<String> cameraRequestLauncher;
 
     public ViewPagerFragment() {
         // Required empty public constructor
@@ -77,7 +86,15 @@ public class ViewPagerFragment extends Fragment {
 
         trashList = LocalDataManager.getObjectListData("TRASH_LIST");
 
-        view.findViewById(R.id.editBtn).setOnClickListener(v -> ((FullImageActivity)requireActivity()).startCrop(imageDataList.get(viewPager2.getCurrentItem()).uri));
+
+        cameraRequestLauncher = registerForActivityResult(
+                new ActivityResultContracts.RequestPermission(),
+                granted -> { if (granted) { startActivity(new Intent(MediaStore.ACTION_IMAGE_CAPTURE)); }}
+        );
+        view.findViewById(R.id.editBtn).setOnClickListener(v ->
+                ((FullImageActivity) requireActivity()).startCrop(imageDataList.get(viewPager2.getCurrentItem()).uri));
+        view.findViewById(R.id.shareBtn).setOnClickListener(v ->
+                ImageSharer.share(requireActivity(), imageDataList.get(viewPager2.getCurrentItem())));
         view.findViewById(R.id.delBtn).setOnClickListener(view1 -> {
             String sourcePath = imageDataList.get(viewPager2.getCurrentItem()).uri.getPath();
             if (isAlbum) {
@@ -93,7 +110,8 @@ public class ViewPagerFragment extends Fragment {
                     LocalDataManager.setObjectListData("TRASH_LIST", trashList);
                     new MaterialAlertDialogBuilder(requireContext())
                             .setTitle("Image is moved to trash")
-                            .setPositiveButton("Cancel", ((dialog, which) -> { }))
+                            .setPositiveButton("Cancel", ((dialog, which) -> {
+                            }))
                             .show();
                 }
             }
@@ -174,9 +192,22 @@ public class ViewPagerFragment extends Fragment {
             FullImageActivity.setCurrentImagePosition(position);
             FullImageActivity.setImageData(imageDataList.get(position));
             Navigation.findNavController(requireView()).navigate(R.id.viewPagerFragmentToInformationFragment);
-        } else if (item.getItemId() == R.id.action_share) {
-            ImageSharer.share(requireActivity(), imageDataList.get(viewPager2.getCurrentItem()));
+        } else if (item.getItemId() == R.id.action_camera) {
+            startCamera();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    void startCamera() {
+        try {
+            final String permission = Manifest.permission.CAMERA;
+            if (! PermissionChecker.checkPermission(this, permission)) {
+                cameraRequestLauncher.launch(permission);
+            } else {
+                startActivity(new Intent(MediaStore.ACTION_IMAGE_CAPTURE));
+            }
+        } catch (Exception e) {
+            Log.e("CAMERA", e.getMessage());
+        }
     }
 }

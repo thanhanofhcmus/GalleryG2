@@ -23,13 +23,23 @@
         style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
         android:text="Edit"
         app:icon="@drawable/ic_edit"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/delBtn"
+        app:layout_constraintEnd_toStartOf="@+id/shareBtn"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/shareBtn" />
+
+    <Button
+        android:id="@+id/shareBtn"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Share"
+        app:icon="@drawable/ic_share"
+        app:layout_constraintEnd_toStartOf="@+id/delBtn"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/editBtn"
         app:layout_constraintTop_toTopOf="@+id/delBtn" />
 
     <Button
@@ -43,6 +53,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/editBtn" />
+        app:layout_constraintStart_toEndOf="@+id/shareBtn" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
