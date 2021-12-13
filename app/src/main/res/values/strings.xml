@@ -23,7 +23,7 @@
     <string name="importImages">Import</string>
     <string name="option">Import to:</string>
     <string name="existing_albums">Albums:</string>
-    
+
     <string-array name="optionList">
         <item>Existing Album</item>
         <item>New Album</item>
