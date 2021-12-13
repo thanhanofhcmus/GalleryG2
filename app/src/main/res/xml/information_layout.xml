@@ -25,6 +25,14 @@
             app:summary="Date"
             app:icon="@drawable/ic_calendar"
             app:title="Date added" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="Action">
+
+        <Preference
+            app:key="Wallpaper"
+            app:title="Set as wallpaper" />
     </PreferenceCategory>
 
 </PreferenceScreen>
