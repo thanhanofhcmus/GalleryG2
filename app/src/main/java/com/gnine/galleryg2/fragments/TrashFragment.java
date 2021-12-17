@@ -28,6 +28,8 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
@@ -111,7 +113,8 @@ public class TrashFragment extends Fragment {
             return;
         }
 
-        trashList = LocalDataManager.getObjectListData("TRASH_LIST");
+        //trashList = LocalDataManager.getObjectListData("TRASH_LIST");
+        getTrashList();
 
         textView = view.findViewById(R.id.trashFragmentEmpty);
         //textView.setVisibility(View.GONE);
@@ -183,6 +186,21 @@ public class TrashFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
+    private void getTrashList() {
+        String currentTime = TrashData.df.format(Calendar.getInstance().getTime());
+        trashList = LocalDataManager.getObjectListData("TRASH_LIST");
+        for (int i = 0; i < trashList.size(); i++) {
+            if (trashList.get(i).dateDeleted.compareTo(currentTime) > 0) {
+                int index = trashList.get(i).oldPath.lastIndexOf("/");
+                String name = trashList.get(i).oldPath.substring(index + 1);
+                File file = new File(trashList.get(i).trashPath + "/" + name);
+                if (ContentHelper.deleteFile(file.getPath())) {
+                    trashList.remove(trashList.get(i));
+                }
+            }
+        }
+    }
+
     private void deleteToTrash() {
         ArrayList<TrashData> selectedTrash = trashList.stream()
                 .filter(TrashData::isChecked)
@@ -193,7 +211,7 @@ public class TrashFragment extends Fragment {
             String name = selectedTrash.get(i).oldPath.substring(index + 1);
             File file = new File(selectedTrash.get(i).trashPath + "/" + name);
 
-            if (deleteFile(file.getPath())) {
+            if (ContentHelper.deleteFile(file.getPath())) {
                 trashList.remove(selectedTrash.get(i));
             }
         }
@@ -203,11 +221,6 @@ public class TrashFragment extends Fragment {
                 .setPositiveButton("Cancel", ((dialog, which) -> { }))
                 .show();
 
-    }
-
-    private boolean deleteFile(String path) {
-        File file = new File(path);
-        return file.delete();
     }
 
     private void RestoreToTrash() {

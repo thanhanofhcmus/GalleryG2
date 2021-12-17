@@ -39,7 +39,10 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
@@ -325,6 +328,10 @@ public class AllImagesFragment extends Fragment {
                 .filter(ImageData::isChecked)
                 .collect(Collectors.toCollection(ArrayList::new));
 
+        Calendar deleteDate = Calendar.getInstance();
+        deleteDate.add(Calendar.DAY_OF_YEAR, 30);
+        String date = TrashData.df.format(deleteDate.getTime());
+
         File file = new File(Environment.getExternalStorageDirectory() + "/" + ".nomedia");
 
         if ((file.exists() && file.isDirectory()) || file.mkdir()) {
@@ -332,7 +339,7 @@ public class AllImagesFragment extends Fragment {
                 String sourcePath = selectedImages.get(i).uri.getPath();
                 if (ContentHelper.moveFile(sourcePath, file.getPath())) {
                     imageDataList.remove(selectedImages.get(i));
-                    trashList.add(new TrashData(file.getPath(), sourcePath, 0));
+                    trashList.add(new TrashData(file.getPath(), sourcePath, date));
                 }
             }
         }

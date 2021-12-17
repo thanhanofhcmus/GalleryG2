@@ -41,6 +41,8 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.stream.Collectors;
 
 
@@ -106,7 +108,10 @@ public class ViewPagerFragment extends Fragment {
                 File file = new File(Environment.getExternalStorageDirectory() + "/" + ".nomedia");
                 if (ContentHelper.moveFile(sourcePath, file.getPath())) {
                     imageDataList.remove(imageDataList.get(viewPager2.getCurrentItem()));
-                    trashList.add(new TrashData(file.getPath(), sourcePath, 0));
+                    Calendar deleteDate = Calendar.getInstance();
+                    deleteDate.add(Calendar.DAY_OF_YEAR, 30);
+                    String date = TrashData.df.format(deleteDate.getTime());
+                    trashList.add(new TrashData(file.getPath(), sourcePath, date));
                     LocalDataManager.setObjectListData("TRASH_LIST", trashList);
                     new MaterialAlertDialogBuilder(requireContext())
                             .setTitle("Image is moved to trash")
