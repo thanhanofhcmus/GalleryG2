@@ -18,7 +18,6 @@ import com.gnine.galleryg2.R;
 import com.gnine.galleryg2.data.ImageData;
 import com.gnine.galleryg2.tools.PermissionChecker;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.wallpaper.WallpaperApplyTask;
 
 import java.io.IOException;
 

@@ -7,9 +7,6 @@
         android:title=""
         android:icon="@drawable/ic_clear"
         app:showAsAction="ifRoom" />
-        android:id="@+id/menu_camera"
-        android:title="Camera"
-        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/delete_images"
