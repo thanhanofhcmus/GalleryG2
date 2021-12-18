@@ -175,7 +175,6 @@ public class ViewPagerFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.action_favorite) {
-            System.out.println(imageDataList.get(viewPager2.getCurrentItem()).uri);
             if (favImages.contains(imageDataList.get(viewPager2.getCurrentItem()).uri)) {//like -> unlike
                 item.setIcon(R.drawable.ic_favorite);
                 LocalDataManager.removeImageFromFav(imageDataList.get(viewPager2.getCurrentItem()).uri.getPath());
@@ -194,6 +193,12 @@ public class ViewPagerFragment extends Fragment {
             Navigation.findNavController(requireView()).navigate(R.id.viewPagerFragmentToInformationFragment);
         } else if (item.getItemId() == R.id.action_camera) {
             startCamera();
+        } else if (item.getItemId() == R.id.import_album) {
+            ArrayList<String> targetImage = new ArrayList<>();
+            targetImage.add(imageDataList.get(viewPager2.getCurrentItem()).uri.getPath());
+            ImportDialog importDialog = new ImportDialog();
+            importDialog.setData(targetImage);
+            importDialog.show(getParentFragmentManager(), "Import Dialog");
         }
         return super.onOptionsItemSelected(item);
     }

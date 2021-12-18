@@ -6,17 +6,23 @@
         android:id="@+id/action_favorite"
         android:icon="@drawable/ic_favorite"
         android:title="Favorite"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="always"/>
     <item
         android:id="@+id/action_camera"
         android:icon="@drawable/ic_camera"
         android:title="Open Camera"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/import_album"
+        android:title="Import Album"
+        android:icon="@drawable/ic_add_photo"
         app:showAsAction="ifRoom"/>
 
     <item
         android:title="Information"
         android:icon="@drawable/ic_outline_info"
         android:id="@+id/action_information"
-        app:showAsAction="always"/>
+        app:showAsAction="ifRoom"/>
 
 </menu>
