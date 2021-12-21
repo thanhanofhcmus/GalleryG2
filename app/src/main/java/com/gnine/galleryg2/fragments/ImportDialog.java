@@ -1,6 +1,5 @@
 package com.gnine.galleryg2.fragments;
 
-import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +17,7 @@ import androidx.fragment.app.DialogFragment;
 import com.gnine.galleryg2.R;
 import com.gnine.galleryg2.tools.LocalDataManager;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -25,12 +25,12 @@ import java.util.Objects;
 public class ImportDialog extends DialogFragment {
     private EditText input;
     private Spinner option, existingAlbums;
-    private ArrayList<String> imagesPath;
+    final private ArrayList<String> imagesPath;
+    final private View parentView;
 
-    public ImportDialog() {}
-
-    public void setData(ArrayList<String> list) {
-        this.imagesPath = list;
+    public ImportDialog(ArrayList<String> imagesPath, View parentView) {
+        this.imagesPath = imagesPath;
+        this.parentView = parentView;
     }
 
     @Nullable
@@ -76,49 +76,32 @@ public class ImportDialog extends DialogFragment {
         existingAlbums.setAdapter(albumsAdapter);
 
         importBtn.setOnClickListener(view1 -> {
+            MaterialAlertDialogBuilder alertDialogBuilder
+                    = new MaterialAlertDialogBuilder(requireContext())
+                    .setTitle("Error")
+                    .setPositiveButton("Got it", null);
+
             if (option.getSelectedItem().toString().equals("Existing Album")) {//EXISTING ALBUMS
                 if (existingAlbums != null && existingAlbums.getSelectedItem() != null) {
                     LocalDataManager.importImageToExistingOrNewAlbum(existingAlbums.getSelectedItem().toString(), imagesPath);
-                    AlertDialog ad = new AlertDialog.Builder(getContext())
-                            .setTitle("Import images to album successfully!!!")
-                            .setPositiveButton(android.R.string.yes, null)
-                            .setIcon(android.R.drawable.ic_dialog_info)
-                            .create();
-                    ad.show();
+                    Snackbar.make(parentView, "Images imported", Snackbar.LENGTH_SHORT).show();
                     Objects.requireNonNull(getDialog()).dismiss();
                 } else {
-                    new MaterialAlertDialogBuilder(requireContext())
-                            .setTitle("Error")
-                            .setMessage("No album exists!")
-                            .setPositiveButton("GOT IT", null)
-                            .show();
+                    alertDialogBuilder.setMessage("No album exists!").show();
                 }
             } else {//NEW ALBUMS
                 if (input.getText().toString().equals("")) {
-                    new MaterialAlertDialogBuilder(requireContext())
-                            .setTitle("Error")
-                            .setMessage("The name of the new album cannot be empty!")
-                            .setPositiveButton("GOT IT", null)
-                            .show();
+                    alertDialogBuilder.setMessage("The name of the new album cannot be empty!").show();
                 } else {
                     String newAlbum = input.getText().toString();
                     if (LocalDataManager.getAlbumsNames().contains(newAlbum) || newAlbum.equalsIgnoreCase("FAVORITES")) {
-                        new MaterialAlertDialogBuilder(requireContext())
-                                .setTitle("Error")
-                                .setMessage("This album already exists!")
-                                .setPositiveButton("GOT IT", null)
-                                .show();
+                        alertDialogBuilder.setMessage("This album already exists!").show();
                     } else {
                         ArrayList<String> currentAlbums = LocalDataManager.getAlbumsNames();
                         currentAlbums.add(input.getText().toString());
                         LocalDataManager.setAlbumsNames(currentAlbums);
                         LocalDataManager.importImageToExistingOrNewAlbum(input.getText().toString(), imagesPath);
-                        AlertDialog ad = new AlertDialog.Builder(getContext())
-                                .setTitle("Import images to album successfully!!!")
-                                .setPositiveButton(android.R.string.yes, null)
-                                .setIcon(android.R.drawable.ic_dialog_info)
-                                .create();
-                        ad.show();
+                        Snackbar.make(parentView, "Images imported", Snackbar.LENGTH_SHORT).show();
                         Objects.requireNonNull(getDialog()).dismiss();
                     }
                 }

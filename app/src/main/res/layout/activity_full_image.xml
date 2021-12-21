@@ -13,7 +13,8 @@
             android:id="@+id/fullImageToolBar"
             android:layout_width="match_parent"
             android:layout_height="55dp"
-            android:layout_gravity="center_horizontal" />
+            android:layout_gravity="center_horizontal"
+            android:background="@color/backgroundColor" />
     </com.google.android.material.appbar.AppBarLayout>
 
 

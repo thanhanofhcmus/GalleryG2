@@ -87,11 +87,13 @@
         <entry key="app/src/main/res/drawable/ic_splash_screen.xml" value="0.2526041666666667" />
         <entry key="app/src/main/res/layout/activity_full_image.xml" value="0.33" />
         <entry key="app/src/main/res/layout/activity_splash_screen.xml" value="0.1953125" />
+        <entry key="app/src/main/res/layout/create_album.xml" value="0.19791666666666666" />
         <entry key="app/src/main/res/layout/folder_item.xml" value="0.22509057971014493" />
         <entry key="app/src/main/res/layout/fragment_all_images.xml" value="0.22871376811594202" />
         <entry key="app/src/main/res/layout/fragment_edit.xml" value="0.22509057971014493" />
         <entry key="app/src/main/res/layout/fragment_trash.xml" value="0.22871376811594202" />
         <entry key="app/src/main/res/layout/fragment_view_pager.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/main_activity.xml" value="0.24230072463768115" />
         <entry key="app/src/main/res/menu/appbar_menu.xml" value="0.35625" />
         <entry key="app/src/main/res/menu/full_activity_top_menu.xml" value="0.35625" />
         <entry key="app/src/main/res/xml/information_layout.xml" value="0.2921875" />

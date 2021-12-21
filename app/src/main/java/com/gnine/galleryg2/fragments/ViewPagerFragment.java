@@ -84,7 +84,7 @@ public class ViewPagerFragment extends Fragment {
 
         FullImageActivity.setIsInViewpagerFragment(true);
 
-        trashList = LocalDataManager.getObjectListData("TRASH_LIST");
+        trashList = LocalDataManager.getObjectListData(TrashFragment.TRASH_LIST_KEY);
 
 
         cameraRequestLauncher = registerForActivityResult(
@@ -107,7 +107,7 @@ public class ViewPagerFragment extends Fragment {
                 if (ContentHelper.moveFile(sourcePath, file.getPath())) {
                     imageDataList.remove(imageDataList.get(viewPager2.getCurrentItem()));
                     trashList.add(new TrashData(file.getPath(), sourcePath, 0));
-                    LocalDataManager.setObjectListData("TRASH_LIST", trashList);
+                    LocalDataManager.setObjectListData(TrashFragment.TRASH_LIST_KEY, trashList);
                     new MaterialAlertDialogBuilder(requireContext())
                             .setTitle("Image is moved to trash")
                             .setPositiveButton("Cancel", ((dialog, which) -> {
@@ -196,8 +196,7 @@ public class ViewPagerFragment extends Fragment {
         } else if (item.getItemId() == R.id.import_album) {
             ArrayList<String> targetImage = new ArrayList<>();
             targetImage.add(imageDataList.get(viewPager2.getCurrentItem()).uri.getPath());
-            ImportDialog importDialog = new ImportDialog();
-            importDialog.setData(targetImage);
+            ImportDialog importDialog = new ImportDialog(targetImage, requireView());
             importDialog.show(getParentFragmentManager(), "Import Dialog");
         }
         return super.onOptionsItemSelected(item);

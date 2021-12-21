@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,7 +23,7 @@ import com.gnine.galleryg2.R;
 import com.gnine.galleryg2.adapters.TrashAdapter;
 import com.gnine.galleryg2.data.TrashData;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -33,6 +32,8 @@ import java.util.stream.Collectors;
 
 
 public class TrashFragment extends Fragment {
+
+    static final public String TRASH_LIST_KEY = "TRASH_LIST";
 
     private RecyclerView recyclerView;
     private TextView textView;
@@ -111,7 +112,7 @@ public class TrashFragment extends Fragment {
             return;
         }
 
-        trashList = LocalDataManager.getObjectListData("TRASH_LIST");
+        trashList = LocalDataManager.getObjectListData(TRASH_LIST_KEY);
 
         textView = view.findViewById(R.id.trashFragmentEmpty);
         //textView.setVisibility(View.GONE);
@@ -197,12 +198,8 @@ public class TrashFragment extends Fragment {
                 trashList.remove(selectedTrash.get(i));
             }
         }
-        LocalDataManager.setObjectListData("TRASH_LIST", trashList);
-        new MaterialAlertDialogBuilder(requireContext())
-                .setTitle("Images are permanently deleted")
-                .setPositiveButton("Cancel", ((dialog, which) -> { }))
-                .show();
-
+        LocalDataManager.setObjectListData(TRASH_LIST_KEY, trashList);
+        Snackbar.make(requireView(), "Images are permanently deleted", Snackbar.LENGTH_SHORT).show();
     }
 
     private boolean deleteFile(String path) {
@@ -225,10 +222,7 @@ public class TrashFragment extends Fragment {
                 trashList.remove(selectedTrash.get(i));
             }
         }
-        LocalDataManager.setObjectListData("TRASH_LIST", trashList);
-        new MaterialAlertDialogBuilder(requireContext())
-                .setTitle("Images are restored")
-                .setPositiveButton("Cancel", ((dialog, which) -> { }))
-                .show();
+        LocalDataManager.setObjectListData(TRASH_LIST_KEY, trashList);
+        Snackbar.make(requireView(), "Images are restored", Snackbar.LENGTH_SHORT).show();
     }
 }
