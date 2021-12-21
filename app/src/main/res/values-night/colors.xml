@@ -5,7 +5,7 @@
 
     <color name="colorPrimary">#FFFFFF</color>
     <color name="colorPrimaryVariant">#000000</color>
-    <color name="colorOnPrimary">#FFFFFF</color>
+    <color name="colorOnPrimary">#000000</color>
     <color name="colorSecondary">#FFAB00</color>
     <color name="colorSecondaryVariant">#FFD600</color>
     <color name="colorOnSecondary">#2962FF</color>
