@@ -9,20 +9,22 @@
         <item name="colorSecondary">@color/colorSecondary</item>
         <item name="colorSecondaryVariant">@color/colorSecondaryVariant</item>
         <item name="colorOnSecondary">@color/colorOnSecondary</item>
-        <!-- Status bar color. -->
+
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
-        <!-- Customize your theme here. -->
-        <item name="android:background">@color/backgroundColor</item>
 
         <item name="windowActionModeOverlay">true</item>
 
         <item name="bottomNavigationStyle">@style/ThemeOverlay.GalleryG2.BottomNavigationView</item>
 
         <item name="android:toolbarStyle">@style/Theme.GalleryG2.ToolBar</item>
+
+        <item name="snackbarStyle">@style/Theme.GalleryG2.Snackbar</item>
+        <item name="snackbarButtonStyle">@style/Theme.GalleryG2.SnackbarButton</item>
     </style>
 
     <style name="Theme.GalleryG2.BottomNavigationView" parent="Widget.MaterialComponents.BottomNavigationView.Colored">
         <item name="materialThemeOverlay">@style/ThemeOverlay.GalleryG2.BottomNavigationView</item>
+        <item name="backgroundTint">@color/backgroundColor</item>
     </style>
 
     <style name="ThemeOverlay.GalleryG2.BottomNavigationView" parent="">
@@ -32,6 +34,21 @@
 
     <style name="Theme.GalleryG2.ToolBar" parent="Widget.AppCompat.Toolbar">
         <item name="background">@color/colorPrimary</item>
+    </style>
+
+    <style name="Theme.GalleryG2.Snackbar" parent="Widget.MaterialComponents.Snackbar">
+        <item name="android:background">@color/snackbarBackground</item>
+        <item name="materialThemeOverlay">@style/ThemeOverlay.GalleryG2.Snackbar</item>
+        <item name="actionTextColorAlpha">1</item>
+    </style>
+
+    <style name="Theme.GalleryG2.SnackbarButton" parent="Widget.MaterialComponents.Button.TextButton.Snackbar">
+        <item name="android:textColor">@color/snackbarButtonTextColor</item>
+    </style>
+
+    <style name="ThemeOverlay.GalleryG2.Snackbar" parent="">
+<!--        <item name="colorPrimary">@color/colorSecondaryVariant</item>-->
+<!--        <item name="colorOnSurface">@color/colorOnSecondary</item>-->
     </style>
 
 </resources>

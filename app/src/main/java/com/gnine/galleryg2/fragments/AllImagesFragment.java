@@ -179,6 +179,7 @@ public class AllImagesFragment extends Fragment {
         trashList = LocalDataManager.getObjectListData("TRASH_LIST");
 
         if (folder || types || albums) {
+            getView().setBackgroundColor(getResources().getColor(R.color.backgroundColor, requireContext().getTheme()));
             getView().setFocusableInTouchMode(true);
             getView().requestFocus();
             getView().setOnKeyListener((view13, i, keyEvent) -> {

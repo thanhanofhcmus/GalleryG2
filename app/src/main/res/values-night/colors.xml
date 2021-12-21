@@ -10,5 +10,8 @@
     <color name="colorSecondaryVariant">#FFD600</color>
     <color name="colorOnSecondary">#2962FF</color>
 
+    <color name="snackbarBackground">#FFB300</color>
+    <color name="snackbarButtonTextColor">#3949AB</color>
+
     <color name="backgroundColor">#121212</color>
 </resources>

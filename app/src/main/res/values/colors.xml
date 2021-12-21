@@ -7,8 +7,11 @@
     <color name="colorPrimaryVariant">#000000</color>
     <color name="colorOnPrimary">@color/white</color>
     <color name="colorSecondary">#D50000</color>
-    <color name="colorSecondaryVariant">#FFD600</color>
-    <color name="colorOnSecondary">#2962FF</color>
+    <color name="colorSecondaryVariant">#42A5F5</color>
+    <color name="colorOnSecondary">#000000</color>
+
+    <color name="snackbarBackground">#3949AB</color>
+    <color name="snackbarButtonTextColor">#FDD835</color>
 
     <color name="backgroundColor">@color/white</color>
 </resources>
