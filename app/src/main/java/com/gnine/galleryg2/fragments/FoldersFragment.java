@@ -161,7 +161,7 @@ public class FoldersFragment extends Fragment {
 
         ImageButton addingBtn = view.findViewById(R.id.addingBtn);
         addingBtn.setOnClickListener(view1 -> {
-            AlbumDialog ad = new AlbumDialog();
+            AlbumDialog ad = new AlbumDialog(requireView());
             ad.setOnDismissListener(dialogInterface -> update());
             ad.show(getParentFragmentManager(), "AlbumDialog");
         });
@@ -196,11 +196,10 @@ public class FoldersFragment extends Fragment {
     }
 
     private List<FolderData> getListFolders() {
-        List<FolderData> list = new ArrayList<>();
-        if (ImageLoader.retrieveFoldersHaveImage("/storage/") != null)
-            list.addAll(Objects.requireNonNull(ImageLoader.retrieveFoldersHaveImage("/storage/")));
-        if (ImageLoader.retrieveFoldersHaveImage(Environment.getExternalStorageDirectory().getPath()) != null)
-            list.addAll(Objects.requireNonNull(ImageLoader.retrieveFoldersHaveImage(Environment.getExternalStorageDirectory().getPath())));
+        ImageLoader.retrieveFoldersHaveImage("/storage/");
+        List<FolderData> list = new ArrayList<>(Objects.requireNonNull(ImageLoader.retrieveFoldersHaveImage("/storage/")));
+        ImageLoader.retrieveFoldersHaveImage(Environment.getExternalStorageDirectory().getPath());
+        list.addAll(Objects.requireNonNull(ImageLoader.retrieveFoldersHaveImage(Environment.getExternalStorageDirectory().getPath())));
         return list;
     }
 

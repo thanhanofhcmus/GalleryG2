@@ -16,8 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -36,7 +34,6 @@ import com.gnine.galleryg2.data.TrashData;
 import com.gnine.galleryg2.tools.ImageLoader;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.snackbar.Snackbar;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -57,8 +54,6 @@ public class AllImagesFragment extends Fragment {
     private String folderPath = null;
     private String typesTitle = null;
     private ArrayList<TrashData> trashList = null;
-
-    private ActivityResultLauncher<String> cameraRequestLauncher;
 
     public AllImagesFragment() {
         // Required empty public constructor
@@ -143,10 +138,6 @@ public class AllImagesFragment extends Fragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
 
-        cameraRequestLauncher = registerForActivityResult(
-                new ActivityResultContracts.RequestPermission(),
-                granted -> { if (granted) { startActivity(new Intent(MediaStore.ACTION_IMAGE_CAPTURE)); }}
-        );
     }
 
     @Override
@@ -176,7 +167,7 @@ public class AllImagesFragment extends Fragment {
             return;
         }
 
-        trashList = LocalDataManager.getObjectListData("TRASH_LIST");
+        trashList = LocalDataManager.getObjectListData(TrashFragment.TRASH_LIST_KEY);
 
         if (folder || types || albums) {
             getView().setBackgroundColor(getResources().getColor(R.color.backgroundColor, requireContext().getTheme()));
@@ -310,8 +301,7 @@ public class AllImagesFragment extends Fragment {
                         .setPositiveButton("GOT IT", null)
                         .show();
             } else {
-                ImportDialog importDialog = new ImportDialog();
-                importDialog.setData(selectedImages);
+                ImportDialog importDialog = new ImportDialog(selectedImages, requireView());
                 importDialog.show(getParentFragmentManager(), "ImportDialog");
             }
         } else if (item.getItemId() == R.id.menu_camera) {
@@ -337,7 +327,7 @@ public class AllImagesFragment extends Fragment {
                 }
             }
         }
-        LocalDataManager.setObjectListData("TRASH_LIST", trashList);
+        LocalDataManager.setObjectListData(TrashFragment.TRASH_LIST_KEY, trashList);
         new MaterialAlertDialogBuilder(requireContext())
                 .setTitle("Images are moved to trash")
                 .setPositiveButton("Cancel", ((dialog, which) -> { }))

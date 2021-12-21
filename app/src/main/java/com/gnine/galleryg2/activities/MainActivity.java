@@ -53,8 +53,7 @@ public class MainActivity extends AppCompatActivity {
         setNightMode(preferences.getString("theme_mode", "invalid"));
 
         NavHostFragment navHostFragment =
-                (NavHostFragment) getSupportFragmentManager().findFragmentById(
-                        R.id.navHostFragment);
+                (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.navHostFragment);
         assert navHostFragment != null;
         NavController navController = navHostFragment.getNavController();
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavView);
