@@ -112,21 +112,11 @@ public class LocalDataManager {
         LocalDataManager.getInstance().mySharedPreferences.putStringValue("G2ALBUMS"+title,saveData.toString());
     }
 
-    public static void setAlbumsData(List<FolderData> albumsList) {
-        ArrayList<String> albumsNames = albumsList.stream()
-                .map(folderData -> folderData.title)
-                .collect(Collectors.toCollection(ArrayList::new));
-        setAlbumsNames(albumsNames);
-        for (int i = 0; i < albumsList.size(); i++) {
-            StringBuilder saveData = new StringBuilder();
-            for (int j = 0; j < albumsList.get(i).imageList.size(); j++) {
-                if (j != albumsList.get(i).imageList.size() - 1)
-                    saveData.append(albumsList.get(i).imageList.get(j).uri.getPath()).append(" $ ");
-                else
-                    saveData.append(albumsList.get(i).imageList.get(j).uri.getPath());
-            }
-            LocalDataManager.getInstance().mySharedPreferences.putStringValue("G2ALBUMS"+albumsList.get(i).title, saveData.toString());
-        }
+    public static void removeSingleAlbum(String title) {
+        ArrayList<String> allAlbums = getAlbumsNames();
+        allAlbums.remove(title);
+        setAlbumsNames(allAlbums);
+        LocalDataManager.getInstance().mySharedPreferences.removeKeyValuePair("G2ALBUMS" + title);
     }
 
     public static ArrayList<String> getAlbumsNames() {

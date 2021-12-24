@@ -48,6 +48,17 @@
                         android:layout_weight="1"/>
 
                     <ImageButton
+                        android:id="@+id/editingBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="5dp"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:background="@android:color/transparent"
+                        android:src="@drawable/ic_edit"
+                        android:contentDescription="@string/edit" />
+
+                    <ImageButton
                         android:id="@+id/addingBtn"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

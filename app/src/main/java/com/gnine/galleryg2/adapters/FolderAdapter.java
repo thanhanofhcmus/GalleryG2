@@ -23,6 +23,7 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.FolderView
         public final ImageView icon;
         public final TextView title;
         public final TextView count;
+        public final View scrim, cancel;
 
         public FolderViewHolder(@NonNull View itemView, BiConsumer<Integer, View> onFolderClick) {
             super(itemView);
@@ -30,13 +31,21 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.FolderView
             icon = itemView.findViewById(R.id.icon);
             title = itemView.findViewById(R.id.title);
             count = itemView.findViewById(R.id.count);
+            scrim = itemView.findViewById(R.id.folderScrim);
+            cancel = itemView.findViewById(R.id.folderCancel);
 
             itemView.setOnClickListener(view -> onFolderClick.accept(getAbsoluteAdapterPosition(), view));
         }
     }
 
+    public enum State {
+        Normal,
+        Edit
+    }
+
     private List<FolderData> mFolderDataList;
     private final BiConsumer<Integer, View> onFolderClick;
+    private State state = State.Normal;
 
     public FolderAdapter(List<FolderData> folderDataList,
                          BiConsumer<Integer, View> onFolderClick) {
@@ -68,10 +77,22 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.FolderView
         List<ImageData> imageDataList = folderData.imageList;
         String count = imageDataList != null ? String.valueOf(imageDataList.size()) : "0";
         holder.count.setText(count);
+
+        if (state == State.Normal) {
+            holder.scrim.setVisibility(View.GONE);
+            holder.cancel.setVisibility(View.GONE);
+        } else {
+            holder.scrim.setVisibility(View.VISIBLE);
+            holder.cancel.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
     public int getItemCount() {
         return mFolderDataList != null ? mFolderDataList.size() : 0;
     }
+
+    public State getState() {return state;}
+
+    public void setState(State state) {this.state = state;}
 }
