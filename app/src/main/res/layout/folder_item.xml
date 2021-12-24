@@ -1,19 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="150dp"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_margin="15dp"
     android:orientation="vertical">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent">
+        <ImageView
+            android:id="@+id/icon"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_folder"
+            tools:ignore="MissingConstraints"
+            android:contentDescription="@string/item_folders">
+        </ImageView>
+        <View
+            android:id="@+id/folderScrim"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/scrim"
+            app:layout_constraintDimensionRatio="1"
+            tools:ignore="MissingConstraints" />
+        <View
+            android:id="@+id/folderCancel"
+            app:layout_constraintLeft_toLeftOf="@id/icon"
+            app:layout_constraintTop_toTopOf="@+id/icon"
+            app:layout_constraintBottom_toBottomOf="@id/icon"
+            app:layout_constraintRight_toRightOf="@id/icon"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/ic_cancel_line"
+            tools:ignore="MissingConstraints" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <ImageView
-        android:id="@+id/icon"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/ic_folder">
-
-    </ImageView>
     <TextView
         android:id="@+id/title"
         android:layout_width="wrap_content"
