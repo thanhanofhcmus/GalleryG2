@@ -164,7 +164,7 @@ public class TrashFragment extends Fragment {
                 numImagesChecked = 0;
                 getActivity().invalidateOptionsMenu();
             } else if (item.getItemId() == R.id.restore_images) {
-                RestoreToTrash();
+                restoreToTrash();
                 resume();
             } else if (item.getItemId() == R.id.delete_images) {
                 deleteToTrash();
@@ -207,7 +207,7 @@ public class TrashFragment extends Fragment {
         return file.delete();
     }
 
-    private void RestoreToTrash() {
+    private void restoreToTrash() {
         ArrayList<TrashData> selectedTrash = trashList.stream()
                 .filter(TrashData::isChecked)
                 .collect(Collectors.toCollection(ArrayList::new));

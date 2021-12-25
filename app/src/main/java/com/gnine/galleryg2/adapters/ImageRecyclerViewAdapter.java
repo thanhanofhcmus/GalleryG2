@@ -4,6 +4,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,12 +14,13 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.gnine.galleryg2.data.ImageData;
 import com.gnine.galleryg2.R;
+import com.gnine.galleryg2.data.TimelineData;
 
 import java.util.List;
 import java.util.function.BiConsumer;
 
 public class ImageRecyclerViewAdapter extends
-        RecyclerView.Adapter<ImageRecyclerViewAdapter.ImageViewHolder> {
+        RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public static class ImageViewHolder extends RecyclerView.ViewHolder {
 
@@ -43,13 +45,23 @@ public class ImageRecyclerViewAdapter extends
         }
     }
 
+    public static class TimelineViewHolder extends RecyclerView.ViewHolder {
+
+        public TextView textView;
+
+        TimelineViewHolder(@NonNull View view) {
+            super(view);
+            textView = view.findViewById(R.id.timelineItemText);
+        }
+    }
+
     public enum State {
         Normal,
         MultipleSelect
     }
 
     @NonNull
-    private final List<ImageData> imageDataList;
+    private final List<TimelineData> imageDataList;
     @NonNull
     private final BiConsumer<Integer, View> onItemClick;
     @NonNull
@@ -57,7 +69,7 @@ public class ImageRecyclerViewAdapter extends
 
     private State state = State.Normal;
 
-    public ImageRecyclerViewAdapter(@NonNull List<ImageData> imageDataList,
+    public ImageRecyclerViewAdapter(@NonNull List<TimelineData> imageDataList,
                                     @NonNull BiConsumer<Integer, View> onItemClick,
                                     @NonNull BiConsumer<Integer, View> onItemLongClick) {
         this.imageDataList = imageDataList;
@@ -65,34 +77,55 @@ public class ImageRecyclerViewAdapter extends
         this.onItemLongClick = onItemLongClick;
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        if (imageDataList.get(position).type == TimelineData.Type.Time) {
+            return 0;
+        } else {
+            return 1;
+        }
+    }
+
     @NonNull
     @Override
-    public ImageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View view = inflater.inflate(R.layout.picture_item, parent, false);
-        return new ImageViewHolder(view, onItemClick, onItemLongClick);
+        if (viewType == 1) {
+            View view = inflater.inflate(R.layout.picture_item, parent, false);
+            return new ImageViewHolder(view, onItemClick, onItemLongClick);
+        } else {
+            return new TimelineViewHolder(inflater.inflate(R.layout.timeline_item, parent, false));
+        }
+
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ImageViewHolder holder, int position) {
-        ImageView imageView = holder.imageView;
-        ImageData imageData = imageDataList.get(position);
-        Glide.with(imageView.getContext())
-                .load(imageData.uri)
-                .placeholder(R.drawable.bird_thumbnail)
-                .transform(new CenterCrop(), new RoundedCorners(24))
-                .into(imageView);
-        if (state == State.Normal) {
-            holder.scrim.setVisibility(View.GONE);
-            holder.check.setVisibility(View.GONE);
-            imageData.setChecked(false);
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        if (imageDataList.get(position).type == TimelineData.Type.Time) {
+            final TimelineViewHolder timelineHolder = (TimelineViewHolder) holder;
+            //long timelineData = imageDataList.get(position).time;
+            timelineHolder.textView.setText(imageDataList.get(position).time);
         } else {
-            if (imageData.isChecked()) {
-                holder.scrim.setVisibility(View.VISIBLE);
-                holder.check.setVisibility(View.VISIBLE);
+            final ImageViewHolder imageHolder = (ImageViewHolder) holder;
+            ImageView imageView = imageHolder.imageView;
+            ImageData imageData = imageDataList.get(position).imageData;
+            Glide.with(imageView.getContext())
+                    .load(imageData.uri)
+                    .placeholder(R.drawable.bird_thumbnail)
+                    .transform(new CenterCrop(), new RoundedCorners(24))
+                    .into(imageView);
+            if (state == State.Normal) {
+                imageHolder.scrim.setVisibility(View.GONE);
+                imageHolder.check.setVisibility(View.GONE);
+                imageData.setChecked(false);
             } else {
-                holder.scrim.setVisibility(View.GONE);
-                holder.check.setVisibility(View.GONE);
+                if (imageData.isChecked()) {
+                    imageHolder.scrim.setVisibility(View.VISIBLE);
+                    imageHolder.check.setVisibility(View.VISIBLE);
+                } else {
+                    imageHolder.scrim.setVisibility(View.GONE);
+                    imageHolder.check.setVisibility(View.GONE);
+                }
             }
         }
     }
