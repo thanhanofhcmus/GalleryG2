@@ -59,7 +59,8 @@ public class ImageRecyclerViewAdapter extends
         Normal,
         MultipleSelect
     }
-
+    public static int ITEM_TYPE_TIME = 0;
+    public static int ITEM_TYPE_IMAGE = 1;
     @NonNull
     private final List<TimelineData> imageDataList;
     @NonNull
@@ -80,9 +81,9 @@ public class ImageRecyclerViewAdapter extends
     @Override
     public int getItemViewType(int position) {
         if (imageDataList.get(position).type == TimelineData.Type.Time) {
-            return 0;
+            return ITEM_TYPE_TIME;
         } else {
-            return 1;
+            return ITEM_TYPE_IMAGE;
         }
     }
 
@@ -90,7 +91,7 @@ public class ImageRecyclerViewAdapter extends
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        if (viewType == 1) {
+        if (viewType == ITEM_TYPE_IMAGE) {
             View view = inflater.inflate(R.layout.picture_item, parent, false);
             return new ImageViewHolder(view, onItemClick, onItemLongClick);
         } else {
