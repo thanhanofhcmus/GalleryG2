@@ -34,6 +34,7 @@ import com.gnine.galleryg2.data.TrashData;
 import com.gnine.galleryg2.tools.ImageLoader;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -278,8 +279,9 @@ public class AllImagesFragment extends Fragment {
                             .show();
                 } else
                     LocalDataManager.removeImagesFromAlbum(folderPath, selectedImages);
-            } else
+            } else {
                 AddToTrash();
+            }
             update();
             requireActivity().invalidateOptionsMenu();
         } else if (item.getItemId() == R.id.select_all) {
@@ -328,10 +330,8 @@ public class AllImagesFragment extends Fragment {
             }
         }
         LocalDataManager.setObjectListData(TrashFragment.TRASH_LIST_KEY, trashList);
-        new MaterialAlertDialogBuilder(requireContext())
-                .setTitle("Images are moved to trash")
-                .setPositiveButton("Cancel", ((dialog, which) -> { }))
-                .show();
+        Snackbar.make(requireView(), "Images move to trash", Snackbar.LENGTH_SHORT).show();
+
     }
 
     private void sendImageListAndPositionToMain(int position) {
