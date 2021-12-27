@@ -240,16 +240,20 @@ public class AllImagesFragment extends Fragment {
                 menu.getItem(1).setVisible(true);
             menu.getItem(2).setVisible(true);
             menu.getItem(3).setVisible(true);
-            menu.getItem(4).setVisible(false);
+            menu.getItem(4).setVisible(true);
             menu.getItem(5).setVisible(false);
+            menu.getItem(6).setVisible(true);
+            menu.getItem(7).setVisible(false);
             activity.setTitle(String.valueOf(numImagesChecked));
         } else {
             menu.getItem(0).setVisible(false);
             menu.getItem(1).setVisible(false);
             menu.getItem(2).setVisible(false);
-            menu.getItem(3).setVisible(false);
-            menu.getItem(4).setVisible(true);
+            menu.getItem(3).setVisible(true);
+            menu.getItem(4).setVisible(false);
             menu.getItem(5).setVisible(true);
+            menu.getItem(6).setVisible(true);
+            menu.getItem(7).setVisible(true);
             if (folder || albums) {
                 activity.setTitle(folderPath);
             } else if (types) {
@@ -325,6 +329,25 @@ public class AllImagesFragment extends Fragment {
             }
         } else if (item.getItemId() == R.id.menu_camera) {
             startActivity(new Intent(MediaStore.ACTION_IMAGE_CAPTURE));
+        } else if (item.getItemId() == R.id.slideShow) {
+            if (imageAdapter.getState() == State.MultipleSelect) {
+                ArrayList<ImageData> selectedImages = imageDataList.stream()
+                        .filter(ImageData::isChecked)
+                        .collect(Collectors.toCollection(ArrayList::new));
+                if (selectedImages.isEmpty()) {
+                    new MaterialAlertDialogBuilder(requireContext())
+                            .setTitle("Error")
+                            .setMessage("Please select image(s) to make a slideshow!")
+                            .setPositiveButton("GOT IT", null)
+                            .show();
+                } else {
+                    SlideshowDialog ssDialog = new SlideshowDialog(selectedImages);
+                    ssDialog.show(getParentFragmentManager(), "SlideShowDialog");
+                }
+            } else {
+                SlideshowDialog ssDialog = new SlideshowDialog(imageDataList);
+                ssDialog.show(getParentFragmentManager(), "SlideShowDialog");
+            }
         }
 
         return super.onOptionsItemSelected(item);
