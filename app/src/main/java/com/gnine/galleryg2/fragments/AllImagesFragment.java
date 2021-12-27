@@ -23,6 +23,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.gnine.galleryg2.data.TimelineData;
 import com.gnine.galleryg2.tools.ContentHelper;
 import com.gnine.galleryg2.tools.ImageSharer;
 import com.gnine.galleryg2.tools.LocalDataManager;
@@ -34,10 +35,11 @@ import com.gnine.galleryg2.data.TrashData;
 import com.gnine.galleryg2.tools.ImageLoader;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.snackbar.Snackbar;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
@@ -49,6 +51,7 @@ public class AllImagesFragment extends Fragment {
     private int typeView;
     private int numImagesChecked;
     private ArrayList<ImageData> imageDataList = null;
+    private ArrayList<TimelineData> viewList = null;
     private boolean folder = false;
     private boolean types = false;
     private boolean albums = false;
@@ -80,16 +83,29 @@ public class AllImagesFragment extends Fragment {
         this.folderPath = folderPath;
     }
 
-    public void setImageDataList(ArrayList<ImageData> imageDataList) {
-        this.imageDataList = imageDataList;
+    private void sortImageDataList() {
+        this.imageDataList.sort((image1, image2) -> {
+            String date1 = new SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(image1.dateAdded);
+            String date2 = new SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(image2.dateAdded);
+            return date1.compareTo(date2) * (-1);
+        });
     }
 
-    void update() {
+    public void setImageDataList(ArrayList<ImageData> imageDataList) {
+        this.imageDataList = imageDataList;
+        sortImageDataList();
+        toViewList();
+    }
+
+    private void update() {
         if (folder) {
             this.imageDataList = ImageLoader.getImagesFromFolder(folderPath);
         } else {
             this.imageDataList = (albums) ? LocalDataManager.getSingleAlbumData(folderPath) : ImageLoader.getAllImagesFromDevice();
         }
+        sortImageDataList();
+        toViewList();
+
         if (this.imageDataList.size() > 0) {
             textView.setVisibility(View.GONE);
             recyclerView.setVisibility(View.VISIBLE);
@@ -105,31 +121,36 @@ public class AllImagesFragment extends Fragment {
             BottomNavigationView bnv = requireActivity().findViewById(R.id.bottomNavView);
             bnv.getMenu().getItem(1).setEnabled(true);
         }
-        BiConsumer<Integer, View> onItemClick = (position, view12) -> {
+
+        BiConsumer<Integer, View> onItemClick = (position, view1) -> {
             if (imageAdapter.getState() == State.MultipleSelect) {
-                if (!imageDataList.get(position).isChecked()) {
-                    imageDataList.get(position).setChecked(true);
+                if (!viewList.get(position).imageData.isChecked()) {
+                    viewList.get(position).imageData.setChecked(true);
+                    imageDataList.get(viewList.get(position).index).setChecked(true);
                     numImagesChecked++;
                 } else {
-                    imageDataList.get(position).setChecked(false);
+                    viewList.get(position).imageData.setChecked(false);
+                    imageDataList.get(viewList.get(position).index).setChecked(false);
                     numImagesChecked--;
                 }
                 requireActivity().setTitle(String.valueOf(numImagesChecked));
                 imageAdapter.notifyItemChanged(position);
             } else {
-                sendImageListAndPositionToMain(position);
+                sendImageListAndPositionToMain(viewList.get(position).index);
             }
         };
 
         BiConsumer<Integer, View> onItemLongClick = (position, view1) -> {
             imageAdapter.setState(State.MultipleSelect);
             requireActivity().invalidateOptionsMenu();
-            imageDataList.get(position).setChecked(true);
+            viewList.get(position).imageData.setChecked(true);
+            imageDataList.get(viewList.get(position).index).setChecked(true);
             imageAdapter.notifyItemRangeChanged(0, imageAdapter.getItemCount());
             numImagesChecked = 0;
             requireActivity().setTitle(String.valueOf(++numImagesChecked));
         };
-        imageAdapter = new ImageRecyclerViewAdapter(imageDataList, onItemClick, onItemLongClick);
+
+        imageAdapter = new ImageRecyclerViewAdapter(viewList, onItemClick, onItemLongClick);
         imageAdapter.setState(ImageRecyclerViewAdapter.State.Normal);
         recyclerView.setAdapter(imageAdapter);
     }
@@ -138,7 +159,6 @@ public class AllImagesFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-
     }
 
     @Override
@@ -193,8 +213,7 @@ public class AllImagesFragment extends Fragment {
 
         recyclerView = view.findViewById(R.id.allPicturesFragmentRecyclerView);
         recyclerView.setHasFixedSize(true);
-        typeView = 4;
-        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), typeView));
+        setRecyclerViewLayoutManager(4);
 
         textView = view.findViewById(R.id.allImagesFragmentEmpty);
 
@@ -248,16 +267,15 @@ public class AllImagesFragment extends Fragment {
         assert getActivity() != null;
         if (item.getItemId() == R.id.menu_chang_view) {
             if (typeView == 4) {
-                typeView = 2;
+                setRecyclerViewLayoutManager(2);
                 item.setIcon(R.drawable.ic_grid_2);
             } else if (typeView == 2) {
-                typeView = 1;
+                setRecyclerViewLayoutManager(1);
                 item.setIcon(R.drawable.ic_grid_1);
             } else {
-                typeView = 4;
+                setRecyclerViewLayoutManager(4);
                 item.setIcon(R.drawable.ic_grid_4);
             }
-            recyclerView.setLayoutManager(new GridLayoutManager(getContext(), typeView));
         } else if (item.getItemId() == R.id.clear_choose) {
             imageAdapter.setState(State.Normal);
             imageAdapter.notifyItemRangeChanged(0, imageAdapter.getItemCount());
@@ -279,9 +297,8 @@ public class AllImagesFragment extends Fragment {
                             .show();
                 } else
                     LocalDataManager.removeImagesFromAlbum(folderPath, selectedImages);
-            } else {
-                AddToTrash();
-            }
+            } else
+                addToTrash();
             update();
             requireActivity().invalidateOptionsMenu();
         } else if (item.getItemId() == R.id.select_all) {
@@ -313,7 +330,39 @@ public class AllImagesFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
-    private void AddToTrash() {
+    private void toViewList(){
+        if (imageDataList.size() > 0) {
+            viewList = new ArrayList<>();
+            String date = new SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault()).format(imageDataList.get(0).dateAdded);
+            date += '.';
+            for (int i = 0; i < imageDataList.size(); i++) {
+                String dateAdded = new SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault()).format(imageDataList.get(i).dateAdded);
+                if (!dateAdded.equals(date)) {
+                    date = dateAdded;
+                    viewList.add(new TimelineData(TimelineData.Type.Time, date, imageDataList.get(i), i));
+                }
+                viewList.add(new TimelineData(TimelineData.Type.Image, "", imageDataList.get(i), i));
+            }
+        }
+    }
+
+    private void setRecyclerViewLayoutManager(int newTypeView) {
+        typeView = newTypeView;
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), typeView);
+        gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+                if (viewList.get(position).type == TimelineData.Type.Time) {
+                    return typeView;
+                } else {
+                    return 1;
+                }
+            }
+        });
+        recyclerView.setLayoutManager(gridLayoutManager);
+    }
+
+    private void addToTrash() {
         ArrayList<ImageData> selectedImages = imageDataList.stream()
                 .filter(ImageData::isChecked)
                 .collect(Collectors.toCollection(ArrayList::new));
@@ -330,8 +379,10 @@ public class AllImagesFragment extends Fragment {
             }
         }
         LocalDataManager.setObjectListData(TrashFragment.TRASH_LIST_KEY, trashList);
-        Snackbar.make(requireView(), "Images move to trash", Snackbar.LENGTH_SHORT).show();
-
+        new MaterialAlertDialogBuilder(requireContext())
+                .setTitle("Images are moved to trash")
+                .setPositiveButton("Cancel", ((dialog, which) -> { }))
+                .show();
     }
 
     private void sendImageListAndPositionToMain(int position) {
