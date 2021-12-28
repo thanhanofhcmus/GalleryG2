@@ -69,30 +69,7 @@ public class FullImageActivity extends AppCompatActivity {
         int dotPos = sourceName.lastIndexOf('.');
         String desc = sourceName.substring(0, dotPos) + "_copy" + sourceName.substring(dotPos);
 
-//        UCrop.of(uri, Uri.parse(desc))
-//                .withAspectRatio(16, 9)
-//                .withMaxResultSize(1000, 1000)
-//                .start(this);
-        try {
-            Intent intent = new ImageEditorIntentBuilder(this, uri.getPath(), desc)
-                    .withAddText() // Add the features you need
-                    .withPaintFeature()
-                    .withFilterFeature()
-                    .withRotateFeature()
-                    .withCropFeature()
-                    .withBrightnessFeature()
-                    .withSaturationFeature()
-                    .withBeautyFeature()
-                    .withStickerFeature()
-                    .forcePortrait(true)  // Add this to force portrait mode (It's set to false by default)
-                    .setSupportActionBarVisibility(false) // To hide app's default action bar
-                    .build();
 
-            //TODO: Con thieu androidx.activity.result.ActivityResultLauncher nhung em khong biet no la cai gi :))))
-            EditImageActivity.start(, intent, PHOTO_EDITOR_REQUEST_CODE);
-        } catch (Exception e) {
-            Log.e("Demo App", e.getMessage()); // This could throw if either `sourcePath` or `outputPath` is blank or Null
-        }
     }
 
 
