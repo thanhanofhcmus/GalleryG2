@@ -1,7 +1,9 @@
 package com.gnine.galleryg2.activities;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,13 +11,14 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.gnine.galleryg2.R;
 import com.gnine.galleryg2.data.ImageData;
-import com.yalantis.ucrop.UCrop;
+
 
 public class FullImageActivity extends AppCompatActivity {
 
     private static ImageData imageData = null;
     private static boolean isInViewpagerFragment;
     private static int currentImagePosition = 0;
+    private final int PHOTO_EDITOR_REQUEST_CODE = 231;// Any integer value as a request code.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,14 +61,13 @@ public class FullImageActivity extends AppCompatActivity {
         return currentImagePosition;
     }
 
-    public void startCrop(@NonNull Uri uri) {
-        String sourceName = uri.toString();
-        int dotPos = sourceName.lastIndexOf('.');
-        String desc = sourceName.substring(0, dotPos) + "_copy" + sourceName.substring(dotPos);
+    public void startEdit(@NonNull Uri uri) {
+        String IMAGE_SOURCE = "IMAGE_SOURCE";
+        Intent intent = new Intent(FullImageActivity.this, EditPhotoActivity.class);
+        intent.putExtra(IMAGE_SOURCE, uri.getPath());
 
-        UCrop.of(uri, Uri.parse(desc))
-                .withAspectRatio(16, 9)
-                .withMaxResultSize(1000, 1000)
-                .start(this);
+        startActivity(intent);
     }
+
+
 }
