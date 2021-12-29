@@ -11,10 +11,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.gnine.galleryg2.R;
 import com.gnine.galleryg2.data.ImageData;
-import com.yalantis.ucrop.UCrop;
 
-import iamutkarshtiwari.github.io.ananas.editimage.EditImageActivity;
-import iamutkarshtiwari.github.io.ananas.editimage.ImageEditorIntentBuilder;
 
 public class FullImageActivity extends AppCompatActivity {
 
@@ -64,12 +61,12 @@ public class FullImageActivity extends AppCompatActivity {
         return currentImagePosition;
     }
 
-    public void startCrop(@NonNull Uri uri) {
-        String sourceName = uri.toString();
-        int dotPos = sourceName.lastIndexOf('.');
-        String desc = sourceName.substring(0, dotPos) + "_copy" + sourceName.substring(dotPos);
+    public void startEdit(@NonNull Uri uri) {
+        String IMAGE_SOURCE = "IMAGE_SOURCE";
+        Intent intent = new Intent(FullImageActivity.this, EditPhotoActivity.class);
+        intent.putExtra(IMAGE_SOURCE, uri.getPath());
 
-
+        startActivity(intent);
     }
 
 

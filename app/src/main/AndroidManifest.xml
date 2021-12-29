@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.gnine.galleryg2">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -8,6 +9,7 @@
         android:maxSdkVersion="28" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.SET_WALLPAPER" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -23,7 +25,31 @@
         android:theme="@style/Theme.GalleryG2">
         <activity
             android:name=".activities.EditPhotoActivity"
-            android:exported="true" />
+            android:screenOrientation="fullSensor"
+            android:exported="true">
+            <intent-filter
+                android:label="@string/app_intent_name"
+                android:scheme="file"
+                tools:ignore="AppLinkUrlError">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="image/*" />
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="action_nextgen_edit" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="image/*" />
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.EDIT" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="image/*" />
+            </intent-filter>
+
+
+        </activity>
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -49,10 +75,6 @@
         </provider>
 
         <activity
-            android:name="com.yalantis.ucrop.UCropActivity"
-            android:screenOrientation="fullSensor"
-            android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar" />
-        <activity
             android:name=".activities.FullImageActivity"
             android:exported="true"
             android:label="@string/title_activity_full_image"
@@ -71,7 +93,7 @@
             android:name=".activities.MainActivity"
             android:exported="true"
             android:label="GalleryG2"
-            android:theme="@style/Theme.GalleryG2"></activity>
+            android:theme="@style/Theme.GalleryG2"/>
     </application>
 
 </manifest>
