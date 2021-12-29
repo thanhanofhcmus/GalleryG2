@@ -24,6 +24,7 @@ import com.gnine.galleryg2.data.TypeData;
 import com.gnine.galleryg2.tools.ImageLoader;
 import com.gnine.galleryg2.tools.LocalDataManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +46,9 @@ public class FoldersFragment extends Fragment {
     TypesAdapter typesAdapter;
     RecyclerView rcvFolder, rcvTypes, rcvAlbums;
     GridLayoutManager gridLayoutManager, albumLayoutManager;
+    BiConsumer<Integer, View> onFolderClick;
+    BiConsumer<Integer, View> onAlbumClick;
+    BiConsumer<Integer, View> onTypeClick;
 
     public FoldersFragment() {
         // Required empty public constructor
@@ -54,13 +58,13 @@ public class FoldersFragment extends Fragment {
         folderDataList = getListFolders();
         typeDataList = getListTypes();
         albumsList = getAlbumsList();
-        BiConsumer<Integer, View> onFolderClick = (position, view1) -> {
+        onFolderClick = (position, view1) -> {
             checkBackPressed = false;
             FragmentTransaction ft = getChildFragmentManager().beginTransaction();
             tempFragment = new AllImagesFragment();
             ((AllImagesFragment) tempFragment).setFolder(true);
-            ((AllImagesFragment) tempFragment).setFolderPath(getListFolders().get(position).uri.getPath());
-            ((AllImagesFragment) tempFragment).setImageDataList(getListFolders().get(position).imageList);
+            ((AllImagesFragment) tempFragment).setFolderPath(folderDataList.get(position).uri.getPath());
+            ((AllImagesFragment) tempFragment).setImageDataList(folderDataList.get(position).imageList);
             BottomNavigationView bnv = requireActivity().findViewById(R.id.bottomNavView);
             bnv.getMenu().getItem(1).setEnabled(false);
             ft.replace(R.id.fragmentFolders, tempFragment);
@@ -68,28 +72,51 @@ public class FoldersFragment extends Fragment {
             ft.commit();
         };
 
-        BiConsumer<Integer, View> onAlbumClick = (position, view1) -> {
-            checkBackPressed = false;
-            FragmentTransaction ft = getChildFragmentManager().beginTransaction();
-            tempFragment = new AllImagesFragment();
-            ((AllImagesFragment) tempFragment).setAlbums(true);
-            ((AllImagesFragment) tempFragment).setFolderPath(getAlbumsList().get(position).title);
-            ((AllImagesFragment) tempFragment).setImageDataList(getAlbumsList().get(position).imageList);
-            BottomNavigationView bnv = requireActivity().findViewById(R.id.bottomNavView);
-            bnv.getMenu().getItem(1).setEnabled(false);
-            ft.replace(R.id.fragmentFolders, tempFragment);
-            ft.addToBackStack(null);
-            ft.commit();
+        onAlbumClick = (position, view1) -> {
+            if (albumAdapter.getState() == FolderAdapter.State.Normal) {
+                checkBackPressed = false;
+                FragmentTransaction ft = getChildFragmentManager().beginTransaction();
+                tempFragment = new AllImagesFragment();
+                ((AllImagesFragment) tempFragment).setAlbums(true);
+                ((AllImagesFragment) tempFragment).setFolderPath(albumsList.get(position).title);
+                ((AllImagesFragment) tempFragment).setImageDataList(albumsList.get(position).imageList);
+                BottomNavigationView bnv = requireActivity().findViewById(R.id.bottomNavView);
+                bnv.getMenu().getItem(1).setEnabled(false);
+                ft.replace(R.id.fragmentFolders, tempFragment);
+                ft.addToBackStack(null);
+                ft.commit();
+            } else {
+                if (getAlbumsList().get(position).title.equals("Favorites")) {
+                    new MaterialAlertDialogBuilder(requireContext())
+                            .setTitle("Error")
+                            .setMessage("You cannot delete this album!")
+                            .setPositiveButton("GOT IT", null)
+                            .show();
+                } else {
+                    new MaterialAlertDialogBuilder(requireContext())
+                            .setTitle("WARNING")
+                            .setMessage("Do you really want to delete this album?")
+                            .setNegativeButton("CANCEL", null)
+                            .setPositiveButton("YES", (dialog, which) -> {
+                                FolderData targetAlbumDel = albumsList.get(position);
+                                LocalDataManager.removeSingleAlbum(targetAlbumDel.title);
+                                albumsList.remove(targetAlbumDel);
+                                albumAdapter.notifyItemRemoved(position);
+                            })
+                            .show();
+                }
+            }
+
         };
 
-        BiConsumer<Integer, View> onTypeClick = (position, view1) -> {
+        onTypeClick = (position, view1) -> {
             if (getListTypes().get(position).list != null) {
                 checkBackPressed = false;
                 FragmentTransaction ft = getChildFragmentManager().beginTransaction();
                 tempFragment = new AllImagesFragment();
                 ((AllImagesFragment) tempFragment).setTypes(true);
-                ((AllImagesFragment) tempFragment).setTypesTitle(getListTypes().get(position).title);
-                ((AllImagesFragment) tempFragment).setImageDataList(getListTypes().get(position).list);
+                ((AllImagesFragment) tempFragment).setTypesTitle(typeDataList.get(position).title);
+                ((AllImagesFragment) tempFragment).setImageDataList(typeDataList.get(position).list);
                 BottomNavigationView bnv = requireActivity().findViewById(R.id.bottomNavView);
                 bnv.getMenu().getItem(1).setEnabled(false);
                 ft.replace(R.id.fragmentFolders, tempFragment);
@@ -164,6 +191,15 @@ public class FoldersFragment extends Fragment {
             AlbumDialog ad = new AlbumDialog(requireView());
             ad.setOnDismissListener(dialogInterface -> update());
             ad.show(getParentFragmentManager(), "AlbumDialog");
+        });
+
+        ImageButton editingBtn = view.findViewById(R.id.editingBtn);
+        editingBtn.setOnClickListener(view1 -> {
+            if (albumAdapter.getState() == FolderAdapter.State.Normal)
+                albumAdapter.setState(FolderAdapter.State.Edit);
+            else
+                albumAdapter.setState(FolderAdapter.State.Normal);
+            albumAdapter.notifyItemRangeChanged(0, albumAdapter.getItemCount());
         });
 
         if (!checkBackPressed && tempFragment != null) {

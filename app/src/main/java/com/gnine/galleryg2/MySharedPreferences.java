@@ -18,13 +18,20 @@ public class MySharedPreferences {
         this.mContext = mContext;
     }
 
+    public void removeKeyValuePair(String key) {
+        SharedPreferences sharedPreferences = mContext.getSharedPreferences(MY_SHARED_PREFERENCES,Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.remove(key);
+        editor.apply();
+    }
+
     public void  putIntValue(String key,int value){
         SharedPreferences sharedPreferences = mContext.getSharedPreferences(MY_SHARED_PREFERENCES,Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
         editor.putInt(key,value);
         editor.apply();
-
     }
 
     public int getIntValue(String key){
@@ -37,7 +44,6 @@ public class MySharedPreferences {
 
         editor.putString(key,value);
         editor.apply();
-
     }
 
     public String getStringValue(String key){

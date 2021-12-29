@@ -37,7 +37,7 @@ import com.gnine.galleryg2.tools.ContentHelper;
 import com.gnine.galleryg2.tools.ImageSharer;
 import com.gnine.galleryg2.tools.LocalDataManager;
 import com.gnine.galleryg2.tools.PermissionChecker;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -108,11 +108,7 @@ public class ViewPagerFragment extends Fragment {
                     imageDataList.remove(imageDataList.get(viewPager2.getCurrentItem()));
                     trashList.add(new TrashData(file.getPath(), sourcePath, 0));
                     LocalDataManager.setObjectListData(TrashFragment.TRASH_LIST_KEY, trashList);
-                    new MaterialAlertDialogBuilder(requireContext())
-                            .setTitle("Image is moved to trash")
-                            .setPositiveButton("Cancel", ((dialog, which) -> {
-                            }))
-                            .show();
+                    Snackbar.make(requireView(), "Image removed", Snackbar.LENGTH_SHORT).show();
                 }
             }
             viewPager2.setAdapter(new SliderAdapter(imageDataList));
