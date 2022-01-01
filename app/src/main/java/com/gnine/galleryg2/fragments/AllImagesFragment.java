@@ -37,7 +37,10 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Locale;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
@@ -47,6 +50,7 @@ public class AllImagesFragment extends Fragment {
     private ImageRecyclerViewAdapter imageAdapter;
     private TextView textView;
     private int typeView;
+    private SortType typeSort = SortType.dateNew;
     private int numImagesChecked;
     private ArrayList<ImageData> imageDataList = null;
     private boolean folder = false;
@@ -55,6 +59,15 @@ public class AllImagesFragment extends Fragment {
     private String folderPath = null;
     private String typesTitle = null;
     private ArrayList<TrashData> trashList = null;
+
+    private enum SortType {
+        nameAZ,
+        nameZA,
+        dateNew,
+        dateOld,
+        sizeSmall,
+        sizeLarge
+    }
 
     public AllImagesFragment() {
         // Required empty public constructor
@@ -82,6 +95,7 @@ public class AllImagesFragment extends Fragment {
 
     public void setImageDataList(ArrayList<ImageData> imageDataList) {
         this.imageDataList = imageDataList;
+        sortImages(typeSort,  false);
     }
 
     void update() {
@@ -90,6 +104,7 @@ public class AllImagesFragment extends Fragment {
         } else {
             this.imageDataList = (albums) ? LocalDataManager.getSingleAlbumData(folderPath) : ImageLoader.getAllImagesFromDevice();
         }
+        sortImages(typeSort, false);
         if (this.imageDataList.size() > 0) {
             textView.setVisibility(View.GONE);
             recyclerView.setVisibility(View.VISIBLE);
@@ -282,6 +297,7 @@ public class AllImagesFragment extends Fragment {
             } else {
                 AddToTrash();
             }
+            //imageAdapter.notifyItemRangeChanged(0, imageAdapter.getItemCount());
             update();
             requireActivity().invalidateOptionsMenu();
         } else if (item.getItemId() == R.id.select_all) {
@@ -291,6 +307,18 @@ public class AllImagesFragment extends Fragment {
             numImagesChecked = imageDataList.size();
             requireActivity().invalidateOptionsMenu();
             requireActivity().setTitle(String.valueOf(numImagesChecked));
+        } else if (item.getItemId() == R.id.sort_name_az) {
+            sortImages(SortType.nameAZ, true);
+        } else if (item.getItemId() == R.id.sort_name_za) {
+            sortImages(SortType.nameZA, true);
+        } else if (item.getItemId() == R.id.sort_date_new) {
+            sortImages(SortType.dateNew, true);
+        } else if (item.getItemId() == R.id.sort_date_old) {
+            sortImages(SortType.dateOld, true);
+        } else if (item.getItemId() == R.id.sort_size_small) {
+            sortImages(SortType.sizeSmall, true);
+        } else if (item.getItemId() == R.id.sort_size_large) {
+            sortImages(SortType.sizeLarge, true);
         } else if (item.getItemId() == R.id.importAlbums) {
             ArrayList<String> selectedImages = imageDataList.stream()
                     .filter(ImageData::isChecked)
@@ -311,6 +339,48 @@ public class AllImagesFragment extends Fragment {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void sortImages(SortType type, boolean update) {
+        typeSort = type;
+        if (type == SortType.nameAZ) {
+            imageDataList.sort((image1, image2) -> image1.name.compareTo((image2.name)) * (-1));
+        } else if (type == SortType.nameZA) {
+            imageDataList.sort(Comparator.comparing(image -> image.name));
+        } else if (type == SortType.dateNew) {
+            imageDataList.sort((image1, image2) -> {
+                String date1 = new SimpleDateFormat("yyyyMMdd.hh:mm", Locale.getDefault()).format(image1.dateAdded);
+                String date2 = new SimpleDateFormat("yyyyMMdd.hh:mm", Locale.getDefault()).format(image2.dateAdded);
+                return date1.compareTo(date2) * (-1);
+            });
+        } else if (type == SortType.dateOld) {
+            imageDataList.sort((image1, image2) -> {
+                String date1 = new SimpleDateFormat("yyyyMMdd.hh:mm", Locale.getDefault()).format(image1.dateAdded);
+                String date2 = new SimpleDateFormat("yyyyMMdd.hh:mm", Locale.getDefault()).format(image2.dateAdded);
+                return date1.compareTo(date2);
+            });
+        } else if (type == SortType.sizeSmall) {
+            imageDataList.sort((image1, image2) -> {
+                if (image1.size > image2.size) {
+                    return 1;
+                } else if (image1.size < image2.size) {
+                    return -1;
+                }
+                return 0;
+            });
+        } else if (type == SortType.sizeLarge) {
+            imageDataList.sort((image1, image2) -> {
+                if (image1.size > image2.size) {
+                    return -1;
+                } else if (image1.size < image2.size) {
+                    return 1;
+                }
+                return 0;
+            });
+        }
+        if (update) {
+            imageAdapter.notifyItemRangeChanged(0, imageAdapter.getItemCount());
+        }
     }
 
     private void AddToTrash() {
