@@ -3,6 +3,7 @@ package com.gnine.galleryg2.fragments;
 import static com.gnine.galleryg2.adapters.ImageRecyclerViewAdapter.*;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
@@ -19,12 +20,14 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.gnine.galleryg2.data.TimelineData;
 import com.gnine.galleryg2.tools.ContentHelper;
+import com.gnine.galleryg2.tools.ErrorDialog;
 import com.gnine.galleryg2.tools.ImageSharer;
 import com.gnine.galleryg2.tools.LocalDataManager;
 import com.gnine.galleryg2.activities.MainActivity;
@@ -34,7 +37,7 @@ import com.gnine.galleryg2.R;
 import com.gnine.galleryg2.data.TrashData;
 import com.gnine.galleryg2.tools.ImageLoader;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -101,10 +104,12 @@ public class AllImagesFragment extends Fragment {
         if (folder) {
             this.imageDataList = ImageLoader.getImagesFromFolder(folderPath);
         } else {
-            this.imageDataList = (albums) ? LocalDataManager.getSingleAlbumData(folderPath) : ImageLoader.getAllImagesFromDevice();
+            this.imageDataList = albums ? LocalDataManager.getSingleAlbumData(folderPath) : ImageLoader.getAllImagesFromDevice();
         }
         sortImageDataList();
         toViewList();
+
+        final FragmentActivity activity = requireActivity();
 
         if (this.imageDataList.size() > 0) {
             textView.setVisibility(View.GONE);
@@ -114,11 +119,11 @@ public class AllImagesFragment extends Fragment {
             recyclerView.setVisibility(View.GONE);
         }
         if (folder && !(new File(folderPath).exists())) {
-            FragmentManager manager = requireActivity().getSupportFragmentManager();
+            FragmentManager manager = activity.getSupportFragmentManager();
             manager.popBackStack();
             FoldersFragment.checkBackPressed = true;
             FoldersFragment.tempFragment = null;
-            BottomNavigationView bnv = requireActivity().findViewById(R.id.bottomNavView);
+            BottomNavigationView bnv = activity.findViewById(R.id.bottomNavView);
             bnv.getMenu().getItem(1).setEnabled(true);
         }
 
@@ -133,7 +138,7 @@ public class AllImagesFragment extends Fragment {
                     imageDataList.get(viewList.get(position).index).setChecked(false);
                     numImagesChecked--;
                 }
-                requireActivity().setTitle(String.valueOf(numImagesChecked));
+                activity.setTitle(String.valueOf(numImagesChecked));
                 imageAdapter.notifyItemChanged(position);
             } else {
                 sendImageListAndPositionToMain(viewList.get(position).index);
@@ -142,12 +147,12 @@ public class AllImagesFragment extends Fragment {
 
         BiConsumer<Integer, View> onItemLongClick = (position, view1) -> {
             imageAdapter.setState(State.MultipleSelect);
-            requireActivity().invalidateOptionsMenu();
+            activity.invalidateOptionsMenu();
             viewList.get(position).imageData.setChecked(true);
             imageDataList.get(viewList.get(position).index).setChecked(true);
             imageAdapter.notifyItemRangeChanged(0, imageAdapter.getItemCount());
             numImagesChecked = 0;
-            requireActivity().setTitle(String.valueOf(++numImagesChecked));
+            activity.setTitle(String.valueOf(++numImagesChecked));
         };
 
         imageAdapter = new ImageRecyclerViewAdapter(viewList, onItemClick, onItemLongClick);
@@ -177,7 +182,6 @@ public class AllImagesFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_all_images, container, false);
     }
 
@@ -189,6 +193,7 @@ public class AllImagesFragment extends Fragment {
         }
 
         trashList = LocalDataManager.getObjectListData(TrashFragment.TRASH_LIST_KEY);
+        final FragmentActivity activity = requireActivity();
 
         if (folder || types || albums) {
             getView().setBackgroundColor(getResources().getColor(R.color.backgroundColor, requireContext().getTheme()));
@@ -196,18 +201,18 @@ public class AllImagesFragment extends Fragment {
             getView().requestFocus();
             getView().setOnKeyListener((view13, i, keyEvent) -> {
                 if (i == KeyEvent.KEYCODE_BACK) {
-                    FragmentManager manager = requireActivity().getSupportFragmentManager();
+                    FragmentManager manager = activity.getSupportFragmentManager();
                     manager.popBackStack();
                     FoldersFragment.checkBackPressed = true;
                     FoldersFragment.tempFragment = null;
-                    BottomNavigationView bnv = requireActivity().findViewById(R.id.bottomNavView);
+                    BottomNavigationView bnv = activity.findViewById(R.id.bottomNavView);
                     bnv.getMenu().getItem(1).setEnabled(true);
                     return true;
                 }
                 return false;
             });
         } else if (!FoldersFragment.checkBackPressed && FoldersFragment.tempFragment != null) {
-            BottomNavigationView bnv = requireActivity().findViewById(R.id.bottomNavView);
+            BottomNavigationView bnv = activity.findViewById(R.id.bottomNavView);
             bnv.getMenu().getItem(1).setEnabled(true);
         }
 
@@ -223,8 +228,7 @@ public class AllImagesFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.appbar_menu, menu);
-        Activity activity = getActivity();
-        assert activity != null;
+        Activity activity = requireActivity();
 
         if (typeView == 2) {
             menu.getItem(1).setIcon(R.drawable.ic_grid_2);
@@ -234,10 +238,11 @@ public class AllImagesFragment extends Fragment {
 
         if (imageAdapter.getState() == State.MultipleSelect) {
             menu.getItem(0).setVisible(true);
-            if (albums)
+            if (albums) {
                 menu.getItem(1).setVisible(!folderPath.equals("Favorites"));
-            else
+            } else {
                 menu.getItem(1).setVisible(true);
+            }
             menu.getItem(2).setVisible(true);
             menu.getItem(3).setVisible(true);
             menu.getItem(4).setVisible(true);
@@ -268,7 +273,9 @@ public class AllImagesFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        assert getActivity() != null;
+        final FragmentActivity activity = requireActivity();
+        final Context context = requireContext();
+
         if (item.getItemId() == R.id.menu_chang_view) {
             if (typeView == 4) {
                 setRecyclerViewLayoutManager(2);
@@ -284,9 +291,9 @@ public class AllImagesFragment extends Fragment {
             imageAdapter.setState(State.Normal);
             imageAdapter.notifyItemRangeChanged(0, imageAdapter.getItemCount());
             numImagesChecked = 0;
-            getActivity().invalidateOptionsMenu();
+            activity.invalidateOptionsMenu();
         } else if (item.getItemId() == R.id.menu_share) {
-            ImageSharer.shareCheckedInList(requireActivity(), imageDataList);
+            ImageSharer.shareCheckedInList(activity, imageDataList);
         } else if (item.getItemId() == R.id.delete_images) {
             if (albums) {
                 ArrayList<String> selectedImages = imageDataList.stream()
@@ -294,35 +301,29 @@ public class AllImagesFragment extends Fragment {
                         .map(imageData -> imageData.uri.getPath())
                         .collect(Collectors.toCollection(ArrayList::new));
                 if (selectedImages.isEmpty()) {
-                    new MaterialAlertDialogBuilder(requireContext())
-                            .setTitle("Error")
-                            .setMessage("Please select image(s) to remove from album!")
-                            .setPositiveButton("GOT IT", null)
-                            .show();
-                } else
+                    ErrorDialog.show(context, "Please select image(s) to remove from album!");
+                } else {
                     LocalDataManager.removeImagesFromAlbum(folderPath, selectedImages);
-            } else
+                }
+            } else {
                 addToTrash();
+            }
             update();
-            requireActivity().invalidateOptionsMenu();
+            activity.invalidateOptionsMenu();
         } else if (item.getItemId() == R.id.select_all) {
             imageDataList.forEach(imageData -> imageData.setChecked(true));
             imageAdapter.setState(State.MultipleSelect);
             imageAdapter.notifyItemRangeChanged(0, imageAdapter.getItemCount());
             numImagesChecked = imageDataList.size();
-            requireActivity().invalidateOptionsMenu();
-            requireActivity().setTitle(String.valueOf(numImagesChecked));
+            activity.invalidateOptionsMenu();
+            activity.setTitle(String.valueOf(numImagesChecked));
         } else if (item.getItemId() == R.id.importAlbums) {
             ArrayList<String> selectedImages = imageDataList.stream()
                     .filter(ImageData::isChecked)
                     .map(imageData -> imageData.uri.getPath())
                     .collect(Collectors.toCollection(ArrayList::new));
             if (selectedImages.isEmpty()) {
-                new MaterialAlertDialogBuilder(requireContext())
-                        .setTitle("Error")
-                        .setMessage("Please select image(s) to import!")
-                        .setPositiveButton("GOT IT", null)
-                        .show();
+                ErrorDialog.show(context, "Please select image(s) to import!");
             } else {
                 ImportDialog importDialog = new ImportDialog(selectedImages, requireView());
                 importDialog.show(getParentFragmentManager(), "ImportDialog");
@@ -335,11 +336,7 @@ public class AllImagesFragment extends Fragment {
                         .filter(ImageData::isChecked)
                         .collect(Collectors.toCollection(ArrayList::new));
                 if (selectedImages.isEmpty()) {
-                    new MaterialAlertDialogBuilder(requireContext())
-                            .setTitle("Error")
-                            .setMessage("Please select image(s) to make a slideshow!")
-                            .setPositiveButton("GOT IT", null)
-                            .show();
+                    ErrorDialog.show(context, "Please select image(s) to make a slideshow!");
                 } else {
                     SlideshowDialog ssDialog = new SlideshowDialog(selectedImages);
                     ssDialog.show(getParentFragmentManager(), "SlideShowDialog");
@@ -375,11 +372,7 @@ public class AllImagesFragment extends Fragment {
         gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
             public int getSpanSize(int position) {
-                if (viewList.get(position).type == TimelineData.Type.Time) {
-                    return typeView;
-                } else {
-                    return 1;
-                }
+                return viewList.get(position).type == TimelineData.Type.Time ? typeView : 1;
             }
         });
         recyclerView.setLayoutManager(gridLayoutManager);
@@ -393,19 +386,16 @@ public class AllImagesFragment extends Fragment {
         File file = new File(Environment.getExternalStorageDirectory() + "/" + ".nomedia");
 
         if ((file.exists() && file.isDirectory()) || file.mkdir()) {
-            for (int i = 0; i < selectedImages.size(); i++) {
-                String sourcePath = selectedImages.get(i).uri.getPath();
+            for (ImageData image : selectedImages) {
+                String sourcePath = image.uri.getPath();
                 if (ContentHelper.moveFile(sourcePath, file.getPath())) {
-                    imageDataList.remove(selectedImages.get(i));
+                    imageDataList.remove(image);
                     trashList.add(new TrashData(file.getPath(), sourcePath, 0));
                 }
             }
         }
         LocalDataManager.setObjectListData(TrashFragment.TRASH_LIST_KEY, trashList);
-        new MaterialAlertDialogBuilder(requireContext())
-                .setTitle("Images are moved to trash")
-                .setPositiveButton("Cancel", ((dialog, which) -> { }))
-                .show();
+        Snackbar.make(requireView(), "Images removed", Snackbar.LENGTH_SHORT).show();
     }
 
     private void sendImageListAndPositionToMain(int position) {

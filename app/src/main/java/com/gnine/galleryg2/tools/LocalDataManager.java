@@ -10,11 +10,16 @@ import com.gnine.galleryg2.data.TrashData;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class LocalDataManager {
-    private static final String PREF_FIRST_INSTALL = "PREF_FIRST_INSTALL";
+    final private static String ALBUM_PREFIX = "G2ALBUMS";
+    final private static String FAV_ALBUM_NAME = "Favorites";
+    final private static String ALBUM_LIST_KEY = "ALBUMS";
+
     private static LocalDataManager instance;
     private MySharedPreferences mySharedPreferences;
 
@@ -30,71 +35,39 @@ public class LocalDataManager {
         return instance;
     }
 
-    //layout
-    public static void setLayoutSetting(int isFirst) {
-        LocalDataManager.getInstance().mySharedPreferences.putIntValue("LAYOUT", isFirst);
+    public static MySharedPreferences getSharedPreferences() {
+        return LocalDataManager.getInstance().mySharedPreferences;
     }
 
-    public static int getLayoutSetting() {
-        return LocalDataManager.getInstance().mySharedPreferences.getIntValue("LAYOUT");
+    public static void putString(String key, String value) {
+        getSharedPreferences().putStringValue(key, value);
+    }
+
+    public static String getString(String key) {
+        return getSharedPreferences().getStringValue(key);
     }
 
     //list object
     public static void setObjectListData(String key, ArrayList<TrashData> list) {
-        LocalDataManager.getInstance().mySharedPreferences.saveObjectList(key, list);
+        getSharedPreferences().saveObjectList(key, list);
     }
 
     public static ArrayList<TrashData> getObjectListData(String key) {
-        return LocalDataManager.getInstance().mySharedPreferences.getObjectList(key);
-    }
-
-    //setting
-    public static void setSetting(String isFirst) {
-        LocalDataManager.getInstance().mySharedPreferences.putStringValue("SETTING", isFirst);
-    }
-
-    public static String getSetting() {
-        return LocalDataManager.getInstance().mySharedPreferences.getStringValue("SETTING");
+        return getSharedPreferences().getObjectList(key);
     }
 
     //albums
     public static void setAlbumsNames(ArrayList<String> albumsList) {
-        StringBuilder saveRes = new StringBuilder();
-        for (int i = 0; i < albumsList.size(); i++) {
-            if (i != albumsList.size() - 1)
-                saveRes.append(albumsList.get(i)).append(" //|//|// ");
-            else
-                saveRes.append(albumsList.get(i));
-        }
-        LocalDataManager.getInstance().mySharedPreferences.putStringValue("ALBUMS",saveRes.toString());
+        putString(ALBUM_LIST_KEY, String.join(" //|//|// ", albumsList));
     }
 
     public static void importImageToExistingOrNewAlbum(String title, ArrayList<String> imagesPath) {
-        ArrayList<String> currentData = getSingleAlbumData(title).stream()
-                .map(imageData -> imageData.uri.getPath())
-                .collect(Collectors.toCollection(ArrayList::new));
-        StringBuilder saveData = new StringBuilder();
-        if (currentData.size() == 0) {
-            for (int i = 0; i < imagesPath.size(); i++) {
-                if (i != imagesPath.size() - 1)
-                    saveData.append(imagesPath.get(i)).append(" $ ");
-                else
-                    saveData.append(imagesPath.get(i));
-            }
-        } else {
-            for (String item : imagesPath) {
-                if (!currentData.contains(item)) {
-                    currentData.add(item);
-                }
-            }
-            for (int i = 0; i < currentData.size(); i++) {
-                if (i != currentData.size() - 1)
-                    saveData.append(currentData.get(i)).append(" $ ");
-                else
-                    saveData.append(currentData.get(i));
-            }
-        }
-        LocalDataManager.getInstance().mySharedPreferences.putStringValue("G2ALBUMS"+title,saveData.toString());
+        Stream<String> currentData = getSingleAlbumData(title).stream()
+                .map(imageData -> imageData.uri.getPath());
+        List<String> arr = Stream.concat(imagesPath.stream(), currentData)
+                .distinct()
+                .collect(Collectors.toList());
+        putString(ALBUM_PREFIX + title, String.join(" $ ", arr));
     }
 
     public static void removeImagesFromAlbum(String title, ArrayList<String> imagesPath) {
@@ -102,95 +75,45 @@ public class LocalDataManager {
                 .map(imageData -> imageData.uri.getPath())
                 .collect(Collectors.toCollection(ArrayList::new));
         currentData.removeIf(imagesPath::contains);
-        StringBuilder saveData = new StringBuilder();
-        for (int i = 0; i < currentData.size(); i++) {
-            if (i != currentData.size() - 1)
-                saveData.append(currentData.get(i)).append(" $ ");
-            else
-                saveData.append(currentData.get(i));
-        }
-        LocalDataManager.getInstance().mySharedPreferences.putStringValue("G2ALBUMS"+title,saveData.toString());
+        putString(ALBUM_PREFIX + title, String.join(" $ ", currentData));
     }
 
     public static void removeSingleAlbum(String title) {
         ArrayList<String> allAlbums = getAlbumsNames();
         allAlbums.remove(title);
         setAlbumsNames(allAlbums);
-        LocalDataManager.getInstance().mySharedPreferences.removeKeyValuePair("G2ALBUMS" + title);
+        getSharedPreferences().removeKeyValuePair(ALBUM_PREFIX + title);
     }
 
     public static ArrayList<String> getAlbumsNames() {
-        String albumsNamesString = LocalDataManager.getInstance().mySharedPreferences.getStringValue("ALBUMS");
+        String albumsNamesString = getString(ALBUM_LIST_KEY);
         if (albumsNamesString != null && !albumsNamesString.equals(""))
             return new ArrayList<>(Arrays.asList(albumsNamesString.split(" //\\|//\\|// ")));
         return new ArrayList<>();
     }
 
     public static List<FolderData> getAllAlbumsData() {
-        List<FolderData> myAlbums = new ArrayList<>();
-        ArrayList<String> albumsNamesKey = getAlbumsNames();
-        for (String title : albumsNamesKey)
-            myAlbums.add(new FolderData(R.drawable.ic_folder, null, title, getSingleAlbumData(title)));
-        return myAlbums;
+        return getAlbumsNames().stream()
+                .map(title -> new FolderData(R.drawable.ic_folder, null, title, getSingleAlbumData(title)))
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
     public static ArrayList<ImageData> getSingleAlbumData(String title) {
-        if (LocalDataManager.getInstance().mySharedPreferences.getStringValue("G2ALBUMS" + title) != null && !LocalDataManager.getInstance().mySharedPreferences.getStringValue("G2ALBUMS" + title).equals("")) {
-            ArrayList<ImageData> res = ImageLoader.getImageDataFromPath(new ArrayList<>(Arrays.asList(LocalDataManager.getInstance().mySharedPreferences.getStringValue("G2ALBUMS" + title).split(" \\$ "))));
-            ArrayList<String> checkedExistList = res.stream()
-                    .map(imageData -> imageData.uri.getPath())
-                    .collect(Collectors.toCollection(ArrayList::new));
-            StringBuilder saveData = new StringBuilder();
-            for (int i = 0; i < checkedExistList.size(); i++) {
-                if (i != checkedExistList.size() - 1)
-                    saveData.append(checkedExistList.get(i)).append(" $ ");
-                else
-                    saveData.append(checkedExistList.get(i));
-            }
-            LocalDataManager.getInstance().mySharedPreferences.putStringValue("G2ALBUMS"+title,saveData.toString());
-            return res;
-        }
-        return new ArrayList<>();
+        final String albumString = getString(ALBUM_PREFIX + title);
+        return albumString != null && !albumString.equals("")
+                ? ImageLoader.getImageDataFromPath(new ArrayList<>(Arrays.asList(albumString.split(" \\$ "))))
+                : new ArrayList<>();
     }
 
     public static ArrayList<ImageData> getFavAlbum() {
-        //G2ALBUMSFAVORITES
-        if (LocalDataManager.getInstance().mySharedPreferences.getStringValue("G2ALBUMSFavorites") != null && !LocalDataManager.getInstance().mySharedPreferences.getStringValue("G2ALBUMSFavorites").equals("")) {
-            ArrayList<ImageData> res = ImageLoader.getImageDataFromPath(new ArrayList<>(Arrays.asList(LocalDataManager.getInstance().mySharedPreferences.getStringValue("G2ALBUMSFavorites").split(" \\$ "))));
-            ArrayList<String> checkedExistList = res.stream()
-                    .map(imageData -> imageData.uri.getPath())
-                    .collect(Collectors.toCollection(ArrayList::new));
-            StringBuilder saveData = new StringBuilder();
-            for (int i = 0; i < checkedExistList.size(); i++) {
-                if (i != checkedExistList.size() - 1)
-                    saveData.append(checkedExistList.get(i)).append(" $ ");
-                else
-                    saveData.append(checkedExistList.get(i));
-            }
-            LocalDataManager.getInstance().mySharedPreferences.putStringValue("G2ALBUMSFavorites",saveData.toString());
-            return res;
-        }
-        return new ArrayList<>();
+        return getSingleAlbumData(FAV_ALBUM_NAME);
     }
 
     public static void importImageIntoFav(String imagePath) {
-        ArrayList<String> importList = new ArrayList<>();
-        importList.add(imagePath);
-        importImageToExistingOrNewAlbum("Favorites", importList);
+        importImageToExistingOrNewAlbum(FAV_ALBUM_NAME, new ArrayList<>(Collections.singletonList(imagePath)));
     }
 
     public static void removeImageFromFav(String imagePath) {
-        ArrayList<String> currentData = getFavAlbum().stream()
-                .map(imageData -> imageData.uri.getPath())
-                .collect(Collectors.toCollection(ArrayList::new));
-        currentData.remove(imagePath);
-        StringBuilder saveData = new StringBuilder();
-        for (int i = 0; i < currentData.size(); i++) {
-            if (i != currentData.size() - 1)
-                saveData.append(currentData.get(i)).append(" $ ");
-            else
-                saveData.append(currentData.get(i));
-        }
-        LocalDataManager.getInstance().mySharedPreferences.putStringValue("G2ALBUMSFavorites", saveData.toString());
+        removeImagesFromAlbum(FAV_ALBUM_NAME, new ArrayList<>(Collections.singletonList(imagePath)));
     }
 }

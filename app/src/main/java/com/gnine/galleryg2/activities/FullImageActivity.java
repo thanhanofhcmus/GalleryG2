@@ -3,7 +3,6 @@ package com.gnine.galleryg2.activities;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,7 +17,6 @@ public class FullImageActivity extends AppCompatActivity {
     private static ImageData imageData = null;
     private static boolean isInViewpagerFragment;
     private static int currentImagePosition = 0;
-    private final int PHOTO_EDITOR_REQUEST_CODE = 231;// Any integer value as a request code.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
