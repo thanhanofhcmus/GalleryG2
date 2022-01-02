@@ -22,7 +22,6 @@ import java.nio.file.attribute.FileTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 public class ImageLoader {
 
@@ -152,17 +151,11 @@ public class ImageLoader {
     public static ArrayList<ImageData> getAllImagesFromDevice() {
         ArrayList<ImageData> res = new ArrayList<>();
         List<FolderData> list = new ArrayList<>();
-        if (ImageLoader.retrieveFoldersHaveImage("/storage/") != null)
-            list.addAll(Objects.requireNonNull(ImageLoader.retrieveFoldersHaveImage("/storage/")));
-        if (ImageLoader.retrieveFoldersHaveImage(Environment.getExternalStorageDirectory().getPath()) != null)
-            list.addAll(Objects.requireNonNull(ImageLoader.retrieveFoldersHaveImage(Environment.getExternalStorageDirectory().getPath())));
+        list.addAll(ImageLoader.retrieveFoldersHaveImage("/storage/"));
+        list.addAll(ImageLoader.retrieveFoldersHaveImage(Environment.getExternalStorageDirectory().getPath()));
         for (FolderData folder : list)
             res.addAll(getImagesFromFolder(folder.uri.getPath()));
-        res.sort((o1, o2) -> {
-            if (o1.getDateTime() == null || o2.getDateTime() == null)
-                return 0;
-            return o1.getDateTime().compareTo(o2.getDateTime());
-        });
+        res.sort((o1, o2) -> o1.dateString.compareTo(o2.dateString) * (-1));
         return res;
     }
 
@@ -179,11 +172,7 @@ public class ImageLoader {
                 res.add(new ImageData(Uri.fromFile(temp), temp.getName(), (int)temp.length(), ft != null ? ft.toMillis() : 0));
             }
         }
-        res.sort((o1, o2) -> {
-            if (o1.getDateTime() == null || o2.getDateTime() == null)
-                return 0;
-            return o1.getDateTime().compareTo(o2.getDateTime());
-        });
+        res.sort((o1, o2) -> o1.dateString.compareTo(o2.dateString) * (-1));
         return res;
     }
 }

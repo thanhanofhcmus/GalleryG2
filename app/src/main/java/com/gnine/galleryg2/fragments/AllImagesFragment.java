@@ -94,11 +94,7 @@ public class AllImagesFragment extends Fragment {
     }
 
     private void sortImageDataList() {
-        this.imageDataList.sort((image1, image2) -> {
-            String date1 = new SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(image1.dateAdded);
-            String date2 = new SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(image2.dateAdded);
-            return date1.compareTo(date2) * (-1);
-        });
+        this.imageDataList.sort((o1, o2) -> o1.dateString.compareTo(o2.dateString) * (-1));
     }
 
     public void setImageDataList(ArrayList<ImageData> imageDataList) {
