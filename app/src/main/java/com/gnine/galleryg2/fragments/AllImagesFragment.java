@@ -2,12 +2,14 @@ package com.gnine.galleryg2.fragments;
 
 import static com.gnine.galleryg2.adapters.ImageRecyclerViewAdapter.*;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -17,6 +19,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -36,6 +40,7 @@ import com.gnine.galleryg2.adapters.ImageRecyclerViewAdapter;
 import com.gnine.galleryg2.R;
 import com.gnine.galleryg2.data.TrashData;
 import com.gnine.galleryg2.tools.ImageLoader;
+import com.gnine.galleryg2.tools.PermissionChecker;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -61,6 +66,8 @@ public class AllImagesFragment extends Fragment {
     private String folderPath = null;
     private String typesTitle = null;
     private ArrayList<TrashData> trashList = null;
+
+    private ActivityResultLauncher<String> cameraRequestLauncher;
 
     public AllImagesFragment() {
         // Required empty public constructor
@@ -194,6 +201,11 @@ public class AllImagesFragment extends Fragment {
 
         trashList = LocalDataManager.getObjectListData(TrashFragment.TRASH_LIST_KEY);
         final FragmentActivity activity = requireActivity();
+
+        cameraRequestLauncher = registerForActivityResult(
+                new ActivityResultContracts.RequestPermission(),
+                granted -> { if (granted) { startActivity(new Intent(MediaStore.ACTION_IMAGE_CAPTURE)); }}
+        );
 
         if (folder || types || albums) {
             getView().setBackgroundColor(getResources().getColor(R.color.backgroundColor, requireContext().getTheme()));
@@ -329,7 +341,7 @@ public class AllImagesFragment extends Fragment {
                 importDialog.show(getParentFragmentManager(), "ImportDialog");
             }
         } else if (item.getItemId() == R.id.menu_camera) {
-            startActivity(new Intent(MediaStore.ACTION_IMAGE_CAPTURE));
+            startCamera();
         } else if (item.getItemId() == R.id.slideShow) {
             if (imageAdapter.getState() == State.MultipleSelect) {
                 ArrayList<ImageData> selectedImages = imageDataList.stream()
@@ -403,5 +415,18 @@ public class AllImagesFragment extends Fragment {
         assert mainActivity != null;
 
         mainActivity.invokeFullImageActivity(imageDataList, position, albums, folderPath);
+    }
+
+    void startCamera() {
+        try {
+            final String permission = Manifest.permission.CAMERA;
+            if (! PermissionChecker.checkPermission(this, permission)) {
+                cameraRequestLauncher.launch(permission);
+            } else {
+                startActivity(new Intent(MediaStore.ACTION_IMAGE_CAPTURE));
+            }
+        } catch (Exception e) {
+            Log.e("CAMERA", e.getMessage());
+        }
     }
 }
