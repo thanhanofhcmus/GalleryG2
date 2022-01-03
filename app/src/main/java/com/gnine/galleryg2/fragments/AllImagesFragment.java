@@ -418,7 +418,7 @@ public class AllImagesFragment extends Fragment {
 
     private String getRecyclerViewLabel(ImageData imageData) {
         if (typeSort == SortType.dateNew || typeSort == SortType.dateOld) {
-            return new SimpleDateFormat("EEE, MMM d, yyyy", Locale.US).format(imageData.dateAdded);
+            return new SimpleDateFormat("EEE, d MMM, yyyy", Locale.getDefault()).format(imageData.dateAdded);
         } else if (typeSort == SortType.nameAZ || typeSort == SortType.nameZA) {
             return "" + imageData.name.toUpperCase().charAt(0);
         }
