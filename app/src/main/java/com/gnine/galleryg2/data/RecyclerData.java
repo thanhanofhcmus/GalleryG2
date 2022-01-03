@@ -1,18 +1,18 @@
 package com.gnine.galleryg2.data;
 
-public class TimelineData {
+public class RecyclerData {
     public enum Type {
-        Time,
+        Label,
         Image
     }
     public final Type type;
-    public final String time;
+    public final String labelData;
     public final ImageData imageData;
     public final int index;
 
-    public TimelineData(Type type, String time, ImageData imageData, int index) {
+    public RecyclerData(Type type, String labelData, ImageData imageData, int index) {
         this.type = type;
-        this.time = time;
+        this.labelData = labelData;
         this.imageData = imageData;
         this.index = index;
     }
