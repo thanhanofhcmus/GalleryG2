@@ -3,8 +3,12 @@ package com.gnine.galleryg2.activities;
 import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContract;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -29,6 +33,8 @@ public class MainActivity extends AppCompatActivity {
     public static final String IS_ALBUM = "IS_ALBUM";
     public static final String ALBUM_TITLE = "ALBUM_TITLE";
 
+    private ActivityResultLauncher<String> storageRequestLauncher;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,13 +45,17 @@ public class MainActivity extends AppCompatActivity {
 
         LocalDataManager.init(getApplicationContext());
 
-        final String permission = Manifest.permission.WRITE_EXTERNAL_STORAGE;
-
+        storageRequestLauncher = registerForActivityResult(
+                new ActivityResultContracts.RequestPermission(),
+                granted -> { }
+        );
+        final String permission = Build.VERSION.SDK_INT >= Build.VERSION_CODES.R
+                ? Manifest.permission.MANAGE_EXTERNAL_STORAGE
+                : Manifest.permission.WRITE_EXTERNAL_STORAGE;
         if (! PermissionChecker.checkPermission(this, permission)) {
-            PermissionChecker.requestPermission(this, permission, granted -> { if (granted) { setupBottomNavigation(); } });
-        } else {
-            setupBottomNavigation();
+            storageRequestLauncher.launch(permission);
         }
+        setupBottomNavigation();
     }
 
     private void setupBottomNavigation() {

@@ -21,6 +21,12 @@
         app:showAsAction="ifRoom"/>
 
     <item
+        android:id="@+id/slideShow"
+        android:title="@string/slideshow"
+        android:icon="@drawable/ic_slideshow"
+        app:showAsAction="ifRoom"/>
+
+    <item
         android:id="@+id/menu_share"
         android:title=""
         android:icon="@drawable/ic_share"

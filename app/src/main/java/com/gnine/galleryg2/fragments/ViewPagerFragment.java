@@ -92,7 +92,7 @@ public class ViewPagerFragment extends Fragment {
                 granted -> { if (granted) { startActivity(new Intent(MediaStore.ACTION_IMAGE_CAPTURE)); }}
         );
         view.findViewById(R.id.editBtn).setOnClickListener(v ->
-                ((FullImageActivity) requireActivity()).startCrop(imageDataList.get(viewPager2.getCurrentItem()).uri));
+                ((FullImageActivity) requireActivity()).startEdit(imageDataList.get(viewPager2.getCurrentItem()).uri));
         view.findViewById(R.id.shareBtn).setOnClickListener(v ->
                 ImageSharer.share(requireActivity(), imageDataList.get(viewPager2.getCurrentItem())));
         view.findViewById(R.id.delBtn).setOnClickListener(view1 -> {
