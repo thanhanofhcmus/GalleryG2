@@ -63,7 +63,7 @@ public class FoldersFragment extends Fragment {
             FragmentTransaction ft = getChildFragmentManager().beginTransaction();
             tempFragment = new AllImagesFragment();
             ((AllImagesFragment) tempFragment).setFolder(true);
-            ((AllImagesFragment) tempFragment).setFolderPath(folderDataList.get(position).uri.getPath());
+            ((AllImagesFragment) tempFragment).setFolderName(folderDataList.get(position).title);
             ((AllImagesFragment) tempFragment).setImageDataList(folderDataList.get(position).imageList);
             BottomNavigationView bnv = requireActivity().findViewById(R.id.bottomNavView);
             bnv.getMenu().getItem(1).setEnabled(false);
@@ -78,7 +78,7 @@ public class FoldersFragment extends Fragment {
                 FragmentTransaction ft = getChildFragmentManager().beginTransaction();
                 tempFragment = new AllImagesFragment();
                 ((AllImagesFragment) tempFragment).setAlbums(true);
-                ((AllImagesFragment) tempFragment).setFolderPath(albumsList.get(position).title);
+                ((AllImagesFragment) tempFragment).setFolderName(albumsList.get(position).title);
                 ((AllImagesFragment) tempFragment).setImageDataList(albumsList.get(position).imageList);
                 BottomNavigationView bnv = requireActivity().findViewById(R.id.bottomNavView);
                 bnv.getMenu().getItem(1).setEnabled(false);
@@ -225,23 +225,24 @@ public class FoldersFragment extends Fragment {
         List<TypeData> list = new ArrayList<>();
         list.add(new TypeData(R.drawable.ic_video, "Videos", null));
         list.add(new TypeData(R.drawable.ic_selfie, "Images",
-                ImageLoader.getAllImagesFromDevice()));
+                ImageLoader.getAllImage(requireActivity().getApplicationContext())));
         list.add(new TypeData(R.drawable.ic_screenshot, "Screenshots", null));
 
         return list;
     }
 
     private List<FolderData> getListFolders() {
-        ImageLoader.retrieveFoldersHaveImage("/storage/");
+        /*ImageLoader.retrieveFoldersHaveImage("/storage/");
         List<FolderData> list = new ArrayList<>(Objects.requireNonNull(ImageLoader.retrieveFoldersHaveImage("/storage/")));
         ImageLoader.retrieveFoldersHaveImage(Environment.getExternalStorageDirectory().getPath());
-        list.addAll(Objects.requireNonNull(ImageLoader.retrieveFoldersHaveImage(Environment.getExternalStorageDirectory().getPath())));
+        list.addAll(Objects.requireNonNull(ImageLoader.retrieveFoldersHaveImage(Environment.getExternalStorageDirectory().getPath())));*/
+        List<FolderData> list = ImageLoader.getAllFolder(requireActivity().getApplicationContext());
         return list;
     }
 
     private List<FolderData> getAlbumsList() {
         ArrayList<FolderData> list = new ArrayList<>();
-        list.add(new FolderData(R.drawable.ic_folder, null, "Favorites", LocalDataManager.getFavAlbum()));
+        list.add(new FolderData(/*R.drawable.ic_folder, null, */"Favorites", LocalDataManager.getFavAlbum()));
         list.addAll(LocalDataManager.getAllAlbumsData());
         return list;
     }

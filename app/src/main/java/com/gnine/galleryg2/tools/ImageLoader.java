@@ -20,20 +20,23 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.attribute.FileTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
 public class ImageLoader {
 
     @NonNull
-    public static ArrayList<ImageData> loadImageFromSharedStorage(Context context) {
+    public static ArrayList<ImageData> getAllImage(Context context) {
         ArrayList<ImageData> imageDataList = new ArrayList<>();
 
-        Uri collection = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
+        /*Uri collection = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
                 ? MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL)
-                : MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+                : MediaStore.Images.Media.EXTERNAL_CONTENT_URI;*/
+        Uri contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
         String[] projection = new String[]{
-                MediaStore.Images.Media._ID,
+                //MediaStore.Images.Media._ID,
+                MediaStore.Images.Media.DATA,
                 MediaStore.Images.Media.DISPLAY_NAME,
                 MediaStore.Images.Media.SIZE,
                 MediaStore.Images.Media.DATE_ADDED,
@@ -41,21 +44,24 @@ public class ImageLoader {
         String sortOrder = MediaStore.Images.Media.DATE_ADDED + " DESC";
 
         Cursor cursor = context.getApplicationContext().getContentResolver().query(
-                collection, projection, null, null, sortOrder);
+                contentUri, projection, null, null, sortOrder);
 
-        int idColumn = cursor.getColumnIndexOrThrow(MediaStore.Images.Media._ID);
+        //int idColumn = cursor.getColumnIndexOrThrow(MediaStore.Images.Media._ID);
+        int pathColumn = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
         int nameColumn = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DISPLAY_NAME);
         int sizeColumn = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.SIZE);
         int dateAddedColumn = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATE_ADDED);
 
         while (cursor.moveToNext()) {
-            long id = cursor.getLong(idColumn);
+            //long id = cursor.getLong(idColumn);
+            //Uri contentUri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id);
+            File file = new File(cursor.getString(pathColumn));
+            Uri fileUri = Uri.fromFile(file);
             String name = cursor.getString(nameColumn);
+            String folder = Objects.requireNonNull(file.getParentFile()).getName();
             int size = cursor.getInt(sizeColumn);
             long dateAdded = cursor.getLong(dateAddedColumn);
-            Uri contentUri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id);
-
-            imageDataList.add(new ImageData(contentUri, name, size, dateAdded * 1000L));
+            imageDataList.add(new ImageData(fileUri, name, folder, size, dateAdded * 1000L));
         }
 
         cursor.close();
@@ -63,7 +69,43 @@ public class ImageLoader {
         return imageDataList;
     }
 
-    private static boolean isImageFile(String filePath) {
+    public static ArrayList<FolderData> getAllFolder(Context context) {
+        ArrayList<ImageData> imageDataList = getAllImage(context);
+        ArrayList<FolderData> folderDataList = new ArrayList<>();
+
+        if (imageDataList.size() > 0) {
+            imageDataList.sort((image1, image2) -> image2.folder.compareTo(image1.folder));
+
+            String folderCur = imageDataList.get(0).folder;
+
+            ArrayList<ImageData> images = new ArrayList<>();
+            images.add(imageDataList.get(0));
+
+            for (int i = 1; i < imageDataList.size(); i++) {
+                if (!folderCur.equals(imageDataList.get(i).folder)) {
+                    folderDataList.add(new FolderData(folderCur, images));
+                    folderCur = imageDataList.get(i).folder;
+                    images = new ArrayList<>();
+                }
+                images.add(imageDataList.get(i));
+            }
+            folderDataList.add(new FolderData(folderCur, images));
+        }
+        return folderDataList;
+    }
+
+    public static ArrayList<ImageData> getImagesFromFolder(Context context, String folderName) {
+        ArrayList<ImageData> imageDataList = getAllImage(context);
+        ArrayList<ImageData> images = new ArrayList<>();
+        for (int i = 0; i <imageDataList.size(); i++) {
+            if (folderName.equals(imageDataList.get(i).folder)) {
+                images.add(imageDataList.get(i));
+            }
+        }
+        return images;
+    }
+
+    /*private static boolean isImageFile(String filePath) {
         return filePath.endsWith(".jpg") || filePath.endsWith(".png") || filePath.endsWith(".jpeg")
                 || filePath.endsWith(".gif") || filePath.endsWith(".webp") || filePath.endsWith(
                 ".bmp");
@@ -109,7 +151,7 @@ public class ImageLoader {
                     fileTime = (FileTime) Files.getAttribute(file.toPath(), "creationTime");
                 } catch (IOException ignored) {
                 }
-                imagesList.add(new ImageData(Uri.fromFile(file), file.getName(), (int) file.length(),
+                imagesList.add(new ImageData(Uri.fromFile(file), file.getName(), file.getParentFile().getName(), (int) file.length(),
                         fileTime != null ? fileTime.toMillis() : 0));
             }
         }
@@ -157,7 +199,7 @@ public class ImageLoader {
             res.addAll(getImagesFromFolder(folder.uri.getPath()));
         res.sort((o1, o2) -> o1.dateString.compareTo(o2.dateString) * (-1));
         return res;
-    }
+    }*/
 
     public static ArrayList<ImageData> getImageDataFromPath(ArrayList<String> pathList) {
         ArrayList<ImageData> res = new ArrayList<>();
@@ -169,7 +211,7 @@ public class ImageLoader {
                     ft = (FileTime) Files.getAttribute(temp.toPath(), "creationTime");
                 } catch (IOException ignored) {
                 }
-                res.add(new ImageData(Uri.fromFile(temp), temp.getName(), (int)temp.length(), ft != null ? ft.toMillis() : 0));
+                res.add(new ImageData(Uri.fromFile(temp), temp.getName(), temp.getParentFile().getName(), (int)temp.length(), ft != null ? ft.toMillis() : 0));
             }
         }
         res.sort((o1, o2) -> o1.dateString.compareTo(o2.dateString) * (-1));

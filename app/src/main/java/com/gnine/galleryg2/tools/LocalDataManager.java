@@ -94,7 +94,7 @@ public class LocalDataManager {
 
     public static List<FolderData> getAllAlbumsData() {
         return getAlbumsNames().stream()
-                .map(title -> new FolderData(R.drawable.ic_folder, null, title, getSingleAlbumData(title)))
+                .map(title -> new FolderData(/*R.drawable.ic_folder, null, */title, getSingleAlbumData(title)))
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
