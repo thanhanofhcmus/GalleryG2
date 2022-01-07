@@ -1,7 +1,7 @@
 # GalleryG2
 A simple gallery app for android user, easy to use with many feature
 
-[Imgur](https://i.imgur.com/a7iKcYH.png)
+![](https://i.imgur.com/a7iKcYH.png)
 </br>
 
 ## Feature
@@ -22,19 +22,19 @@ A simple gallery app for android user, easy to use with many feature
 
 You can watch images with different grid layouts.
 
-[Imgur](https://i.imgur.com/PjGjliK.png)
+![](https://i.imgur.com/PjGjliK.png)
 
 ## Album
 
 You can create, access, delete and edit albums.
 
-[Imgur](https://i.imgur.com/k5tOfXY.png)
+![](https://i.imgur.com/k5tOfXY.png)
 
 ## Single image
 
 You can watch full view, zoom, edit, share, delete or watch information of image.
 
-[Imgur](https://i.imgur.com/LCj1l1u.png)
+![](https://i.imgur.com/LCj1l1u.png)
 
 ## Edit
 
