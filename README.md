@@ -1,19 +1,20 @@
 # GalleryG2
 A simple gallery app for android user, easy to use with many feature
 
-![](https://i.imgur.com/a7iKcYH.png)
+<img src="https://i.imgur.com/a7iKcYH.png" width=50>
+
 </br>
 
 ## Feature
 
 - Load [**All Image**](#all-image) from your smartphone.
 - Create and watch [**Album**](#Album).
-- Click one item to see a [**Single Image**](#Single image).
+- Click one item to see a [**Single Image**](#Single-image).
 - [**Edit**](#Edit) images and save to your phone.
-- [**Share**] (#share) pictures to your friends.
-- [**Take a photo**] (#take-a-photo) easily and save to your phone.
-- Create a [**Slide show**] (#slide-show) from multiple images.
-- Change theme in [**Setting**] (#setting).
+- [**Share**](#share) pictures to your friends.
+- [**Take a photo**](#take-a-photo) easily and save to your phone.
+- Create a [**Slide show**](#slide-show) from multiple images.
+- Change theme in [**Setting**](#setting).
 
 ## Benefit
 - Easy to edit
@@ -22,19 +23,19 @@ A simple gallery app for android user, easy to use with many feature
 
 You can watch images with different grid layouts.
 
-![](https://i.imgur.com/PjGjliK.png)
+<img src="https://i.imgur.com/PjGjliK.png" width=250>
 
 ## Album
 
 You can create, access, delete and edit albums.
 
-![](https://i.imgur.com/k5tOfXY.png)
+<img src="https://i.imgur.com/k5tOfXY.png" width=250>
 
 ## Single image
 
 You can watch full view, zoom, edit, share, delete or watch information of image.
 
-![](https://i.imgur.com/LCj1l1u.png)
+<img src="https://i.imgur.com/LCj1l1u.png" width=250>
 
 ## Edit
 
