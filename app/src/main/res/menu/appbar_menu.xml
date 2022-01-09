@@ -43,7 +43,41 @@
         android:title="@string/select_all" />
 
     <item
+        android:id="@+id/sort"
+        android:title="@string/sort" >
+
+        <menu>
+
+            <item
+                android:id="@+id/sort_name_az"
+                android:title="@string/sort_name_az" />
+
+            <item
+                android:id="@+id/sort_name_za"
+                android:title="@string/sort_name_za" />
+
+            <item
+                android:id="@+id/sort_date_new"
+                android:title="@string/sort_date_new" />
+
+            <item
+                android:id="@+id/sort_date_old"
+                android:title="@string/sort_date_old" />
+
+            <item
+                android:id="@+id/sort_size_small"
+                android:title="@string/sort_size_small" />
+
+            <item
+                android:id="@+id/sort_size_large"
+                android:title="@string/sort_size_large" />
+
+        </menu>
+
+    </item>
+
+    <item
         android:id="@+id/menu_camera"
-        android:title="Open Camera" />
+        android:title="@string/open_camera" />
 
 </menu>

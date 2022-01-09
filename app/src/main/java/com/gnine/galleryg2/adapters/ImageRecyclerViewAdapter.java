@@ -14,7 +14,7 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.gnine.galleryg2.data.ImageData;
 import com.gnine.galleryg2.R;
-import com.gnine.galleryg2.data.TimelineData;
+import com.gnine.galleryg2.data.RecyclerData;
 
 import java.util.List;
 import java.util.function.BiConsumer;
@@ -62,7 +62,7 @@ public class ImageRecyclerViewAdapter extends
     public static int ITEM_TYPE_TIME = 0;
     public static int ITEM_TYPE_IMAGE = 1;
     @NonNull
-    private final List<TimelineData> imageDataList;
+    private final List<RecyclerData> imageDataList;
     @NonNull
     private final BiConsumer<Integer, View> onItemClick;
     @NonNull
@@ -70,7 +70,7 @@ public class ImageRecyclerViewAdapter extends
 
     private State state = State.Normal;
 
-    public ImageRecyclerViewAdapter(@NonNull List<TimelineData> imageDataList,
+    public ImageRecyclerViewAdapter(@NonNull List<RecyclerData> imageDataList,
                                     @NonNull BiConsumer<Integer, View> onItemClick,
                                     @NonNull BiConsumer<Integer, View> onItemLongClick) {
         this.imageDataList = imageDataList;
@@ -80,7 +80,7 @@ public class ImageRecyclerViewAdapter extends
 
     @Override
     public int getItemViewType(int position) {
-        if (imageDataList.get(position).type == TimelineData.Type.Time) {
+        if (imageDataList.get(position).type == RecyclerData.Type.Label) {
             return ITEM_TYPE_TIME;
         } else {
             return ITEM_TYPE_IMAGE;
@@ -102,10 +102,9 @@ public class ImageRecyclerViewAdapter extends
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        if (imageDataList.get(position).type == TimelineData.Type.Time) {
+        if (imageDataList.get(position).type == RecyclerData.Type.Label) {
             final TimelineViewHolder timelineHolder = (TimelineViewHolder) holder;
-            //long timelineData = imageDataList.get(position).time;
-            timelineHolder.textView.setText(imageDataList.get(position).time);
+            timelineHolder.textView.setText(imageDataList.get(position).labelData);
         } else {
             final ImageViewHolder imageHolder = (ImageViewHolder) holder;
             ImageView imageView = imageHolder.imageView;
