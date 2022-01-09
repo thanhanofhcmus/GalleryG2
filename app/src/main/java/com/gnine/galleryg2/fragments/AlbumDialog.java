@@ -1,6 +1,5 @@
 package com.gnine.galleryg2.fragments;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -16,8 +15,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 import com.gnine.galleryg2.R;
+import com.gnine.galleryg2.tools.ErrorDialog;
 import com.gnine.galleryg2.tools.LocalDataManager;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
@@ -58,16 +57,13 @@ public class AlbumDialog extends DialogFragment {
         input = view.findViewById(R.id.albumId);
         Button createBtn = view.findViewById(R.id.confirmBtn);
         Button cancelBtn = view.findViewById(R.id.cancelBtn);
+        final Context context = requireContext();
 
         createBtn.setOnClickListener(view1 -> {
             if (!input.getText().toString().equals("")) {
                 String newAlbum = input.getText().toString();
                 if (LocalDataManager.getAlbumsNames().contains(newAlbum) || newAlbum.equalsIgnoreCase("FAVORITES")) {
-                    new MaterialAlertDialogBuilder(requireContext())
-                            .setTitle("Error")
-                            .setMessage("This album already exists!")
-                            .setPositiveButton("Got it", null)
-                            .show();
+                    ErrorDialog.show(context, "This album already exists");
                 } else {
                     ArrayList<String> currentData = LocalDataManager.getAlbumsNames();
                     System.out.println(currentData);
@@ -80,13 +76,7 @@ public class AlbumDialog extends DialogFragment {
                 }
             }
             else {
-                new MaterialAlertDialogBuilder(requireContext())
-                        .setTitle("Error")
-                        .setMessage("Please type the name of the new album!")
-                        .setPositiveButton(android.R.string.yes, null)
-                        .setIcon(android.R.drawable.ic_dialog_alert)
-                        .create()
-                        .show();
+                ErrorDialog.show(context, "Please type the name of the new album");
             }
         });
         cancelBtn.setOnClickListener(view1 -> Objects.requireNonNull(getDialog()).dismiss());

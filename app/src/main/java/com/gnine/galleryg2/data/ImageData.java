@@ -13,6 +13,7 @@ public class ImageData implements Parcelable {
     public final String name;
     public final int size;
     public final long dateAdded;
+    public final String dateString;
     private boolean checked;
 
     public ImageData(Uri uri, String name, int size, long dateAdded) {
@@ -20,18 +21,20 @@ public class ImageData implements Parcelable {
         this.name = name;
         this.size = size;
         this.dateAdded = dateAdded;
+        this.dateString = new SimpleDateFormat("yyyyMMdd:hh:mm", Locale.getDefault()).format(this.dateAdded);
     }
 
     protected ImageData(Parcel in) {
-        uri = in.readParcelable(Uri.class.getClassLoader());
-        name = in.readString();
-        size = in.readInt();
-        dateAdded = in.readLong();
-        checked = in.readByte() != 0;
+        this.uri = in.readParcelable(Uri.class.getClassLoader());
+        this.name = in.readString();
+        this.size = in.readInt();
+        this.dateAdded = in.readLong();
+        this.checked = in.readByte() != 0;
+        this.dateString = new SimpleDateFormat("yyyyMMdd:hh:mm", Locale.getDefault()).format(this.dateAdded);
     }
 
     public String getDateTime() {
-        return new SimpleDateFormat("hh:mm dd/MM/yyyy", Locale.getDefault()).format(dateAdded);
+        return dateString;
     }
 
     public boolean isChecked() {
