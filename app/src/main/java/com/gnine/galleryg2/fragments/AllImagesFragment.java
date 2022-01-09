@@ -136,6 +136,7 @@ public class AllImagesFragment extends Fragment {
                 requireActivity().setTitle(String.valueOf(numImagesChecked));
                 imageAdapter.notifyItemChanged(position);
             } else {
+                // zoomImageFromThumb(view1, position);
                 sendImageListAndPositionToMain(viewList.get(position).index);
             }
         };
