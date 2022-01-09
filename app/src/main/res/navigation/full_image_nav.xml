@@ -11,7 +11,9 @@
         tools:layout="@layout/fragment_view_pager" >
         <action
             android:id="@+id/viewPagerFragmentToInformationFragment"
-            app:destination="@id/informationFragment" />
+            app:destination="@id/informationFragment"
+            app:enterAnim="@anim/slide_from_right"
+            app:exitAnim="@anim/slide_from_right" />
     </fragment>
     <fragment
         android:id="@+id/informationFragment"
