@@ -136,9 +136,9 @@ public class AllImagesFragment extends Fragment {
             BottomNavigationView bnv = activity.findViewById(R.id.bottomNavView);
             bnv.getMenu().getItem(1).setEnabled(true);
         }
-
         updateAdapterView();
     }
+
 
     private void updateAdapterView() {
         imageAdapter = new ImageRecyclerViewAdapter(viewList, onItemClick, onItemLongClick);
