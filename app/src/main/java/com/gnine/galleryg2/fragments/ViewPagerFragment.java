@@ -1,6 +1,11 @@
 package com.gnine.galleryg2.fragments;
 
+
+
+import static com.gnine.galleryg2.R.anim.slide_from_right;
+
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -18,6 +23,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
+import android.transition.TransitionInflater;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -60,11 +66,15 @@ public class ViewPagerFragment extends Fragment {
         // Required empty public constructor
     }
 
+    @SuppressLint("ResourceType")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_view_pager, container, false);
         assert getActivity() != null;
+        //animation
+        TransitionInflater inflater1 =  TransitionInflater.from(requireContext());
+        setExitTransition(inflater1.inflateTransition(android.R.transition.slide_left));
 
         Bundle bundle = requireActivity().getIntent().getExtras();
         imageDataList = bundle.getParcelableArrayList(MainActivity.IMAGE_LIST_KEY);

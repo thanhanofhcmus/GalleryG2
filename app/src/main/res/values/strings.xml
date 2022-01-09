@@ -17,6 +17,14 @@
     <string name="media_types_and_utilities">Media Types and Utilities</string>
     <string name="my_folders">My Folders</string>
     <string name="select_all">Select All</string>
+    <string name="sort">Sort</string>
+    <string name="sort_name_az">Name (A-Z)</string>
+    <string name="sort_name_za">Name (Z-A)</string>
+    <string name="sort_date_new">Date (newest)</string>
+    <string name="sort_date_old">Date (oldest)</string>
+    <string name="sort_size_small">Size (smallest)</string>
+    <string name="sort_size_large">Size (largest)</string>
+    <string name="open_camera">Open Camera</string>
     <string name="empty">Empty</string>
     <string name="import_album">Import Album</string>
     <string name="delete">Delete</string>
