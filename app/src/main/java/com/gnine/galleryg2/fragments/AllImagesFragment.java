@@ -29,6 +29,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.gnine.galleryg2.data.FolderData;
+import com.gnine.galleryg2.data.TimelineData;
 import com.gnine.galleryg2.data.RecyclerData;
 import com.gnine.galleryg2.tools.ContentHelper;
 import com.gnine.galleryg2.tools.ErrorDialog;
@@ -65,7 +67,7 @@ public class AllImagesFragment extends Fragment {
     private boolean folder = false;
     private boolean types = false;
     private boolean albums = false;
-    private String folderPath = null;
+    private String folderName = null;
     private String typesTitle = null;
     private ArrayList<TrashData> trashList = null;
     BiConsumer<Integer, View> onItemClick;
@@ -102,8 +104,8 @@ public class AllImagesFragment extends Fragment {
         this.typesTitle = typesTitle;
     }
 
-    public void setFolderPath(String folderPath) {
-        this.folderPath = folderPath;
+    public void setFolderName(String folderName) {
+        this.folderName = folderName;
     }
 
     public void setImageDataList(ArrayList<ImageData> imageDataList) {
@@ -113,9 +115,9 @@ public class AllImagesFragment extends Fragment {
 
     private void update() {
         if (folder) {
-            this.imageDataList = ImageLoader.getImagesFromFolder(folderPath);
+            this.imageDataList = ImageLoader.getImagesFromFolder(requireActivity().getApplicationContext(), folderName);
         } else {
-            this.imageDataList = albums ? LocalDataManager.getSingleAlbumData(folderPath) : ImageLoader.getAllImagesFromDevice();
+            this.imageDataList = albums ? LocalDataManager.getSingleAlbumData(folderName) : ImageLoader.getAllImage(requireActivity().getApplicationContext());
         }
         sortImages(typeSort, false);
 
@@ -128,17 +130,10 @@ public class AllImagesFragment extends Fragment {
             textView.setVisibility(View.VISIBLE);
             recyclerView.setVisibility(View.GONE);
         }
-        if (folder && !(new File(folderPath).exists())) {
-            FragmentManager manager = activity.getSupportFragmentManager();
-            manager.popBackStack();
-            FoldersFragment.checkBackPressed = true;
-            FoldersFragment.tempFragment = null;
-            BottomNavigationView bnv = activity.findViewById(R.id.bottomNavView);
-            bnv.getMenu().getItem(1).setEnabled(true);
+
         }
         updateAdapterView();
     }
-
 
     private void updateAdapterView() {
         imageAdapter = new ImageRecyclerViewAdapter(viewList, onItemClick, onItemLongClick);
@@ -258,7 +253,7 @@ public class AllImagesFragment extends Fragment {
         if (imageAdapter.getState() == State.MultipleSelect) {
             menu.getItem(0).setVisible(true);
             if (albums) {
-                menu.getItem(1).setVisible(!folderPath.equals("Favorites"));
+                menu.getItem(1).setVisible(!folderName.equals("Favorites"));
             } else {
                 menu.getItem(1).setVisible(true);
             }
@@ -279,7 +274,7 @@ public class AllImagesFragment extends Fragment {
             menu.getItem(6).setVisible(true);
             menu.getItem(7).setVisible(true);
             if (folder || albums) {
-                activity.setTitle(folderPath);
+                activity.setTitle(folderName);
             } else if (types) {
                 activity.setTitle(typesTitle);
             } else {
@@ -322,7 +317,7 @@ public class AllImagesFragment extends Fragment {
                 if (selectedImages.isEmpty()) {
                     ErrorDialog.show(context, "Please select image(s) to remove from album!");
                 } else {
-                    LocalDataManager.removeImagesFromAlbum(folderPath, selectedImages);
+                    LocalDataManager.removeImagesFromAlbum(folderName, selectedImages);
                 }
             } else {
                 addToTrash();
@@ -479,7 +474,7 @@ public class AllImagesFragment extends Fragment {
         MainActivity mainActivity = (MainActivity) getActivity();
         assert mainActivity != null;
 
-        mainActivity.invokeFullImageActivity(imageDataList, position, albums, folderPath);
+        mainActivity.invokeFullImageActivity(imageDataList, position, albums, folderName);
     }
 
     void startCamera() {
