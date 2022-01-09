@@ -71,7 +71,6 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.FolderView
         if (folderData == null) {
             return;
         }
-        //holder.icon.setImageResource(folderData.resourceId);
         holder.title.setText(String.valueOf(folderData.title));
 
         List<ImageData> imageDataList = folderData.imageList;

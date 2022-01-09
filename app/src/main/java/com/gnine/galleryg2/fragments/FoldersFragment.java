@@ -32,8 +32,6 @@ import java.util.Objects;
 import java.util.function.BiConsumer;
 
 public class FoldersFragment extends Fragment {
-    //private static final String TAG = "FoldersFragment";
-
     static Fragment tempFragment;
 
     static boolean checkBackPressed;
@@ -232,17 +230,13 @@ public class FoldersFragment extends Fragment {
     }
 
     private List<FolderData> getListFolders() {
-        /*ImageLoader.retrieveFoldersHaveImage("/storage/");
-        List<FolderData> list = new ArrayList<>(Objects.requireNonNull(ImageLoader.retrieveFoldersHaveImage("/storage/")));
-        ImageLoader.retrieveFoldersHaveImage(Environment.getExternalStorageDirectory().getPath());
-        list.addAll(Objects.requireNonNull(ImageLoader.retrieveFoldersHaveImage(Environment.getExternalStorageDirectory().getPath())));*/
         List<FolderData> list = ImageLoader.getAllFolder(requireActivity().getApplicationContext());
         return list;
     }
 
     private List<FolderData> getAlbumsList() {
         ArrayList<FolderData> list = new ArrayList<>();
-        list.add(new FolderData(/*R.drawable.ic_folder, null, */"Favorites", LocalDataManager.getFavAlbum()));
+        list.add(new FolderData("Favorites", LocalDataManager.getFavAlbum()));
         list.addAll(LocalDataManager.getAllAlbumsData());
         return list;
     }

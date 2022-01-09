@@ -69,6 +69,7 @@ public class ImageData implements Parcelable {
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeParcelable(uri, i);
         parcel.writeString(name);
+        parcel.writeString(folder);
         parcel.writeInt(size);
         parcel.writeLong(dateAdded);
         parcel.writeByte((byte) (checked ? 1 : 0));
