@@ -6,9 +6,9 @@ A simple gallery app for android user, easy to use with many feature
 
 ## Feature
 
-- Load [**All Image**] (#all-image) from your smartphone.
-- Create and watch [**Album**] (#album).
-- Click one item to see a [**Single Image**] (#single-image).
+- Load [**All Image**](#all-image) from your smartphone.
+- Create and watch [**Album**](#Album).
+- Click one item to see a [**Single Image**](#Single image).
 - [**Edit**](#Edit) images and save to your phone.
 - [**Share**] (#share) pictures to your friends.
 - [**Take a photo**] (#take-a-photo) easily and save to your phone.
