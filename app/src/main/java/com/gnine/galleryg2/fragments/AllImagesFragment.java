@@ -29,8 +29,6 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.gnine.galleryg2.data.FolderData;
-import com.gnine.galleryg2.data.TimelineData;
 import com.gnine.galleryg2.data.RecyclerData;
 import com.gnine.galleryg2.tools.ContentHelper;
 import com.gnine.galleryg2.tools.ErrorDialog;
@@ -129,8 +127,6 @@ public class AllImagesFragment extends Fragment {
         } else {
             textView.setVisibility(View.VISIBLE);
             recyclerView.setVisibility(View.GONE);
-        }
-
         }
         updateAdapterView();
     }
