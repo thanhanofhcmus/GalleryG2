@@ -22,6 +22,11 @@ import java.util.List;
 
 import ja.burhanrashid52.photoeditor.PhotoFilter;
 
+/**
+ * @author <a href="https://github.com/burhanrashid52">Burhanuddin Rashid</a>
+ * @version 0.1.2
+ * @since 5/23/2018
+ */
 public class FilterViewAdapter extends RecyclerView.Adapter<FilterViewAdapter.ViewHolder> {
 
     private FilterListener mFilterListener;

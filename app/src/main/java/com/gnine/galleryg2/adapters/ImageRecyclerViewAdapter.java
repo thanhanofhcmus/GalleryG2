@@ -46,6 +46,7 @@ public class ImageRecyclerViewAdapter extends
     }
 
     public static class TimelineViewHolder extends RecyclerView.ViewHolder {
+
         public TextView textView;
 
         TimelineViewHolder(@NonNull View view) {

@@ -42,6 +42,7 @@ public class StickerBSFragment extends BottomSheetDialogFragment {
             if (newState == BottomSheetBehavior.STATE_HIDDEN) {
                 dismiss();
             }
+
         }
 
         @Override

@@ -73,4 +73,5 @@ public class TypesAdapter extends RecyclerView.Adapter<TypesAdapter.TypesViewHol
     public int getItemCount() {
         return mTypeDataList != null ? mTypeDataList.size() : 0;
     }
+
 }
