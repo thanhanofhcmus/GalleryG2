@@ -35,7 +35,7 @@ You can create, access, delete and edit albums.
 
 You can watch full view, zoom, edit, share, delete or watch information of image.
 
-<img src="https://i.imgur.com/LCj1l1u.png" width=250>
+<img src="https://i.imgur.com/82xI5wB.gif" width=250>
 
 ## Edit
 
