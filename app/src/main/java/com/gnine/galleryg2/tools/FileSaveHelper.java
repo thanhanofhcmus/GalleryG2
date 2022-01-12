@@ -21,18 +21,6 @@ import java.io.OutputStream;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-/**
- * General contract of this class is to
- * create a file on a device.
- * </br>
- * How to Use it-
- * Call {@linkplain FileSaveHelper#createFile(String, OnFileCreateResult)}
- * if file is created you would receive it's file path and Uri
- * and after you are done with File call {@linkplain FileSaveHelper#notifyThatFileIsNowPubliclyAvailable(ContentResolver)}
- * </br>
- * Remember! in order to shutdown executor call {@linkplain FileSaveHelper#addObserver(LifecycleOwner)} or
- * create object with the {@linkplain FileSaveHelper#FileSaveHelper(AppCompatActivity)}
- */
 public class FileSaveHelper implements LifecycleObserver {
     private final ContentResolver mContentResolver;
     private final ExecutorService executor;
@@ -74,16 +62,6 @@ public class FileSaveHelper implements LifecycleObserver {
     public static boolean isSdkHigherThan28() {
         return (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q);
     }
-
-
-    /**
-     * The effects of this method are
-     * 1- insert new Image File data in MediaStore.Images column
-     * 2- create File on Disk.
-     *
-     * @param fileNameToSave fileName
-     * @param listener       result listener
-     */
 
     public void createFile(final String fileNameToSave, OnFileCreateResult listener) {
         this.resultListener = listener;
@@ -170,12 +148,6 @@ public class FileSaveHelper implements LifecycleObserver {
     }
 
     public interface OnFileCreateResult {
-        /**
-         * @param created  whether file creation is success or failure
-         * @param filePath filepath on disk. null in case of failure
-         * @param error    in case file creation is failed . it would represent the cause
-         * @param Uri      Uri to the newly created file. null in case of failure
-         */
         void onFileCreateResult(boolean created, String filePath, String error, Uri Uri);
     }
 
