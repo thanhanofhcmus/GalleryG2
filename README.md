@@ -1,7 +1,7 @@
 # GalleryG2
 A simple gallery app for android user, easy to use with many feature
 
-<img src="https://i.imgur.com/a7iKcYH.png" width=50>
+<img src="https://i.imgur.com/a7iKcYH.png" width=150>
 
 </br>
 
