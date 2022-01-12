@@ -11,16 +11,14 @@ public class ImageData implements Parcelable {
 
     public final Uri uri;
     public final String name;
-    public final String folder;
     public final int size;
     public final long dateAdded;
     public final String dateString;
     private boolean checked;
 
-    public ImageData(Uri uri, String name, String folder, int size, long dateAdded) {
+    public ImageData(Uri uri, String name, int size, long dateAdded) {
         this.uri = uri;
         this.name = name;
-        this.folder = folder;
         this.size = size;
         this.dateAdded = dateAdded;
         this.dateString = new SimpleDateFormat("yyyyMMdd:hh:mm", Locale.getDefault()).format(this.dateAdded);
@@ -29,7 +27,6 @@ public class ImageData implements Parcelable {
     protected ImageData(Parcel in) {
         this.uri = in.readParcelable(Uri.class.getClassLoader());
         this.name = in.readString();
-        this.folder = in.readString();
         this.size = in.readInt();
         this.dateAdded = in.readLong();
         this.checked = in.readByte() != 0;
@@ -69,7 +66,6 @@ public class ImageData implements Parcelable {
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeParcelable(uri, i);
         parcel.writeString(name);
-        parcel.writeString(folder);
         parcel.writeInt(size);
         parcel.writeLong(dateAdded);
         parcel.writeByte((byte) (checked ? 1 : 0));

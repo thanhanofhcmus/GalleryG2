@@ -65,7 +65,7 @@ public class AllImagesFragment extends Fragment {
     private boolean folder = false;
     private boolean types = false;
     private boolean albums = false;
-    private String folderName = null;
+    private String folderPath = null;
     private String typesTitle = null;
     private ArrayList<TrashData> trashList = null;
     BiConsumer<Integer, View> onItemClick;
@@ -102,9 +102,7 @@ public class AllImagesFragment extends Fragment {
         this.typesTitle = typesTitle;
     }
 
-    public void setFolderName(String folderName) {
-        this.folderName = folderName;
-    }
+    public void setFolderPath(String folderPath) { this.folderPath = folderPath; }
 
     public void setImageDataList(ArrayList<ImageData> imageDataList) {
         this.imageDataList = imageDataList;
@@ -113,9 +111,9 @@ public class AllImagesFragment extends Fragment {
 
     private void update() {
         if (folder) {
-            this.imageDataList = ImageLoader.getImagesFromFolder(requireActivity().getApplicationContext(), folderName);
+            this.imageDataList = ImageLoader.getImagesFromFolder(folderPath);
         } else {
-            this.imageDataList = albums ? LocalDataManager.getSingleAlbumData(folderName) : ImageLoader.getAllImage(requireActivity().getApplicationContext());
+            this.imageDataList = albums ? LocalDataManager.getSingleAlbumData(folderPath) : ImageLoader.getAllImagesFromDevice();
         }
         sortImages(typeSort, false);
 
@@ -128,6 +126,16 @@ public class AllImagesFragment extends Fragment {
             textView.setVisibility(View.VISIBLE);
             recyclerView.setVisibility(View.GONE);
         }
+
+        if (folder && !(new File(folderPath).exists())) {
+            FragmentManager manager = activity.getSupportFragmentManager();
+            manager.popBackStack();
+            FoldersFragment.checkBackPressed = true;
+            FoldersFragment.tempFragment = null;
+            BottomNavigationView bnv = activity.findViewById(R.id.bottomNavView);
+            bnv.getMenu().getItem(1).setEnabled(true);
+        }
+
         updateAdapterView();
     }
 
@@ -249,7 +257,7 @@ public class AllImagesFragment extends Fragment {
         if (imageAdapter.getState() == State.MultipleSelect) {
             menu.getItem(0).setVisible(true);
             if (albums) {
-                menu.getItem(1).setVisible(!folderName.equals("Favorites"));
+                menu.getItem(1).setVisible(!folderPath.equals("Favorites"));
             } else {
                 menu.getItem(1).setVisible(true);
             }
@@ -270,7 +278,7 @@ public class AllImagesFragment extends Fragment {
             menu.getItem(6).setVisible(true);
             menu.getItem(7).setVisible(true);
             if (folder || albums) {
-                activity.setTitle(folderName);
+                activity.setTitle(folderPath);
             } else if (types) {
                 activity.setTitle(typesTitle);
             } else {
@@ -313,7 +321,7 @@ public class AllImagesFragment extends Fragment {
                 if (selectedImages.isEmpty()) {
                     ErrorDialog.show(context, "Please select image(s) to remove from album!");
                 } else {
-                    LocalDataManager.removeImagesFromAlbum(folderName, selectedImages);
+                    LocalDataManager.removeImagesFromAlbum(folderPath, selectedImages);
                 }
             } else {
                 addToTrash();
@@ -470,7 +478,7 @@ public class AllImagesFragment extends Fragment {
         MainActivity mainActivity = (MainActivity) getActivity();
         assert mainActivity != null;
 
-        mainActivity.invokeFullImageActivity(imageDataList, position, albums, folderName);
+        mainActivity.invokeFullImageActivity(imageDataList, position, albums, folderPath);
     }
 
     void startCamera() {
