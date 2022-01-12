@@ -41,7 +41,7 @@ You can watch full view, zoom, edit, share, delete or watch information of image
 
 You can edit an image like rotate, crop, add text, add emoji, ...
 
-<img src="https://i.imgur.com/4ZltLNO.gif" width=250>
+<img src="https://i.imgur.com/ezOmxrx.gif" width=250>
 
 ## Share
 
@@ -59,7 +59,7 @@ Take a photo and save to your phone
 
 Create a slide show and enjoy it
 
-<img src="https://i.imgur.com/4ZltLNO.gif" width=250>
+<img src="https://i.imgur.com/wYP1Rb6.gif" width=250>
 
 ## Setting
 
