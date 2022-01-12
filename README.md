@@ -25,15 +25,13 @@ You can watch images with different grid layouts.
 
 <img src="https://i.imgur.com/PjGjliK.png" width=250>
 
-https://user-images.githubusercontent.com/62064861/149161416-449b3969-7119-4d41-b9e9-d37b582ef199.mp4
-
 
 
 ## Album
 
 You can create, access, delete and edit albums.
 
-<img src="https://i.imgur.com/k5tOfXY.png" width=250>
+<img src="https://i.imgur.com/w17TFzJ.gif" width=250>
 
 ## Single image
 
