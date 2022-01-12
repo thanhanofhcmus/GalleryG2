@@ -19,10 +19,6 @@ import java.util.List;
 
 import com.gnine.galleryg2.R;
 
-/**
- * Created by Ahmed Adel on 5/8/17.
- */
-
 public class ColorPickerAdapter extends RecyclerView.Adapter<ColorPickerAdapter.ViewHolder> {
 
     private Context context;

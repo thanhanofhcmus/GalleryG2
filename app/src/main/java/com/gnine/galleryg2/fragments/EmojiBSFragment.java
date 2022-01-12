@@ -41,7 +41,6 @@ public class EmojiBSFragment extends BottomSheetDialogFragment {
             if (newState == BottomSheetBehavior.STATE_HIDDEN) {
                 dismiss();
             }
-
         }
 
         @Override
@@ -74,9 +73,7 @@ public class EmojiBSFragment extends BottomSheetDialogFragment {
         mEmojiListener = emojiListener;
     }
 
-
     public class EmojiAdapter extends RecyclerView.Adapter<EmojiAdapter.ViewHolder> {
-
         ArrayList<String> emojisList = getEmojis(getActivity());
 
         @Override
@@ -115,12 +112,6 @@ public class EmojiBSFragment extends BottomSheetDialogFragment {
         }
     }
 
-    /**
-     * Provide the list of emoji in form of unicode string
-     *
-     * @param context context
-     * @return list of emoji unicode
-     */
     public static ArrayList<String> getEmojis(Context context) {
         ArrayList<String> convertedEmojiList = new ArrayList<>();
         String[] emojiList = context.getResources().getStringArray(R.array.photo_editor_emoji);

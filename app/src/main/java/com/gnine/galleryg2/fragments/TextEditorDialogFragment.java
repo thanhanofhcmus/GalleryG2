@@ -23,10 +23,6 @@ import android.widget.TextView;
 import com.gnine.galleryg2.R;
 import com.gnine.galleryg2.adapters.ColorPickerAdapter;
 
-/**
- * Created by Burhanuddin Rashid on 1/16/2018.
- */
-
 public class TextEditorDialogFragment extends DialogFragment {
 
     public static final String TAG = TextEditorDialogFragment.class.getSimpleName();
@@ -41,7 +37,6 @@ public class TextEditorDialogFragment extends DialogFragment {
     public interface TextEditor {
         void onDone(String inputText, int colorCode);
     }
-
 
     //Show dialog with provide text and text color
     public static TextEditorDialogFragment show(@NonNull AppCompatActivity appCompatActivity,
@@ -122,7 +117,6 @@ public class TextEditorDialogFragment extends DialogFragment {
         });
 
     }
-
 
     //Callback to listener if user is done with text editing
     public void setOnTextEditorListener(TextEditor textEditor) {
