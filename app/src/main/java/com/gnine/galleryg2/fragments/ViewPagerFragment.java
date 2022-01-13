@@ -72,9 +72,6 @@ public class ViewPagerFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_view_pager, container, false);
         assert getActivity() != null;
-        //animation
-        TransitionInflater inflater1 =  TransitionInflater.from(requireContext());
-        setExitTransition(inflater1.inflateTransition(android.R.transition.slide_left));
 
         Bundle bundle = requireActivity().getIntent().getExtras();
         imageDataList = bundle.getParcelableArrayList(MainActivity.IMAGE_LIST_KEY);
@@ -184,7 +181,7 @@ public class ViewPagerFragment extends Fragment {
             if (favImages.contains(imageDataList.get(viewPager2.getCurrentItem()).uri)) {//like -> unlike
                 item.setIcon(R.drawable.ic_favorite);
                 LocalDataManager.removeImageFromFav(imageDataList.get(viewPager2.getCurrentItem()).uri.getPath());
-            } else {//unlike -> like
+            } else {
                 item.setIcon(R.drawable.ic_fill_favorite);
                 LocalDataManager.importImageIntoFav(imageDataList.get(viewPager2.getCurrentItem()).uri.getPath());
             }

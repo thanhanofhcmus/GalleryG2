@@ -78,8 +78,6 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra(ALBUM_TITLE, albumTitle);
 
         startActivity(intent);
-        //animation
-        overridePendingTransition(R.anim.slide_from_right, R.anim.slide_out_right);
     }
 
     public static void setNightMode(String value) {
@@ -95,6 +93,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        overridePendingTransition(R.anim.slide_from_right,R.anim.slide_out_right);
+        overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_right);
     }
 }
